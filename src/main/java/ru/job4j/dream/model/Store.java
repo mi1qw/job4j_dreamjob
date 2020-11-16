@@ -12,6 +12,7 @@ public final class Store {
     private Map<Integer, Post> posts = new ConcurrentHashMap<>();
     private Map<Integer, Candidate> candidates = new ConcurrentHashMap<>();
     private static final AtomicInteger POST_ID = new AtomicInteger(3);
+    private static final AtomicInteger CANDIDATE_ID = new AtomicInteger(3);
     private DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
 
     private Store() {
@@ -21,9 +22,12 @@ public final class Store {
                 "Need a middle team", "11.11.2020"));
         posts.put(3, new Post(3, "Senior Java Job",
                 "One Senior required", "10.11.2020"));
-        candidates.put(1, new Candidate(1, "Junior Java"));
-        candidates.put(2, new Candidate(2, "Middle Java"));
-        candidates.put(3, new Candidate(3, "Senior Java"));
+        candidates.put(1, new Candidate(1, "Junior Java",
+                "We are looking for many juniors", "12.11.2020"));
+        candidates.put(2, new Candidate(2, "Middle Java",
+                "Need a middle team", "12.11.2020"));
+        candidates.put(3, new Candidate(3, "Senior Java",
+                "One Senior required", "12.11.2020"));
     }
 
     public static Store instOf() {
@@ -42,5 +46,11 @@ public final class Store {
         post.setId(POST_ID.incrementAndGet());
         post.setCreated(df.format(new Date()));
         posts.put(post.getId(), post);
+    }
+
+    public void saveCandidate(final Candidate candidate) {
+        candidate.setId(CANDIDATE_ID.incrementAndGet());
+        candidate.setCreated(df.format(new Date()));
+        candidates.put(candidate.getId(), candidate);
     }
 }

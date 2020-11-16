@@ -26,32 +26,57 @@
     <title>Работа мечты</title>
 </head>
 <body>
-<div class="container pt-3">
-
+<div class="container">
     <div class="row">
-        <div class="card" style="width: 100%">
-            <div class="card-header">
-                Кандидаты
-            </div>
-            <div class="card-body">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th scope="col">Названия</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <% for (Candidate can : Store.instOf().findAllCandidates()) { %>
-                    <tr>
-                        <td><%= can.getName() %>
-                        </td>
-                    </tr>
-                    <% } %>
-                    </tbody>
-                </table>
+        <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link" href="<%=request.getContextPath()%>/post/posts.jsp">Вакансии</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link"
+                   href="<%=request.getContextPath()%>/post/edit.jsp">Добавить вакансию</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link"
+                   href="<%=request.getContextPath()%>/candidate/edit.jsp">Добавить кандидата</a>
+            </li>
+        </ul>
+    </div>
+    <div class="container pt-3">
+
+        <div class="row">
+            <div class="card" style="width: 100%">
+                <div class="card-header">
+                    Кандидаты
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Названия</th>
+                            <th scope="col">Описание</th>
+                            <th scope="col">Дата</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <% for (Candidate can : Store.instOf().findAllCandidates()) { %>
+                        <tr>
+                            <th scope="row"><%= can.getId() %>
+                            </th>
+                            <td><%= can.getName() %>
+                            </td>
+                            <td><%= can.getDescription() %>
+                            </td>
+                            <td><%= can.getCreated() %>
+                            </td>
+                        </tr>
+                        <% } %>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </body>
 </html>

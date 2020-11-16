@@ -5,10 +5,51 @@ import java.util.Objects;
 public class Candidate {
     private int id;
     private String name;
+    private String description;
+    private String created;
 
-    public Candidate(final int id, final String name) {
+    public Candidate(final int id, final String name, final String description,
+                     final String created) {
         this.id = id;
         this.name = name;
+        this.description = description;
+        this.created = created;
+    }
+
+    /**
+     * Gets description.
+     *
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Sets description.
+     *
+     * @param description the description
+     */
+    public void setDescription(final String description) {
+        this.description = description;
+    }
+
+    /**
+     * Gets created.
+     *
+     * @return the created
+     */
+    public String getCreated() {
+        return created;
+    }
+
+    /**
+     * Sets created.
+     *
+     * @param created the created
+     */
+    public void setCreated(final String created) {
+        this.created = created;
     }
 
     /**
