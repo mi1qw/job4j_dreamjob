@@ -43,13 +43,25 @@ public final class Store {
     }
 
     public void save(final Post post) {
-        post.setId(POST_ID.incrementAndGet());
+        if (post.getId() == 0) {
+            post.setId(POST_ID.incrementAndGet());
+        }
         post.setCreated(df.format(new Date()));
         posts.put(post.getId(), post);
     }
 
+    public Post findById(final int id) {
+        return posts.get(id);
+    }
+
+    public Candidate findByIdCand(final int id) {
+        return candidates.get(id);
+    }
+
     public void saveCandidate(final Candidate candidate) {
-        candidate.setId(CANDIDATE_ID.incrementAndGet());
+        if (candidate.getId() == 0) {
+            candidate.setId(CANDIDATE_ID.incrementAndGet());
+        }
         candidate.setCreated(df.format(new Date()));
         candidates.put(candidate.getId(), candidate);
     }

@@ -23,13 +23,15 @@ public class PostServlet extends HttpServlet {
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) {
         try {
             req.setCharacterEncoding("UTF-8");
-            Store.instOf().save(new Post(0,
-                    req.getParameter("name"),
-                    req.getParameter("description"),
-                    ""
-            ));
+            Store.instOf().save(
+                    new Post(
+                            Integer.parseInt(req.getParameter("id")),
+                            req.getParameter("name"),
+                            req.getParameter("description"),
+                            ""
+                    ));
             resp.sendRedirect(req.getContextPath() + "/post/posts.jsp");
-        } catch (IOException e) {
+        } catch (IOException | NumberFormatException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }

@@ -23,13 +23,15 @@ public class CandidateServlet extends HttpServlet {
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) {
         try {
             req.setCharacterEncoding("UTF-8");
-            Store.instOf().saveCandidate(new Candidate(0,
-                    req.getParameter("name"),
-                    req.getParameter("description"),
-                    ""
-            ));
+            Store.instOf().saveCandidate(
+                    new Candidate(
+                            Integer.parseInt(req.getParameter("id")),
+                            req.getParameter("name"),
+                            req.getParameter("description"),
+                            ""
+                    ));
             resp.sendRedirect(req.getContextPath() + "/candidate/candidates.jsp");
-        } catch (IOException e) {
+        } catch (IOException | NumberFormatException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }
