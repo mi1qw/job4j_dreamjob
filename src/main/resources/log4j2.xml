@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--<Configuration status="WARN">-->
+<Configuration status="WARN">
+    <Appenders>
+        <Console name="ConsoleAppender" target="SYSTEM_OUT">
+                        <PatternLayout disableAnsi="false"
+                                       pattern="%highlight{[%-5level]%d{HH:mm:ss.SSS} [%t] %c{1} - %ex{2} %n}%msg{FATAL=red blink, ERROR=red, WARN=yellow bold, INFO=black, DEBUG=green bold, TRACE=blue}"/>
+            <!--            <PatternLayout disableAnsi="false"-->
+            <!--                           pattern="%highlight{[%-5level] [%t] %c{1} - %ex{2} %n}%msg{FATAL=red blink, ERROR=red, WARN=yellow bold, INFO=black, DEBUG=green bold, TRACE=blue}"/>-->
+<!--            <PatternLayout disableAnsi="false"-->
+<!--                           pattern="%highlight{[%-5level] %d{HH:mm:ss.SSS} %t: }%logger{36} %L %n%throwable%msg{FATAL=red blink, ERROR=red , WARN=yellow bold, INFO=black, DEBUG=green bold, TRACE=blue}"/>-->
+<!--            <PatternLayout disableAnsi="false"-->
+<!--                           pattern="%highlight{[%-5level] %d{HH:mm:ss.SSS} %t: }%logger{36} %L %n%msg{FATAL=red blink, ERROR=red , WARN=yellow bold, INFO=black, DEBUG=green bold, TRACE=blue}"/>-->
+
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Root level="DEBUG" additivity="false">
+            <AppenderRef ref="ConsoleAppender"/>
+        </Root>
+        <!--        <Root level="trace">-->
+        <!--            <AppenderRef ref="ConsoleAppender" level="trace"/>-->
+        <!--        </Root>-->
+    </Loggers>
+</Configuration>
