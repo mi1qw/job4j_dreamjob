@@ -38,6 +38,8 @@ public final class Store {
         return posts.values();
     }
 
+    @org.jetbrains.annotations.NotNull
+    @org.jetbrains.annotations.Contract(pure = true)
     public Collection<Candidate> findAllCandidates() {
         return candidates.values();
     }
