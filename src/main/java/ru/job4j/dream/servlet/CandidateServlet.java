@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import ru.job4j.dream.model.Candidate;
 import ru.job4j.dream.model.Store;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,8 +31,24 @@ public class CandidateServlet extends HttpServlet {
                             req.getParameter("description"),
                             ""
                     ));
-            resp.sendRedirect(req.getContextPath() + "/candidate/candidates.jsp");
+            resp.sendRedirect(req.getContextPath() + "/candidate.do");
         } catch (IOException | NumberFormatException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * doGet.
+     *
+     * @param req  req
+     * @param resp resp
+     */
+    @Override
+    protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) {
+        try {
+            req.setAttribute("candidates", Store.instOf().findAllCandidates());
+            req.getRequestDispatcher("candidate/candidates.jsp").forward(req, resp);
+        } catch (IOException | ServletException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }

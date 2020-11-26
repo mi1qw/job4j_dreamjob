@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="ru.job4j.dream.model.Candidate" %>
-<%@ page import="ru.job4j.dream.model.Store" %>
+<%@ page import="java.util.Collection" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -29,21 +29,7 @@
 </head>
 <body>
 <div class="container">
-    <div class="row">
-        <ul class="nav">
-            <li class="nav-item">
-                <a class="nav-link" href="<%=request.getContextPath()%>/post/posts.jsp">Вакансии</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link"
-                   href="<%=request.getContextPath()%>/post/edit.jsp">Добавить вакансию</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link"
-                   href="<%=request.getContextPath()%>/candidate/edit.jsp">Добавить кандидата</a>
-            </li>
-        </ul>
-    </div>
+    <jsp:include page="/Header.jsp"/>
     <div class="container pt-3">
         <div class="row">
             <div class="card" style="width: 100%">
@@ -61,13 +47,13 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <% for (Candidate can : Store.instOf().findAllCandidates()) { %>
+                        <% for (Candidate can : (Collection<Candidate>) request.getAttribute("candidates")) { %>
                         <tr>
                             <th scope="row"><%= can.getId() %>
                             </th>
                             <td>
-                                <a href="<%=request.getContextPath()%>/candidate/edit.jsp?id=<%=can.getId()%>">
-                                    <i class="fa fa-edit mr-3"></i>
+                                <a href="<%=request.getContextPath()%>/newcandidate.do?id=<%=can.getId()%>">
+                                    <em class="fa fa-edit mr-3"></em>
                                 </a>
                                 <%= can.getName() %>
                             </td>

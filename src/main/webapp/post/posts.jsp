@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="ru.job4j.dream.model.Post" %>
-<%@ page import="ru.job4j.dream.model.Store" %>
+<%@ page import="java.util.Collection" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -29,22 +29,7 @@
 </head>
 <body>
 <div class="container">
-    <div class="row">
-        <ul class="nav">
-            <li class="nav-item">
-                <a class="nav-link"
-                   href="<%=request.getContextPath()%>/candidate/candidates.jsp">Кандидаты</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link"
-                   href="<%=request.getContextPath()%>/post/edit.jsp">Добавить вакансию</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link"
-                   href="<%=request.getContextPath()%>/candidate/edit.jsp">Добавить кандидата</a>
-            </li>
-        </ul>
-    </div>
+    <jsp:include page="/Header.jsp"/>
     <div class="container pt-3">
         <div class="row">
             <div class="card" style="width: 100%">
@@ -62,13 +47,13 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <% for (Post post : Store.instOf().findAllPosts()) { %>
+                        <% for (Post post : (Collection<Post>) request.getAttribute("posts")) { %>
                         <tr>
                             <th scope="row"><%= post.getId() %>
                             </th>
                             <td>
-                                <a href="<%=request.getContextPath()%>/post/edit.jsp?id=<%=post.getId()%>">
-                                    <i class="fa fa-edit mr-3"></i>
+                                <a href="<%=request.getContextPath()%>/newpost.do?id=<%=post.getId()%>">
+                                    <em class="fa fa-edit mr-3"></em>
                                 </a>
                                 <%= post.getName() %>
                             </td>

@@ -9,11 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class IndexServlet extends HttpServlet {
-    public static final Logger LOGGER = LoggerFactory.getLogger(IndexServlet.class);
+public class PostEditServlet extends HttpServlet {
+    public static final Logger LOGGER = LoggerFactory.getLogger(PostEditServlet.class);
 
     /**
-     * Servlet.
+     * doGet.
      *
      * @param req  req
      * @param resp resp
@@ -21,9 +21,20 @@ public class IndexServlet extends HttpServlet {
     @Override
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) {
         try {
-            req.getRequestDispatcher("index.jsp").forward(req, resp);
-        } catch (IOException | ServletException e) {
+            req.getRequestDispatcher("post/edit.jsp").forward(req, resp);
+        } catch (ServletException | IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
+    }
+
+    /**
+     * doPost.
+     *
+     * @param req  req
+     * @param resp resp
+     */
+    @Override
+    protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) {
+        this.doGet(req, resp);
     }
 }

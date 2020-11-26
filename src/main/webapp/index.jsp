@@ -25,25 +25,7 @@
 </head>
 <body>
 <div class="container">
-    <div class="row">
-        <ul class="nav">
-            <li class="nav-item">
-                <a class="nav-link" href="<%=request.getContextPath()%>/post/posts.jsp">Вакансии</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link"
-                   href="<%=request.getContextPath()%>/candidate/candidates.jsp">Кандидаты</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link"
-                   href="<%=request.getContextPath()%>/post/edit.jsp">Добавить вакансию</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link"
-                   href="<%=request.getContextPath()%>/candidate/edit.jsp">Добавить кандидата</a>
-            </li>
-        </ul>
-    </div>
+    <jsp:include page="Header.jsp"/>
     <div class="row">
         <div class="card" style="width: 100%">
             <div class="card-header">

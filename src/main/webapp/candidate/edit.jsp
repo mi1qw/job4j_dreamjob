@@ -34,6 +34,7 @@
     }
 %>
 <div class="container pt-3">
+    <jsp:include page="/Header.jsp"/>
     <div class="row">
         <div class="card" style="width: 100%">
             <div class="card-header">
@@ -44,7 +45,7 @@
                 <% } %>
             </div>
             <div class="card-body">
-                <form action="<%=request.getContextPath()%>/candidate/save?id=<%=candidate.getId()%>"
+                <form action="<%=request.getContextPath()%>/candidate.do?id=<%=candidate.getId()%>"
                       method="post">
                     <div class="form-group">
                         <label>Имя
