@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%@ page import="ru.job4j.dream.model.Post" %>
-<%@ page import="java.util.Collection" %>
+<%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page isELIgnored="false" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -29,7 +30,8 @@
 </head>
 <body>
 <div class="container">
-    <jsp:include page="/Header.jsp"/>
+    <my:Header/>
+    <%--    <jsp:include page="/Header.jsp"/>--%>
     <div class="container pt-3">
         <div class="row">
             <div class="card" style="width: 100%">
@@ -47,22 +49,21 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <% for (Post post : (Collection<Post>) request.getAttribute("posts")) { %>
-                        <tr>
-                            <th scope="row"><%= post.getId() %>
-                            </th>
-                            <td>
-                                <a href="<%=request.getContextPath()%>/newpost.do?id=<%=post.getId()%>">
-                                    <em class="fa fa-edit mr-3"></em>
-                                </a>
-                                <%= post.getName() %>
-                            </td>
-                            <td><%= post.getDescription() %>
-                            </td>
-                            <td><%= post.getCreated() %>
-                            </td>
-                        </tr>
-                        <% } %>
+                        <c:forEach items='${requestScope.posts}' var='post'>
+                            <tr>
+                                <th scope="row">${post.id}
+                                </th>
+                                <td>
+                                    <a href=${pageContext.servletContext.contextPath}/newpost.do?id=${post.id}>
+                                        <em class="fa fa-edit mr-3"></em>
+                                    </a> ${post.name}
+                                </td>
+                                <td>${post.description}
+                                </td>
+                                <td>${post.created}
+                                </td>
+                            </tr>
+                        </c:forEach>
                         </tbody>
                     </table>
                 </div>

@@ -1,4 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
+<%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
+<%--<%@ taglib prefix="my" uri="http://example.com/tags" %>--%>
 <!doctype html>
 <html lang="en">
 <head>
@@ -25,7 +27,8 @@
 </head>
 <body>
 <div class="container">
-    <jsp:include page="Header.jsp"/>
+    <my:Header/>
+    <%--    <jsp:include page="Header.jsp"/>--%>
     <div class="row">
         <div class="card" style="width: 100%">
             <div class="card-header">
