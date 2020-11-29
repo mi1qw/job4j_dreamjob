@@ -1,6 +1,7 @@
 <%@ page import="ru.job4j.dream.model.Candidate" %>
 <%@ page import="ru.job4j.dream.model.Store" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
+<%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -34,6 +35,8 @@
     }
 %>
 <div class="container pt-3">
+    <my:Header/>
+    <%--    <jsp:include page="/Header.jsp"/>--%>
     <div class="row">
         <div class="card" style="width: 100%">
             <div class="card-header">
@@ -44,7 +47,7 @@
                 <% } %>
             </div>
             <div class="card-body">
-                <form action="<%=request.getContextPath()%>/candidate/save?id=<%=candidate.getId()%>"
+                <form action="<%=request.getContextPath()%>/candidate.do?id=<%=candidate.getId()%>"
                       method="post">
                     <div class="form-group">
                         <label>Имя

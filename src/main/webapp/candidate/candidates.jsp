@@ -1,6 +1,8 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%@ page import="ru.job4j.dream.model.Candidate" %>
-<%@ page import="ru.job4j.dream.model.Store" %>
+<%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page isELIgnored="false" %>
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -29,21 +31,8 @@
 </head>
 <body>
 <div class="container">
-    <div class="row">
-        <ul class="nav">
-            <li class="nav-item">
-                <a class="nav-link" href="<%=request.getContextPath()%>/post/posts.jsp">Вакансии</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link"
-                   href="<%=request.getContextPath()%>/post/edit.jsp">Добавить вакансию</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link"
-                   href="<%=request.getContextPath()%>/candidate/edit.jsp">Добавить кандидата</a>
-            </li>
-        </ul>
-    </div>
+    <my:Header/>
+    <%--    <jsp:include page="/Header.jsp"/>--%>
     <div class="container pt-3">
         <div class="row">
             <div class="card" style="width: 100%">
@@ -61,22 +50,21 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <% for (Candidate can : Store.instOf().findAllCandidates()) { %>
-                        <tr>
-                            <th scope="row"><%= can.getId() %>
-                            </th>
-                            <td>
-                                <a href="<%=request.getContextPath()%>/candidate/edit.jsp?id=<%=can.getId()%>">
-                                    <i class="fa fa-edit mr-3"></i>
-                                </a>
-                                <%= can.getName() %>
-                            </td>
-                            <td><%= can.getDescription() %>
-                            </td>
-                            <td><%= can.getCreated() %>
-                            </td>
-                        </tr>
-                        <% } %>
+                        <c:forEach items='${requestScope.candidates}' var='candidate'>
+                            <tr>
+                                <th scope="row">${candidate.id}
+                                </th>
+                                <td>
+                                    <a href=${pageContext.servletContext.contextPath}/newcandidate.do?id=${candidate.id}>
+                                        <em class="fa fa-edit mr-3"></em>
+                                    </a> ${candidate.name}
+                                </td>
+                                <td>${candidate.description}
+                                </td>
+                                <td>${candidate.created}
+                                </td>
+                            </tr>
+                        </c:forEach>
                         </tbody>
                     </table>
                 </div>

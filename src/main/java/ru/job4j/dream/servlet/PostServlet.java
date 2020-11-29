@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import ru.job4j.dream.model.Post;
 import ru.job4j.dream.model.Store;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,8 +31,24 @@ public class PostServlet extends HttpServlet {
                             req.getParameter("description"),
                             ""
                     ));
-            resp.sendRedirect(req.getContextPath() + "/post/posts.jsp");
+            resp.sendRedirect(req.getContextPath() + "/posts.do");
         } catch (IOException | NumberFormatException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * doGet.
+     *
+     * @param req  req
+     * @param resp resp
+     */
+    @Override
+    protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) {
+        try {
+            req.setAttribute("posts", Store.instOf().findAllPosts());
+            req.getRequestDispatcher("post/posts.jsp").forward(req, resp);
+        } catch (IOException | ServletException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }

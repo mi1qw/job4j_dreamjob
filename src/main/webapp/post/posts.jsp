@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%@ page import="ru.job4j.dream.model.Post" %>
-<%@ page import="ru.job4j.dream.model.Store" %>
+<%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page isELIgnored="false" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -29,22 +30,8 @@
 </head>
 <body>
 <div class="container">
-    <div class="row">
-        <ul class="nav">
-            <li class="nav-item">
-                <a class="nav-link"
-                   href="<%=request.getContextPath()%>/candidate/candidates.jsp">Кандидаты</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link"
-                   href="<%=request.getContextPath()%>/post/edit.jsp">Добавить вакансию</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link"
-                   href="<%=request.getContextPath()%>/candidate/edit.jsp">Добавить кандидата</a>
-            </li>
-        </ul>
-    </div>
+    <my:Header/>
+    <%--    <jsp:include page="/Header.jsp"/>--%>
     <div class="container pt-3">
         <div class="row">
             <div class="card" style="width: 100%">
@@ -62,22 +49,21 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <% for (Post post : Store.instOf().findAllPosts()) { %>
-                        <tr>
-                            <th scope="row"><%= post.getId() %>
-                            </th>
-                            <td>
-                                <a href="<%=request.getContextPath()%>/post/edit.jsp?id=<%=post.getId()%>">
-                                    <i class="fa fa-edit mr-3"></i>
-                                </a>
-                                <%= post.getName() %>
-                            </td>
-                            <td><%= post.getDescription() %>
-                            </td>
-                            <td><%= post.getCreated() %>
-                            </td>
-                        </tr>
-                        <% } %>
+                        <c:forEach items='${requestScope.posts}' var='post'>
+                            <tr>
+                                <th scope="row">${post.id}
+                                </th>
+                                <td>
+                                    <a href=${pageContext.servletContext.contextPath}/newpost.do?id=${post.id}>
+                                        <em class="fa fa-edit mr-3"></em>
+                                    </a> ${post.name}
+                                </td>
+                                <td>${post.description}
+                                </td>
+                                <td>${post.created}
+                                </td>
+                            </tr>
+                        </c:forEach>
                         </tbody>
                     </table>
                 </div>
