@@ -3,7 +3,7 @@ package ru.job4j.dream.servlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.job4j.dream.model.Candidate;
-import ru.job4j.dream.model.Store;
+import ru.job4j.dream.model.MemStore;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -24,12 +24,12 @@ public class CandidateServlet extends HttpServlet {
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) {
         try {
             req.setCharacterEncoding("UTF-8");
-            Store.instOf().saveCandidate(
+            MemStore.instOf().saveCandidate(
                     new Candidate(
                             Integer.parseInt(req.getParameter("id")),
                             req.getParameter("name"),
                             req.getParameter("description"),
-                            ""
+                            null
                     ));
             resp.sendRedirect(req.getContextPath() + "/candidate.do");
         } catch (IOException | NumberFormatException e) {
@@ -46,7 +46,7 @@ public class CandidateServlet extends HttpServlet {
     @Override
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) {
         try {
-            req.setAttribute("candidates", Store.instOf().findAllCandidates());
+            req.setAttribute("candidates", MemStore.instOf().findAllCandidates());
             req.getRequestDispatcher("candidate/candidates.jsp").forward(req, resp);
         } catch (IOException | ServletException e) {
             LOGGER.error(e.getMessage(), e);
