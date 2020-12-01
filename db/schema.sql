@@ -5,3 +5,10 @@ CREATE TABLE post
     description TEXT,
     created     date
 );
+CREATE TABLE candidate
+(
+    id          SERIAL PRIMARY KEY,
+    name        TEXT,
+    description TEXT,
+    created     date
+);

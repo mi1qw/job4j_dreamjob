@@ -1,6 +1,5 @@
 package ru.job4j.dream.model;
 
-
 import java.util.Date;
 import java.util.Objects;
 
