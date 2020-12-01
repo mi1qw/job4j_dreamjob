@@ -49,56 +49,22 @@ public final class PsqlStore implements Store {
 
     @Override
     public Collection<Post> findAllPosts() {
-        List<Post> posts = new ArrayList<>();
-        try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("SELECT * FROM post")
-        ) {
-            try (ResultSet it = ps.executeQuery()) {
-                while (it.next()) {
-                    posts.add(new Post(
-                            it.getInt("id"),
-                            it.getString("name"),
-                            it.getString("description"),
-                            it.getDate("created")
-                    ));
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return posts;
+        return findAll("post", Post::new);
     }
 
     @Override
     public Collection<Candidate> findAllCandidates() {
-        Collection<Candidate> list = new ArrayList<>();
-        ResultSet rs;
-        try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("SELECT * FROM post")) {
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                list.add(new Candidate(
-                        rs.getInt("id"),
-                        rs.getString("name"),
-                        rs.getString("description"),
-                        rs.getDate("created")
-                ));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return list;
+        return findAll("post", Candidate::new);
     }
 
-    private Collection<?> findAll(final String table) {
-        List<Post> posts = new ArrayList<>();
+    private <T> Collection<T> findAll(final String table, final TabFactory<T> tabFactory) {
+        List<T> list = new ArrayList<>();
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(
-                     String.format("SELECT * FROM %s", table)
-             ) {
+                     String.format("SELECT * FROM %s", table))) {
             try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
-                    posts.add(new Post(
+                    list.add(tabFactory.create(
                             it.getInt("id"),
                             it.getString("name"),
                             it.getString("description"),
@@ -109,7 +75,7 @@ public final class PsqlStore implements Store {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return posts;
+        return list;
     }
 
     @Override
