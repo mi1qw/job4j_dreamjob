@@ -9,9 +9,9 @@ interface Store {
 
     void save(Post post);
 
-    //void save(Candidate candidate);
+    void save(Candidate candidate);
 
-    Post findById(int id);
+    Post findPostById(int id);
 
-    //Candidate findById(int id);
+    Candidate findCandById(int id);
 }
