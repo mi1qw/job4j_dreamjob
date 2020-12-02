@@ -2,7 +2,7 @@ package ru.job4j.dream.model;
 
 import java.util.Collection;
 
-interface Store {
+public interface Store {
     Collection<Post> findAllPosts();
 
     Collection<Candidate> findAllCandidates();
@@ -11,7 +11,7 @@ interface Store {
 
     void save(Candidate candidate);
 
-    Post findPostById(int id);
+    Post findByIdPost(int id);
 
-    Candidate findCandById(int id);
+    Candidate findByIdCand(int id);
 }

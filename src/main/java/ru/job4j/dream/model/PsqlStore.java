@@ -14,9 +14,10 @@ import java.util.Properties;
  * The type Psql store.
  */
 public final class PsqlStore implements Store {
+    private static final Store INST = new PsqlStore();
     private final BasicDataSource pool = new BasicDataSource();
 
-    private PsqlStore() {
+    public PsqlStore() {
         Properties cfg = new Properties();
         try (BufferedReader io = new BufferedReader(
                 new FileReader("db.properties")
@@ -44,7 +45,7 @@ public final class PsqlStore implements Store {
     }
 
     public static Store instOf() {
-        return Lazy.INST;
+        return INST;
     }
 
     @Override
@@ -146,12 +147,12 @@ public final class PsqlStore implements Store {
     }
 
     @Override
-    public Post findPostById(final int id) {
+    public Post findByIdPost(final int id) {
         return findById(id, Type.POST);
     }
 
     @Override
-    public Candidate findCandById(final int id) {
+    public Candidate findByIdCand(final int id) {
         return findById(id, Type.CANDIDATE);
     }
 

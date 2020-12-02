@@ -36,15 +36,15 @@ public class PsqlMain {
         System.out.println();
 
         System.out.println("_______________findById(7)____________________________");
-        System.out.println(store.findPostById(7));
+        System.out.println(store.findByIdPost(7));
         System.out.println();
 
         System.out.println("_______________findAllCandidates______________________");
         store.findAllCandidates().forEach(System.out::println);
 
         System.out.println("_______________findById_______________________________");
-        Post pp = store.findPostById(3);
-        Candidate cc = store.findCandById(1);
+        Post pp = store.findByIdPost(3);
+        Candidate cc = store.findByIdCand(1);
         System.out.println(pp);
         System.out.println(cc);
         //System.out.println(store.findPostById(3));
