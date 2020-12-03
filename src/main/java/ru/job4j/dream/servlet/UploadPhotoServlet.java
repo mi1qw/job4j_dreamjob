@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UploadServlet extends HttpServlet {
+public class UploadPhotoServlet extends HttpServlet {
     public static final Logger LOGGER = LoggerFactory.getLogger(UploadServlet.class);
     public static final String IMAGES = "images";
 
