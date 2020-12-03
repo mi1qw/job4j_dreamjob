@@ -187,7 +187,11 @@
             <artifactId>javax.el-api</artifactId>
             <version>3.0.1-b06</version>
         </dependency>
-
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.4</version>
+        </dependency>
     </dependencies>
 
 
