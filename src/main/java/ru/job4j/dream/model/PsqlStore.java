@@ -70,7 +70,8 @@ public final class PsqlStore implements Store {
                             it.getInt("id"),
                             it.getString("name"),
                             it.getString("description"),
-                            it.getDate("created")
+                            it.getDate("created"),
+                            findImgCand(it.getInt("photo_id"))
                     ));
                 }
             }
@@ -86,7 +87,8 @@ public final class PsqlStore implements Store {
                 post.getId(),
                 post.getName(),
                 post.getDescription(),
-                post.getCreated()
+                post.getCreated(),
+                post.getPhoto()
         };
         if (post.getId() == 0) {
             post.setId(create(o, Type.POST));
@@ -101,7 +103,8 @@ public final class PsqlStore implements Store {
                 candidate.getId(),
                 candidate.getName(),
                 candidate.getDescription(),
-                candidate.getCreated()
+                candidate.getCreated(),
+                candidate.getPhoto()
         };
         if (candidate.getId() == 0) {
             candidate.setId(create(o, Type.CANDIDATE));
@@ -114,11 +117,12 @@ public final class PsqlStore implements Store {
         int oId = 0;
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(
-                     String.format("INSERT INTO %s VALUES (DEFAULT,?,?,?)", t.getName()),
+                     String.format("INSERT INTO %s VALUES (DEFAULT,?,?,?,?)", t.getName()),
                      PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, (String) o[1]);
             ps.setString(2, (String) o[2]);
             ps.setDate(3, new Date(((java.util.Date) o[3]).getTime()));
+            ps.setInt(4, );
             ps.execute();
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {
@@ -169,12 +173,99 @@ public final class PsqlStore implements Store {
                         rs.getInt("id"),
                         rs.getString("name"),
                         rs.getString("description"),
-                        rs.getDate("created")
+                        rs.getDate("created"),
+                        findImgCand(rs.getInt("photo_id"))
                 );
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return item;
+    }
+
+    /**
+     * find Photo By Id.
+     *
+     * @param id id
+     * @return res
+     */
+    @Override
+    public String findImgCand(final int id) {
+        return findPhoto(id, Type.CANDIDATE);
+    }
+
+    /**
+     * find Photo By Id.
+     *
+     * @param id   id
+     * @param type type
+     * @return res
+     */
+    private String findPhoto(final int id, final Type type) {
+        ResultSet rs;
+        String res = null;
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement(
+                     String.format("SELECT * FROM %s  WHERE id = ?", type.getImgname()))) {
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                res = rs.getString("name");
+            } else {
+                res = "noimages";
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
+
+    /**
+     * saveImg.
+     *
+     * @param photo name of photo
+     * @return
+     */
+    @Override
+    public int saveImg(String photo, Candidate candidate) {
+        if (candidate == null) {
+            return saveImg(photo, Type.CANDIDATE);
+        } else {
+            return updateImg(photo, candidate.getPhoto(), Type.CANDIDATE);
+        }
+        //return 0;
+    }
+
+    private int saveImg(final String photo, final Type type) {
+        int oId = 0;
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement(
+                     String.format("INSERT INTO %s VALUES (DEFAULT,?)", type.getImgname()),
+                     PreparedStatement.RETURN_GENERATED_KEYS)) {
+            ps.setString(1, photo);
+            ps.execute();
+            try (ResultSet id = ps.getGeneratedKeys()) {
+                if (id.next()) {
+                    oId = id.getInt(1);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return oId;
+    }
+
+    private void updateImg(final String photo, int id, final Type type) {
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement(
+                     String.format("UPDATE %s SET name =? WHERE id = ?", type.getImgname()))) {
+            ps.setString(1, photo);
+            ps.setString(2, (String) o[2]);
+            ps.setDate(3, new Date(((java.util.Date) o[3]).getTime()));
+            ps.setInt(4, (int) o[0]);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

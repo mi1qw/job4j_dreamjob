@@ -30,7 +30,9 @@ public class CandidateServlet extends HttpServlet {
                             Integer.parseInt(req.getParameter("id")),
                             req.getParameter("name"),
                             req.getParameter("description"),
-                            new Date()
+                            new Date(),
+                            req.getParameter("photo")
+                            //TODO: photo
                     ));
             resp.sendRedirect(req.getContextPath() + "/candidate.do");
         } catch (IOException | NumberFormatException e) {

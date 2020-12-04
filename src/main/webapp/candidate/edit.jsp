@@ -3,6 +3,8 @@
 <%@ page import="java.util.Date" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page isELIgnored="false" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -30,7 +32,7 @@
 <body>
 <%
     String id = request.getParameter("id");
-    Candidate candidate = new Candidate(0, "", "", new Date());
+    Candidate candidate = new Candidate(0, "", "", new Date(), "noimages.png");
     if (id != null) {
         candidate = PsqlStore.instOf().findByIdCand(Integer.parseInt(id));
     }
@@ -62,11 +64,68 @@
                                    value="<%=candidate.getDescription()%>">
                         </label>
                     </div>
-                    <button type="submit" class="btn btn-primary">Сохранить</button>
+
+                    <%--                    ${param.put("2","one")}--%>
+                    Добавить фото
+                    <%--                    <form action=""--%>
+
+
+                    <%--            TODO    вывести фотона экран--%>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Фото
+                                <input class="form-control" name="imgname" type="text"
+                                       value="<%=candidate.getDescription()%>">
+                                <%--                                    <img src="<c:url value='/download?name=${candidatephoto}'/>"--%>
+                                ${requestScope.size()}<br>
+                                ${requestScope.values()}<br>
+                                <br>
+                                ${pageContext.request.contextPath}<br>
+                                !!!!!!!!!!!!!!!!!<br>
+                                ${pageContext.request.getAttribute("candidate")}
+                                getAttribute("candidate")<br>
+                                ${pageContext.request.getParameter("id")} getParameter<br>
+                                ${id} id<br>
+                                ${paramValues}paramValues<br>
+                                ${param.keySet()}param.keySet<br>
+                                ${param.get("id")} param.get("id")<br>
+                                ${candidate}candidate<br>
+
+                                <c:forEach items="${param.values()}" var="n">
+                                    ${n}
+                                </c:forEach>
+
+                                <img src="<c:url
+                                value='/download?name=${candidate.photo}'/>"
+                                     alt="photo"
+                                     width="100px"
+                                     height="100px"/>
+                            </label>
+                            <p><input name="фото" type="button" value="кнопка значение">
+                                <input name="имя" type="submit" value="кнопка значение"></p>
+                            <%--                                <jsp:include page="/photos/upload.jsp"/>--%>
+                            <%--                                <jsp:forward page="/photos/upload.jsp"/>--%>
+                        </div>
+                    </div>
                 </form>
             </div>
+
+
+            <form id="rendered-form">
+                <div class="rendered-form">
+                    <div class=""><h1 access="false" id="control-5948300">Header</h1></div>
+                    <div class=""><p access="false" id="control-256395">Paragraph</p></div>
+                    <div class="formbuilder-file form-group field-file-1606997307640">
+                        <label for="file-1606997307640" class="formbuilder-file-label">
+                            File Upload
+                        </label>
+                        <input type="file" class="form-control"
+                               name="file-1606997307640" access="false"
+                               multiple="false" id="file-1606997307640">
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
-</div>
 </body>
 </html>

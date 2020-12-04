@@ -6,6 +6,7 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.job4j.dream.model.PsqlStore;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -19,8 +20,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Integer.parseInt;
+
 public class UploadPhotoServlet extends HttpServlet {
-    public static final Logger LOGGER = LoggerFactory.getLogger(UploadServlet.class);
+    public static final Logger LOGGER = LoggerFactory.getLogger(UploadPhotoServlet.class);
     public static final String IMAGES = "images";
 
     /**
@@ -32,11 +35,18 @@ public class UploadPhotoServlet extends HttpServlet {
     @Override
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) {
         List<String> images = new ArrayList<>();
-
+        String img = null;
         File folder = new File(IMAGES);
         if (!folder.exists()) {
             folder.mkdir();
         }
+        try {
+            img = PsqlStore.instOf().findImgCand(parseInt(req.getParameter("id")));
+        } catch (NumberFormatException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+
+        System.out.println(img);
 
         File[] list = new File(IMAGES).listFiles();
 
@@ -44,6 +54,7 @@ public class UploadPhotoServlet extends HttpServlet {
             for (File name : list) {
                 images.add(name.getName());
             }
+
             req.setAttribute(IMAGES, images);
             RequestDispatcher dispatcher = req.getRequestDispatcher("/upload.jsp");
             try {

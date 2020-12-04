@@ -2,6 +2,7 @@ package ru.job4j.dream.servlet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.job4j.dream.model.PsqlStore;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -21,6 +22,10 @@ public class CandidateEditServlet extends HttpServlet {
     @Override
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) {
         try {
+            System.out.println(PsqlStore.instOf().findByIdCand(Integer.parseInt(req.getParameter(
+                    "id"))));
+            req.setAttribute("candidate", PsqlStore.instOf().
+                    findByIdCand(Integer.parseInt(req.getParameter("id"))));
             req.getRequestDispatcher("candidate/edit.jsp").forward(req, resp);
         } catch (ServletException | IOException e) {
             LOGGER.error(e.getMessage(), e);

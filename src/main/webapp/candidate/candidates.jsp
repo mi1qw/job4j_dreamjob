@@ -45,6 +45,7 @@
                         <thead>
                         <tr>
                             <th scope="col">#</th>
+                            <th scope="col"></th>
                             <th scope="col">Названия</th>
                             <th scope="col">Описание</th>
                             <th scope="col">Дата</th>
@@ -55,7 +56,13 @@
                             <tr>
                                 <th scope="row">${candidate.id}
                                 </th>
+                                <td><img src="<c:url value='/download?name=${candidate.photo}'/>"
+                                         width="100px"
+                                         height="100px"/>
+                                </td>
                                 <td>
+                                        <%--                                    <a href=${pageContext.servletContext.contextPath}/newcandidate.do?id=${candidate.id}>--%>
+                                        <%--                                        newcandidate.do--%>
                                     <a href=${pageContext.servletContext.contextPath}/newcandidate.do?id=${candidate.id}>
                                         <em class="fa fa-edit mr-3"></em>
                                     </a> ${candidate.name}

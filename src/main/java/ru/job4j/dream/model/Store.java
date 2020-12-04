@@ -14,4 +14,8 @@ public interface Store {
     Post findByIdPost(int id);
 
     Candidate findByIdCand(int id);
+
+    String findImgCand(int id);
+
+    int saveImg(String photo, Candidate candidate);
 }

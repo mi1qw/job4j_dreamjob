@@ -8,13 +8,29 @@ public class Candidate {
     private String name;
     private String description;
     private Date created;
+    private String photo;
 
     public Candidate(final int id, final String name, final String description,
-                     final Date created) {
+                     final Date created, final String photo) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.created = created;
+        this.photo = photo;
+    }
+
+    public Candidate(final int id, final String name, final String description,
+                     final Date created) {
+        this(id, name, description, created, "noimages.png");
+    }
+
+    /**
+     * Gets photo.
+     *
+     * @return the photo
+     */
+    public String getPhoto() {
+        return photo;
     }
 
     /**
@@ -118,7 +134,8 @@ public class Candidate {
                 + "id=" + id
                 + ", name='" + name + '\''
                 + ", description='" + description + '\''
-                + ", created=" + created + '}';
+                + ", created=" + created
+                + ", photo=" + photo + '}';
     }
 
     /**
