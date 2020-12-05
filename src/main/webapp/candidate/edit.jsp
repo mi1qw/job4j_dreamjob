@@ -27,13 +27,6 @@
     <title>Работа мечты</title>
 </head>
 <body>
-<%--<%--%>
-<%--    String id = request.getParameter("id");--%>
-<%--    Candidate candidate = new Candidate(0, "", "", new Date(), "noimages.png");--%>
-<%--    if (id != null) {--%>
-<%--        candidate = PsqlStore.instOf().findByIdCand(Integer.parseInt(id));--%>
-<%--    }--%>
-<%--%>--%>
 <div class="container pt-3">
     <my:Header/>
     <div class="row">
@@ -47,12 +40,42 @@
                         Редактирование вакансии.
                     </c:otherwise>
                 </c:choose>
-                <%--                <% if (id == null) { %>--%>
-                <%--                Новая вакансия.--%>
-                <%--                <% } else { %>--%>
-                <%--                Редактирование вакансии.--%>
-                <%--                <% } %>--%>
             </div>
+
+
+            <div class="card-body">
+                <form action="<%=request.getContextPath()%>/candidate.do?id=${requestScope.candidate.id}"
+                      method="post">
+                    <div class="form-group">
+                        <table align="center" border="3" cellpadding="1" cellspacing="1">
+                            <tbody>
+                            <tr>
+                                <td>Фото<br>
+                                    <img src="<c:url value='/download?name=${requestScope.photo}'/>"
+                                         alt="photo"
+                                         width="200px"
+                                         height="200px"/>
+                                    <p>Добавить фото</p>
+                                </td>
+                                <td>
+                                    <div class="form-group"><label>Имя&nbsp;<input
+                                            class="form-control" name="name" type="text"
+                                            value="${requestScope.candidate.name}"></label></div>
+                                    <div class="form-group"><label>Описание&nbsp;<input
+                                            class="form-control" name="description" type="text"
+                                            value="${requestScope.candidate.description}"></label>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                                </td>
+                            </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                </form>
+            </div>
+
+
             <div class="card-body">
                 <form action="<%=request.getContextPath()%>/candidate.do?id=${requestScope.candidate.id}"
                       method="post">
