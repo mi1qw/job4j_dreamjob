@@ -1,0 +1,50 @@
+version: '{build}'
+skip_tags: true
+clone_depth: 10
+environment:
+  matrix:
+    - JAVA_HOME: C:\Program Files\Java\jdk14
+#branches:
+#  only:
+#    - master
+#  except:
+#    - gh-pages
+services:
+  - postgresql12
+
+os: Windows Server 2012
+install:
+  - ps: |
+      Add-Type -AssemblyName System.IO.Compression.FileSystem
+      if (!(Test-Path -Path "C:\maven" )) {
+        (new-object System.Net.WebClient).DownloadFile('http://www.us.apache.org/dist/maven/maven-3/3.2.5/binaries/apache-maven-3.2.5-bin.zip', 'C:\maven-bin.zip')
+        [System.IO.Compression.ZipFile]::ExtractToDirectory("C:\maven-bin.zip", "C:\maven")
+      }
+
+  - cmd: SET PGUSER=postgres
+  - cmd: SET PGPASSWORD=Password12!
+  - cmd: PATH=C:\Program Files\PostgreSQL\10\bin\;%PATH%
+
+  - cmd: SET PATH=C:\maven\apache-maven-3.2.5\bin;%JAVA_HOME%\bin;%PATH%
+  - cmd: SET M2_HOME=C:\maven\apache-maven-3.2.5
+  # - cmd: SET MAVEN_OPTS=-XX:MaxPermSize=2g -Xmx4g
+  - cmd: SET JAVA_OPTS=-Dfile.encoding=UTF-8
+  - cmd: mvn --version
+  - cmd: java -version
+  - cmd: psql --version
+
+  #  - cmd: SET NLS_LANG=AMERICAN_AMERICA.UTF8
+  #  - cmd: chcp
+  # before_build:
+
+build_script:
+  #  - chcp 65001 && mvn clean package --batch-mode -DskipTest
+  #  - createdb product
+
+  - mvn clean package --batch-mode -DskipTest
+test_script:
+  #  - chcp 65001 && mvn clean install --batch-mode
+  - mvn clean install --batch-mode
+cache:
+  - C:\maven\
+  - C:\Users\appveyor\.m2

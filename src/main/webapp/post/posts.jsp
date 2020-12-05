@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page isELIgnored="false" %>
 <!doctype html>
 <html lang="en">
@@ -60,7 +61,8 @@
                                 </td>
                                 <td>${post.description}
                                 </td>
-                                <td>${post.created}
+                                <td>
+                                    <fmt:formatDate value="${post.created}" pattern="dd.MM.yyyy"/>
                                 </td>
                             </tr>
                         </c:forEach>

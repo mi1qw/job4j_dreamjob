@@ -3,13 +3,14 @@ package ru.job4j.dream.servlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.job4j.dream.model.Post;
-import ru.job4j.dream.model.Store;
+import ru.job4j.dream.model.PsqlStore;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 
 public class PostServlet extends HttpServlet {
     public static final Logger LOGGER = LoggerFactory.getLogger(PostServlet.class);
@@ -24,12 +25,12 @@ public class PostServlet extends HttpServlet {
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) {
         try {
             req.setCharacterEncoding("UTF-8");
-            Store.instOf().save(
+            PsqlStore.instOf().save(
                     new Post(
                             Integer.parseInt(req.getParameter("id")),
                             req.getParameter("name"),
                             req.getParameter("description"),
-                            ""
+                            new Date()
                     ));
             resp.sendRedirect(req.getContextPath() + "/posts.do");
         } catch (IOException | NumberFormatException e) {
@@ -46,7 +47,7 @@ public class PostServlet extends HttpServlet {
     @Override
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) {
         try {
-            req.setAttribute("posts", Store.instOf().findAllPosts());
+            req.setAttribute("posts", PsqlStore.instOf().findAllPosts());
             req.getRequestDispatcher("post/posts.jsp").forward(req, resp);
         } catch (IOException | ServletException e) {
             LOGGER.error(e.getMessage(), e);

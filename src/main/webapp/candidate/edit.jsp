@@ -1,5 +1,6 @@
 <%@ page import="ru.job4j.dream.model.Candidate" %>
-<%@ page import="ru.job4j.dream.model.Store" %>
+<%@ page import="ru.job4j.dream.model.PsqlStore" %>
+<%@ page import="java.util.Date" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
 <!doctype html>
@@ -29,9 +30,9 @@
 <body>
 <%
     String id = request.getParameter("id");
-    Candidate candidate = new Candidate(0, "", "", "");
+    Candidate candidate = new Candidate(0, "", "", new Date());
     if (id != null) {
-        candidate = Store.instOf().findByIdCand(Integer.parseInt(id));
+        candidate = PsqlStore.instOf().findByIdCand(Integer.parseInt(id));
     }
 %>
 <div class="container pt-3">
