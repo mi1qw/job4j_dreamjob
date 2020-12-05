@@ -102,7 +102,7 @@ public final class PsqlStore implements Store {
                 candidate.getName(),
                 candidate.getDescription(),
                 candidate.getCreated(),
-                candidate.getPhoto()
+                candidate.getPhotoId()
         };
         if (candidate.getId() == 0) {
             candidate.setId(create(o, Type.CANDIDATE));
@@ -230,7 +230,7 @@ public final class PsqlStore implements Store {
         if (candidate == null) {
             return saveImg(photo, Type.CANDIDATE);
         } else {
-            return updateImg(photo, candidate.getPhoto(), Type.CANDIDATE);
+            return updateImg(photo, candidate.getPhotoId(), Type.CANDIDATE);
         }
         //return 0;
     }

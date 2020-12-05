@@ -8,15 +8,15 @@ public class Candidate {
     private String name;
     private String description;
     private Date created;
-    private int photo;
+    private int photoId;
 
     public Candidate(final int id, final String name, final String description,
-                     final Date created, final int photo) {
+                     final Date created, final int photoId) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.created = created;
-        this.photo = photo;
+        this.photoId = photoId;
     }
 
     public Candidate(final int id, final String name, final String description,
@@ -29,8 +29,8 @@ public class Candidate {
      *
      * @return the photo
      */
-    public int getPhoto() {
-        return photo;
+    public int getPhotoId() {
+        return photoId;
     }
 
     /**
@@ -135,7 +135,7 @@ public class Candidate {
                 + ", name='" + name + '\''
                 + ", description='" + description + '\''
                 + ", created=" + created
-                + ", photo=" + photo + '}';
+                + ", photo=" + photoId + '}';
     }
 
     /**

@@ -58,7 +58,7 @@
                                 </th>
                                 <td><img
                                         src="<c:url
-                                        value='/download?name=${requestScope.candidatesPhoto[candidate.photo]}'/>"
+                                        value='/download?name=${requestScope.candidatesPhoto[candidate.photoId]}'/>"
                                         alt="photo"
                                         width="100px"
                                         height="100px"/>
