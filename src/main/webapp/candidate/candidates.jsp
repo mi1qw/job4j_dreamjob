@@ -56,13 +56,14 @@
                             <tr>
                                 <th scope="row">${candidate.id}
                                 </th>
-                                <td><img src="<c:url value='/download?name=${candidate.photo}'/>"
-                                         width="100px"
-                                         height="100px"/>
+                                <td><img
+                                        src="<c:url
+                                        value='/download?name=${requestScope.candidatesPhoto[candidate.photo]}'/>"
+                                        alt="photo"
+                                        width="100px"
+                                        height="100px"/>
                                 </td>
                                 <td>
-                                        <%--                                    <a href=${pageContext.servletContext.contextPath}/newcandidate.do?id=${candidate.id}>--%>
-                                        <%--                                        newcandidate.do--%>
                                     <a href=${pageContext.servletContext.contextPath}/newcandidate.do?id=${candidate.id}>
                                         <em class="fa fa-edit mr-3"></em>
                                     </a> ${candidate.name}

@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.job4j.dream.model.Candidate;
 import ru.job4j.dream.model.PsqlStore;
+import ru.job4j.dream.model.Type;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -31,7 +32,7 @@ public class CandidateServlet extends HttpServlet {
                             req.getParameter("name"),
                             req.getParameter("description"),
                             new Date(),
-                            req.getParameter("photo")
+                            Integer.parseInt(req.getParameter("photo"))
                             //TODO: photo
                     ));
             resp.sendRedirect(req.getContextPath() + "/candidate.do");
@@ -50,6 +51,7 @@ public class CandidateServlet extends HttpServlet {
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) {
         try {
             req.setAttribute("candidates", PsqlStore.instOf().findAllCandidates());
+            req.setAttribute("candidatesPhoto", PsqlStore.instOf().findAllImg(Type.CANDIDATE));
             req.getRequestDispatcher("candidate/candidates.jsp").forward(req, resp);
         } catch (IOException | ServletException e) {
             LOGGER.error(e.getMessage(), e);

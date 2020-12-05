@@ -4,11 +4,9 @@ import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.sql.Date;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * The type Psql store.
@@ -71,7 +69,7 @@ public final class PsqlStore implements Store {
                             it.getString("name"),
                             it.getString("description"),
                             it.getDate("created"),
-                            findImgCand(it.getInt("photo_id"))
+                            it.getInt("photo_id")
                     ));
                 }
             }
@@ -122,7 +120,7 @@ public final class PsqlStore implements Store {
             ps.setString(1, (String) o[1]);
             ps.setString(2, (String) o[2]);
             ps.setDate(3, new Date(((java.util.Date) o[3]).getTime()));
-            ps.setInt(4, );
+            ps.setInt(4, (Integer) o[4]);
             ps.execute();
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {
@@ -139,11 +137,12 @@ public final class PsqlStore implements Store {
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(
                      String.format("UPDATE %s SET name =?, description =?, created =? "
-                             + "WHERE id = ?", t.getName()))) {
+                             + "photo_id =? WHERE id = ?", t.getName()))) {
             ps.setString(1, (String) o[1]);
             ps.setString(2, (String) o[2]);
             ps.setDate(3, new Date(((java.util.Date) o[3]).getTime()));
-            ps.setInt(4, (int) o[0]);
+            ps.setInt(4, (Integer) o[4]);
+            ps.setInt(5, (Integer) o[0]);
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -174,7 +173,7 @@ public final class PsqlStore implements Store {
                         rs.getString("name"),
                         rs.getString("description"),
                         rs.getDate("created"),
-                        findImgCand(rs.getInt("photo_id"))
+                        rs.getInt("photo_id")
                 );
             }
         } catch (SQLException e) {
@@ -212,7 +211,7 @@ public final class PsqlStore implements Store {
             if (rs.next()) {
                 res = rs.getString("name");
             } else {
-                res = "noimages";
+                res = "noimages.png";
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -227,7 +226,7 @@ public final class PsqlStore implements Store {
      * @return
      */
     @Override
-    public int saveImg(String photo, Candidate candidate) {
+    public int saveImgCand(final String photo, final Candidate candidate) {
         if (candidate == null) {
             return saveImg(photo, Type.CANDIDATE);
         } else {
@@ -255,17 +254,34 @@ public final class PsqlStore implements Store {
         return oId;
     }
 
-    private void updateImg(final String photo, int id, final Type type) {
+    private int updateImg(final String name, final int id, final Type type) {
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(
                      String.format("UPDATE %s SET name =? WHERE id = ?", type.getImgname()))) {
-            ps.setString(1, photo);
-            ps.setString(2, (String) o[2]);
-            ps.setDate(3, new Date(((java.util.Date) o[3]).getTime()));
-            ps.setInt(4, (int) o[0]);
+            ps.setString(1, name);
+            ps.setInt(2, id);
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return id;
+    }
+
+    public Map<Integer, String> findAllImg(final Type type) {
+        //List<String> list = new ArrayList<>();
+        Map<Integer, String> map = new HashMap<>();
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement(
+                     String.format("SELECT * FROM %s", type.getImgname()))) {
+            try (ResultSet it = ps.executeQuery()) {
+                while (it.next()) {
+                    map.put(it.getInt("id"), it.getString("name"));
+                    //list.add(it.getString("name"));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return map;
     }
 }

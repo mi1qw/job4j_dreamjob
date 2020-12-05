@@ -8,10 +8,10 @@ public class Candidate {
     private String name;
     private String description;
     private Date created;
-    private String photo;
+    private int photo;
 
     public Candidate(final int id, final String name, final String description,
-                     final Date created, final String photo) {
+                     final Date created, final int photo) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -21,7 +21,7 @@ public class Candidate {
 
     public Candidate(final int id, final String name, final String description,
                      final Date created) {
-        this(id, name, description, created, "noimages.png");
+        this(id, name, description, created, 0);
     }
 
     /**
@@ -29,7 +29,7 @@ public class Candidate {
      *
      * @return the photo
      */
-    public String getPhoto() {
+    public int getPhoto() {
         return photo;
     }
 

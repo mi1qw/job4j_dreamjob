@@ -1,6 +1,7 @@
 package ru.job4j.dream.model;
 
 import java.util.Collection;
+import java.util.Map;
 
 public interface Store {
     Collection<Post> findAllPosts();
@@ -17,5 +18,7 @@ public interface Store {
 
     String findImgCand(int id);
 
-    int saveImg(String photo, Candidate candidate);
+    int saveImgCand(String photo, Candidate candidate);
+
+    Map<Integer, String> findAllImg(Type type);
 }
