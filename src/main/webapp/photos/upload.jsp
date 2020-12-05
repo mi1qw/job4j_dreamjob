@@ -31,19 +31,56 @@
 <%--<div class="container pt-3">--%>
 <div class="container">
     <my:Header/>
+
+
+    <div class="card-body">
+        <form action="<%=request.getContextPath()%>/newcandidate.do?id=${requestScope.candidate.id}"
+              method="post">
+            <div class="form-group">
+                <table align="center" border="1" cellpadding="25" cellspacing="1"
+                       style="height: 200px; width: 700px">
+                    <tbody>
+                    <tr>
+                        <td style="text-align:center;">
+                            <img src="<c:url value='/download?name=${requestScope.photo}'/>"
+                                 alt="photo"
+                                 width="200px"
+                                 height="200px"/>
+                            <div class="nav-item">
+                                <br>
+                                <p>
+                                    <a class="nav-link"
+                                       href="${pageContext.servletContext.contextPath}/addphoto.do?id=${candidate.id}">Добавить
+                                        <%--                                               href="${pageContext.servletContext.contextPath}/addphoto.do?id=${candidate}">Добавить--%>
+                                        фото</a>
+                                </p>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group"><label>Загрузить фотогрфию<input
+                                    class="form-control" name="name" type="text"
+                                    value="${requestScope.candidate.name}"></label></div>
+                            <div class="form-group"><label>Описание<input
+                                    class="form-control" name="description" type="text"
+                                    value="${requestScope.candidate.description}"></label>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Сохранить</button>
+                        </td>
+                    </tr>
+                    </tbody>
+
+                </table>
+            </div>
+        </form>
+    </div>
+
+
     <h2>Upload image !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</h2>
     <div class="form-group">
-        <label>Фото
-            <img src="<c:url value='/download?name=${candidate.photo}'/>"
-                 alt="photo"
-                 width="100px"
-                 height="100px"/>
-
-        </label>
         <p><input name="фото" type="button" value="кнопка значение">
             <input name="имя" type="submit" value="кнопка значение"></p>
     </div>
-    <form action="<c:url value='/upload.do'/>" method="post"
+    <form action="<c:url value='/addphoto.do'/>" method="post"
           enctype="multipart/form-data">
         <div class="checkbox">
             <input type="file" name="file">

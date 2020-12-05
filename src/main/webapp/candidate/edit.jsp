@@ -47,21 +47,30 @@
                 <form action="<%=request.getContextPath()%>/candidate.do?id=${requestScope.candidate.id}"
                       method="post">
                     <div class="form-group">
-                        <table align="center" border="3" cellpadding="1" cellspacing="1">
+                        <table align="center" border="1" cellpadding="25" cellspacing="1"
+                               style="height: 200px; width: 700px">
                             <tbody>
                             <tr>
-                                <td>Фото<br>
+                                <td style="text-align:center;">
                                     <img src="<c:url value='/download?name=${requestScope.photo}'/>"
                                          alt="photo"
                                          width="200px"
                                          height="200px"/>
-                                    <p>Добавить фото</p>
+                                    <div class="nav-item">
+                                        <br>
+                                        <p>
+                                            <a class="nav-link"
+                                               href="${pageContext.servletContext.contextPath}/addphoto.do?id=${candidate.id}">Добавить
+                                                <%--                                               href="${pageContext.servletContext.contextPath}/addphoto.do?id=${candidate}">Добавить--%>
+                                                фото</a>
+                                        </p>
+                                    </div>
                                 </td>
                                 <td>
-                                    <div class="form-group"><label>Имя&nbsp;<input
+                                    <div class="form-group"><label>Имя<input
                                             class="form-control" name="name" type="text"
                                             value="${requestScope.candidate.name}"></label></div>
-                                    <div class="form-group"><label>Описание&nbsp;<input
+                                    <div class="form-group"><label>Описание<input
                                             class="form-control" name="description" type="text"
                                             value="${requestScope.candidate.description}"></label>
                                     </div>
