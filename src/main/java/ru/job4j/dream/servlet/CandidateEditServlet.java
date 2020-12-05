@@ -31,8 +31,8 @@ public class CandidateEditServlet extends HttpServlet {
                 req.setAttribute("candidate", PsqlStore.instOf().
                         findByIdCand(Integer.parseInt(id)));
             } else {
-                req.setAttribute("candidate", new Candidate(0, "Название",
-                        "Описание", new Date(), 1));
+                req.setAttribute("candidate", new Candidate(0, "", "",
+                        new Date(), 1));
             }
 
             req.getRequestDispatcher("candidate/edit.jsp").forward(req, resp);

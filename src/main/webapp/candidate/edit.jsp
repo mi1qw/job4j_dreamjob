@@ -39,73 +39,78 @@
     <div class="row">
         <div class="card" style="width: 100%">
             <div class="card-header">
-                <c:if test=""
-<%--                <% if (id == null) { %>--%>
+                <c:choose>
+                    <c:when test="${requestScope.candidate.id==0}">
+                        Новая вакансия.
+                    </c:when>
+                    <c:otherwise>
+                        Редактирование вакансии.
+                    </c:otherwise>
+                </c:choose>
+                <%--                <% if (id == null) { %>--%>
                 <%--                Новая вакансия.--%>
                 <%--                <% } else { %>--%>
                 <%--                Редактирование вакансии.--%>
                 <%--                <% } %>--%>
             </div>
-            <%--            <div class="card-body">--%>
-            <%--                <form action="<%=request.getContextPath()%>/candidate.do?id=<%=candidate.getId()%>"--%>
-            <%--                      method="post">--%>
-            <%--                    <div class="form-group">--%>
-            <%--                        <label>Имя--%>
-            <%--                            <input type="text" class="form-control" name="name"--%>
-            <%--                                   value="<%=candidate.getName()%>">--%>
-            <%--                        </label>--%>
-            <%--                    </div>--%>
-            <%--                    <div class="form-group">--%>
-            <%--                        <label>Описание--%>
-            <%--                            <input type="text" class="form-control" name="description"--%>
-            <%--                                   value="<%=candidate.getDescription()%>">--%>
-            <%--                        </label>--%>
-            <%--                    </div>--%>
-
-            <%--                    &lt;%&ndash;                    ${param.put("2","one")}&ndash;%&gt;--%>
-            <%--                    Добавить фото--%>
-            <%--                    &lt;%&ndash;                    <form action=""&ndash;%&gt;--%>
+            <div class="card-body">
+                <%--                <form action="<%=request.getContextPath()%>/candidate.do?id=<%=candidate.getId()%>"--%>
+                <form action="<%=request.getContextPath()%>/candidate.do?id=${requestScope.candidate.id}"
+                      method="post">
+                    <div class="form-group">
+                        <label>Имя
+                            <input type="text" class="form-control" name="name"
+                                   value="${requestScope.candidate.name}">
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>Описание
+                            <input type="text" class="form-control" name="description"
+                                   value="${requestScope.candidate.description}">
+                        </label>
+                    </div>
 
 
-            <%--                    &lt;%&ndash;            TODO    вывести фотона экран&ndash;%&gt;--%>
-            <%--                    <div class="card-body">--%>
-            <%--                        <div class="form-group">--%>
-            <%--                            <label>Фото--%>
-            <%--                                <input class="form-control" name="imgname" type="text"--%>
-            <%--                                       value="<%=candidate.getDescription()%>">--%>
-            <%--                                &lt;%&ndash;                                    <img src="<c:url value='/download?name=${candidatephoto}'/>"&ndash;%&gt;--%>
-            <%--                                ${requestScope.size()}<br>--%>
-            <%--                                ${requestScope.values()}<br>--%>
-            <%--                                <br>--%>
-            <%--                                ${pageContext.request.contextPath}<br>--%>
-            <%--                                !!!!!!!!!!!!!!!!!<br>--%>
-            <%--                                ${pageContext.request.getAttribute("candidate")}--%>
-            <%--                                getAttribute("candidate")<br>--%>
-            <%--                                ${pageContext.request.getParameter("id")} getParameter<br>--%>
-            <%--                                ${id} id<br>--%>
-            <%--                                ${paramValues}paramValues<br>--%>
-            <%--                                ${param.keySet()}param.keySet<br>--%>
-            <%--                                ${param.get("id")} param.get("id")<br>--%>
-            <%--                                ${candidate}candidate<br>--%>
+                    Добавить фото
+                    <%--                    TODO вывести фотона экран--%>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Фото
+                                <input class="form-control" name="imgname" type="text"
+                                       value="${requestScope.candidate.description}%>">
+                                <%--                                    <img src="<c:url value='/download?name=${candidatephoto}'/>"--%>
+                                ${requestScope.size()}<br>
+                                ${requestScope.values()}<br>
+                                <br>
+                                ${pageContext.request.contextPath}<br>
+                                !!!!!!!!!!!!!!!!!<br>
+                                ${pageContext.request.getAttribute("candidate")}
+                                getAttribute("candidate")<br>
+                                ${pageContext.request.getParameter("id")} getParameter<br>
+                                ${id} id<br>
+                                ${paramValues}paramValues<br>
+                                ${param.keySet()}param.keySet<br>
+                                ${param.get("id")} param.get("id")<br>
+                                ${candidate}candidate<br>
 
-            <%--                                <c:forEach items="${param.values()}" var="n">--%>
-            <%--                                    ${n}--%>
-            <%--                                </c:forEach>--%>
+                                <c:forEach items="${param.values()}" var="n">
+                                    ${n}
+                                </c:forEach>
 
-            <%--                                <img src="<c:url--%>
-            <%--                                value='/download?name=${candidate.photo}'/>"--%>
-            <%--                                     alt="photo"--%>
-            <%--                                     width="100px"--%>
-            <%--                                     height="100px"/>--%>
-            <%--                            </label>--%>
-            <%--                            <p><input name="фото" type="button" value="кнопка значение">--%>
-            <%--                                <input name="имя" type="submit" value="кнопка значение"></p>--%>
-            <%--                            &lt;%&ndash;                                <jsp:include page="/photos/upload.jsp"/>&ndash;%&gt;--%>
-            <%--                            &lt;%&ndash;                                <jsp:forward page="/photos/upload.jsp"/>&ndash;%&gt;--%>
-            <%--                        </div>--%>
-            <%--                    </div>--%>
-            <%--                </form>--%>
-            <%--            </div>--%>
+                                <img src="<c:url
+                                                                value='/download?name=${requestScope.candidate.photoId}'/>"
+                                     alt="photo"
+                                     width="100px"
+                                     height="100px"/>
+                            </label>
+                            <p><input name="фото" type="button" value="кнопка значение">
+                                <input name="имя" type="submit" value="кнопка значение"></p>
+                            <%--                                <jsp:include page="/photos/upload.jsp"/>--%>
+                            <%--                                <jsp:forward page="/photos/upload.jsp"/>--%>
+                        </div>
+                    </div>
+                </form>
+            </div>
 
 
             <form id="rendered-form">
