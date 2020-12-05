@@ -54,7 +54,6 @@
                 <%--                <% } %>--%>
             </div>
             <div class="card-body">
-                <%--                <form action="<%=request.getContextPath()%>/candidate.do?id=<%=candidate.getId()%>"--%>
                 <form action="<%=request.getContextPath()%>/candidate.do?id=${requestScope.candidate.id}"
                       method="post">
                     <div class="form-group">
@@ -72,42 +71,21 @@
 
 
                     Добавить фото
+                    ${requestScope.keySet()}<br>
+                    ${requestScope.values()}<br>
                     <%--                    TODO вывести фотона экран--%>
                     <div class="card-body">
-                        <div class="form-group">
-                            <label>Фото
-                                <input class="form-control" name="imgname" type="text"
-                                       value="${requestScope.candidate.description}%>">
-                                <%--                                    <img src="<c:url value='/download?name=${candidatephoto}'/>"--%>
-                                ${requestScope.size()}<br>
-                                ${requestScope.values()}<br>
-                                <br>
-                                ${pageContext.request.contextPath}<br>
-                                !!!!!!!!!!!!!!!!!<br>
-                                ${pageContext.request.getAttribute("candidate")}
-                                getAttribute("candidate")<br>
-                                ${pageContext.request.getParameter("id")} getParameter<br>
-                                ${id} id<br>
-                                ${paramValues}paramValues<br>
-                                ${param.keySet()}param.keySet<br>
-                                ${param.get("id")} param.get("id")<br>
-                                ${candidate}candidate<br>
 
-                                <c:forEach items="${param.values()}" var="n">
-                                    ${n}
-                                </c:forEach>
-
-                                <img src="<c:url
-                                                                value='/download?name=${requestScope.candidate.photoId}'/>"
-                                     alt="photo"
-                                     width="100px"
-                                     height="100px"/>
-                            </label>
-                            <p><input name="фото" type="button" value="кнопка значение">
-                                <input name="имя" type="submit" value="кнопка значение"></p>
-                            <%--                                <jsp:include page="/photos/upload.jsp"/>--%>
-                            <%--                                <jsp:forward page="/photos/upload.jsp"/>--%>
-                        </div>
+                        <label>Фото <br>
+                            <img src="<c:url value='/download?name=${requestScope.photo}'/>"
+                                 alt="photo"
+                                 width="100px"
+                                 height="100px"/>
+                        </label>
+                        <p><input name="фото" type="button" value="кнопка значение">
+                            <input name="имя" type="submit" value="кнопка значение"></p>
+                        <%--                                <jsp:include page="/photos/upload.jsp"/>--%>
+                        <%--                                <jsp:forward page="/photos/upload.jsp"/>--%>
                     </div>
                 </form>
             </div>

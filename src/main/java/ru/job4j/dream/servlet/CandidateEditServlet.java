@@ -24,17 +24,15 @@ public class CandidateEditServlet extends HttpServlet {
     @Override
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) {
         try {
-            //System.out.println(PsqlStore.instOf().findByIdCand(Integer.parseInt(req.getParameter(
-            //        "id"))));
+            Candidate candidate;
             String id = req.getParameter("id");
             if (id != null) {
-                req.setAttribute("candidate", PsqlStore.instOf().
-                        findByIdCand(Integer.parseInt(id)));
+                candidate = PsqlStore.instOf().findByIdCand(Integer.parseInt(id));
             } else {
-                req.setAttribute("candidate", new Candidate(0, "", "",
-                        new Date(), 1));
+                candidate = new Candidate(0, "", "", new Date(), 1);
             }
-
+            req.setAttribute("candidate", candidate);
+            req.setAttribute("photo", PsqlStore.instOf().findImgCand(candidate.getPhotoId()));
             req.getRequestDispatcher("candidate/edit.jsp").forward(req, resp);
         } catch (ServletException | IOException e) {
             LOGGER.error(e.getMessage(), e);
