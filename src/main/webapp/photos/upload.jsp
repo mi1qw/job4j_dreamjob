@@ -56,22 +56,21 @@
                     <tbody>
                     <tr>
                         <td style="text-align:center;">
-                            <img src="<c:url value='/download?name=${sessionScope.photo.name}'/>"
-                                 alt="photo"
-                                 width="200px"
-                                 height="200px"/>
+
+                            <div class="containerD">
+                                <img src="<c:url value='/download?name=${sessionScope.photo.name}'/>"
+                                     alt="photo"
+                                     width="200px"
+                                     height="200px"
+                                />
+                                <button class="btnD">Delete</button>
+                            </div>
+                            <br>
                             <div class="nav-item">
-                                <br>
                                 <p><a class="nav-link"
                                       href="${pageContext.servletContext.contextPath}/download?name=${sessionScope.photo.name}">Скачать
                                     фото
                                 </a>
-                                    <%--                                </p>--%>
-                                    <%--                                <p>--%>
-                                    <%--                                    <a class="nav-link"--%>
-                                    <%--                                       href="${pageContext.servletContext.contextPath}/newcandidate.do?photo=${requestScope.photo}">Удалить--%>
-                                    <%--                                        фото--%>
-                                    <%--                                    </a>--%>
                                 </p>
                             </div>
                         </td>

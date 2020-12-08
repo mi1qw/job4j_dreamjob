@@ -1,8 +1,8 @@
 /* Container needed to position the button. Adjust the width as needed */
-.containerD {
-    position: relative;
-    width: 50%;
-}
+/*.containerD {*/
+/*    position: relative;*/
+/*    width: 50%;*/
+/*}*/
 
 /*!* Make the image responsive *!*/
 /*.containerD img {*/
@@ -23,7 +23,7 @@
     padding: 5px 10px;
     border: none;
     cursor: pointer;
-    border-radius: 5px;
+    /*border-radius: 5px;*/
 
     -webkit-border-radius: 9px;
     -moz-border-radius: 9px;
@@ -35,5 +35,5 @@
 .containerD .btnD:hover {
     background-image: -moz-linear-gradient(top, #FF0000, #8B0000 89%);
     background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.00, #BE0E0E), color-stop(0.89, #4E0000));
-    background-color: black;
+    /*background-color: black;*/
 }
