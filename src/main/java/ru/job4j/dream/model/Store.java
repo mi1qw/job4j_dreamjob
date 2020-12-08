@@ -16,7 +16,7 @@ public interface Store {
 
     Candidate findByIdCand(int id);
 
-    String findImgCand(int id);
+    ImgName findImgCand(int id);
 
     int saveImgCand(String photo, Candidate candidate);
 

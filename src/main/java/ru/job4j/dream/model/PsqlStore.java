@@ -189,7 +189,7 @@ public final class PsqlStore implements Store {
      * @return res
      */
     @Override
-    public String findImgCand(final int id) {
+    public ImgName findImgCand(final int id) {
         return findPhoto(id, Type.CANDIDATE);
     }
 
@@ -200,23 +200,24 @@ public final class PsqlStore implements Store {
      * @param type type
      * @return res
      */
-    private String findPhoto(final int id, final Type type) {
+    private ImgName findPhoto(final int id, final Type type) {
         ResultSet rs;
-        String res = null;
+        ImgName img = null;
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(
                      String.format("SELECT * FROM %s  WHERE id = ?", type.getImgname()))) {
             ps.setInt(1, id);
             rs = ps.executeQuery();
             if (rs.next()) {
-                res = rs.getString("name");
+                img = new ImgName(id, rs.getString("name"));
             } else {
-                res = "noimages.png";
+                //img = "noimages.png";
+                img = null;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return res;
+        return img;
     }
 
     /**

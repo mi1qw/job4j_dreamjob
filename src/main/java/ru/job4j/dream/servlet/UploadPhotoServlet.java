@@ -33,7 +33,7 @@ public class UploadPhotoServlet extends HttpServlet {
 
         //System.out.println(req.getSession().getAttribute("candidateSS") + "   candidateSS");
         //Candidate candidate;
-        String id = req.getParameter("id");
+        //String id = req.getParameter("id");
         //candidate = req.getParameter("candidate");
 
         //if (!id.equals("0")) {
@@ -45,8 +45,8 @@ public class UploadPhotoServlet extends HttpServlet {
         //req.setAttribute("photo", PsqlStore.instOf().findImgCand(Integer.parseInt(id)));
         //req.setAttribute("candidate", candidate);
         //req.setAttribute("photo", PsqlStore.instOf().findImgCand(candidate.getPhotoId()));
-        System.out.println(req.getParameter("photo"));
-        req.setAttribute("photo", req.getParameter("photo"));
+        //System.out.println(req.getParameter("photo"));
+        //req.setAttribute("photo", req.getParameter("photo"));
         RequestDispatcher dispatcher = req.getRequestDispatcher("/photos/upload.jsp");
         try {
             dispatcher.forward(req, resp);

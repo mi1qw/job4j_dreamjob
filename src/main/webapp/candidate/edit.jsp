@@ -53,7 +53,7 @@
                             <tbody>
                             <tr>
                                 <td style="text-align:center;">
-                                    <img src="<c:url value='/download?name=${requestScope.photo}'/>"
+                                    <img src="<c:url value='/download?name=${sessionScope.photo.name}'/>"
                                          alt="photo"
                                          width="200px"
                                          height="200px"/>
@@ -62,7 +62,7 @@
                                         <p>
                                             <a class="nav-link"
                                             <%--                                               href="${pageContext.servletContext.contextPath}/addphoto.do?id=${candidate.id}">Добавить--%>
-                                               href="${pageContext.servletContext.contextPath}/addphoto.do?photo=${requestScope.photo}">Добавить
+                                               href="${pageContext.servletContext.contextPath}/addphoto.do?photo=${sessionScope.photo.name}">Добавить
                                                 фото</a>
                                         </p>
                                     </div>

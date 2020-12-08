@@ -25,22 +25,20 @@ public class CandidateEditServlet extends HttpServlet {
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) {
         Candidate candidate;
         String photo = req.getParameter("file");
-        System.out.println(photo);
+        System.out.println(photo + "    getParameter(\"file\")");
         try {
-            if (photo != null) {
-                req.setAttribute("photo", photo);
+            //if (photo != null) {
+            //    //req.setAttribute("photo", photo);
+            //} else {
+            String id = req.getParameter("id");
+            if (id != null) {
+                candidate = PsqlStore.instOf().findByIdCand(Integer.parseInt(id));
             } else {
-                String id = req.getParameter("id");
-                if (id != null) {
-                    candidate = PsqlStore.instOf().findByIdCand(Integer.parseInt(id));
-                } else {
-                    candidate = new Candidate(0, "", "", new Date(), 1);
-                }
-                req.getSession().setAttribute("candidate", candidate);
-
-                //req.setAttribute("candidate", candidate);
-                req.setAttribute("photo", PsqlStore.instOf().findImgCand(candidate.getPhotoId()));
+                candidate = new Candidate(0, "", "", new Date(), 1);
             }
+            req.getSession().setAttribute("candidate", candidate);
+            req.getSession().setAttribute("photo", PsqlStore.instOf().findImgCand(candidate.getPhotoId()));
+            //}
 
             req.getRequestDispatcher("candidate/edit.jsp").forward(req, resp);
         } catch (ServletException | IOException e) {

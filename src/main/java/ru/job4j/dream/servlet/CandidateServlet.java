@@ -30,7 +30,7 @@ public class CandidateServlet extends HttpServlet {
         String photoId = req.getParameter("photo");
         String id = req.getParameter("id");
         id = "";
-        System.out.println(Candidate.getCache() + "   CandidateServlet");
+
         try {
             req.setCharacterEncoding("UTF-8");
             PsqlStore.instOf().save(

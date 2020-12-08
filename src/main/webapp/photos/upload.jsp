@@ -45,14 +45,14 @@
                     <tbody>
                     <tr>
                         <td style="text-align:center;">
-                            <img src="<c:url value='/download?name=${requestScope.photo}'/>"
+                            <img src="<c:url value='/download?name=${sessionScope.photo.name}'/>"
                                  alt="photo"
                                  width="200px"
                                  height="200px"/>
                             <div class="nav-item">
                                 <br>
                                 <p><a class="nav-link"
-                                      href="${pageContext.servletContext.contextPath}/download?name=${requestScope.photo}">Скачать
+                                      href="${pageContext.servletContext.contextPath}/download?name=${sessionScope.photo.name}">Скачать
                                     фото
                                 </a>
                                     <%--                                </p>--%>
