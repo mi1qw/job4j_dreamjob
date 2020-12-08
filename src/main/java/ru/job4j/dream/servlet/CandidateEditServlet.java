@@ -24,8 +24,10 @@ public class CandidateEditServlet extends HttpServlet {
     @Override
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) {
         Candidate candidate;
-        String photo = req.getParameter("file");
-        System.out.println(photo + "    getParameter(\"file\")");
+        System.out.println();
+        String photo = req.getParameter("tests");
+        System.out.println(photo + "    getParameter(\"tests\")");
+
         try {
             //if (photo != null) {
             //    //req.setAttribute("photo", photo);
