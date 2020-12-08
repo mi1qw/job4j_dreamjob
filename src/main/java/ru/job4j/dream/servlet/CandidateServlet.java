@@ -24,6 +24,13 @@ public class CandidateServlet extends HttpServlet {
      */
     @Override
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) {
+
+        System.out.println((Candidate) req.getAttribute("candidateMY") + "   CandidateServlet my");
+
+        String photoId = req.getParameter("photo");
+        String id = req.getParameter("id");
+        id = "";
+        System.out.println(Candidate.getCache() + "   CandidateServlet");
         try {
             req.setCharacterEncoding("UTF-8");
             PsqlStore.instOf().save(

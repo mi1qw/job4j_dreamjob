@@ -34,7 +34,10 @@
 
 
     <div class="card-body">
-        <form action="<%=request.getContextPath()%>/newcandidate.do?id=${requestScope.candidate.id}"
+        <%--        <form action="<%=request.getContextPath()%>/newcandidate.do?id=${requestScope.candidate.id}"--%>
+        <%--        <form action="<%=request.getContextPath()%>/addphoto.do?file="${pageContext.page}--%>
+        <form action="${pageContext.request.contextPath}/addphoto.do"
+              enctype="multipart/form-data"
               method="post">
             <div class="form-group">
                 <table align="center" border="1" cellpadding="25" cellspacing="1"
@@ -48,23 +51,63 @@
                                  height="200px"/>
                             <div class="nav-item">
                                 <br>
-                                <p>
-                                    <a class="nav-link"
-                                       href="${pageContext.servletContext.contextPath}/addphoto.do?id=${candidate.id}">Добавить
-                                        <%--                                               href="${pageContext.servletContext.contextPath}/addphoto.do?id=${candidate}">Добавить--%>
-                                        фото</a>
+                                <p><a class="nav-link"
+                                      href="${pageContext.servletContext.contextPath}/download?name=${requestScope.photo}">Скачать
+                                    фото
+                                </a>
+                                    <%--                                </p>--%>
+                                    <%--                                <p>--%>
+                                    <%--                                    <a class="nav-link"--%>
+                                    <%--                                       href="${pageContext.servletContext.contextPath}/newcandidate.do?photo=${requestScope.photo}">Удалить--%>
+                                    <%--                                        фото--%>
+                                    <%--                                    </a>--%>
                                 </p>
                             </div>
                         </td>
                         <td>
-                            <div class="form-group"><label>Загрузить фотогрфию<input
-                                    class="form-control" name="name" type="text"
-                                    value="${requestScope.candidate.name}"></label></div>
-                            <div class="form-group"><label>Описание<input
-                                    class="form-control" name="description" type="text"
-                                    value="${requestScope.candidate.description}"></label>
+                            <a class="nav-link"
+                               href="${pageContext.servletContext.contextPath}/newcandidate.do?photo=${requestScope.photo}">Удалить
+                                фото
+                            </a>
+                            <li>
+                                <form method="POST" action="index.jsp">
+                                    <button type="submit"> LogOut</button>
+                                </form>
+                            </li>
+                            <div class="card-body">
+
+
+                                <%--                                <a class="nav-link"--%>
+                                <%--                                &lt;%&ndash;                                               href="${pageContext.servletContext.contextPath}/addphoto.do?id=${candidate.id}">Добавить&ndash;%&gt;--%>
+                                <%--                                   href="${pageContext.servletContext.contextPath}/addphoto.do">Добавить--%>
+                                <%--                                    фото</a>--%>
+
+
+                                <h2>Upload image</h2>
+                                <%--                                <form action="<c:url value='/addphoto.do'/>" method="post"--%>
+                                <%--                                      enctype="multipart/form-data">--%>
+                                <div class="checkbox">
+                                    <input type="file" name="file">
+                                </div>
+                                <button type="submit" class="btn btn-default">Submit</button>
+
+                                <%--                                </form>--%>
+
+
+                                <%--                                <h2>Upload image</h2>--%>
+                                <%--                                &lt;%&ndash;                                <form action="<c:url value='/newcandidate.do?file=${file}'/>"&ndash;%&gt;--%>
+                                <%--                                <form action="<c:url value='/addphoto.do'/>"--%>
+                                <%--                                      method="post"--%>
+                                <%--                                      enctype="multipart/form-data">--%>
+                                <%--                                    <div class="checkbox">--%>
+                                <%--                                        <input type="file" name="file">--%>
+                                <%--                                    </div>--%>
+                                <%--                                    <button type="submit" class="btn btn-default">Submit</button>--%>
+                                <%--                                </form>--%>
                             </div>
-                            <button type="submit" class="btn btn-primary">Сохранить</button>
+
+
+                            <%--                            <button type="submit" class="btn btn-primary">Сохранить</button>--%>
                         </td>
                     </tr>
                     </tbody>
@@ -75,19 +118,21 @@
     </div>
 
 
-    <h2>Upload image !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</h2>
-    <div class="form-group">
-        <p><input name="фото" type="button" value="кнопка значение">
-            <input name="имя" type="submit" value="кнопка значение"></p>
-    </div>
-    <form action="<c:url value='/addphoto.do'/>" method="post"
-          enctype="multipart/form-data">
-        <div class="checkbox">
-            <input type="file" name="file">
-        </div>
-        <button type="submit" class="btn btn-default">Submit</button>
-    </form>
-</div>
+    <%--    <h2>Upload image !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</h2>--%>
+    <%--    <div class="form-group">--%>
+    <%--        <p><input name="фото" type="button" value="кнопка значение">--%>
+    <%--            <input name="имя" type="submit" value="кнопка значение"></p>--%>
+    <%--    </div>--%>
+    <%--    ${requestScope.candidate.id}--%>
+    <%--    <div class="card-body">--%>
+    <%--        <form action="<c:url value='/addphoto.do?id=${requestScope.candidate.id}'/>" method="post"--%>
+    <%--              enctype="multipart/form-data">--%>
+    <%--            <div class="checkbox">--%>
+    <%--                <input type="file" name="file">--%>
+    <%--            </div>--%>
+    <%--            <button type="submit" class="btn btn-default">Submit</button>--%>
+    <%--        </form>--%>
+    <%--    </div>--%>
 
 </body>
 </html>

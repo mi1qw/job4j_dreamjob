@@ -33,7 +33,7 @@
         <div class="card" style="width: 100%">
             <div class="card-header">
                 <c:choose>
-                    <c:when test="${requestScope.candidate.id==0}">
+                    <c:when test="${sessionScope.candidate.id==0}">
                         Новая вакансия.
                     </c:when>
                     <c:otherwise>
@@ -41,9 +41,10 @@
                     </c:otherwise>
                 </c:choose>
             </div>
-
-
             <div class="card-body">
+
+                <%--                TODO поменять на EL--%>
+                <%--                FIXME--%>
                 <form action="<%=request.getContextPath()%>/candidate.do?id=${requestScope.candidate.id}"
                       method="post">
                     <div class="form-group">
@@ -60,8 +61,8 @@
                                         <br>
                                         <p>
                                             <a class="nav-link"
-                                               href="${pageContext.servletContext.contextPath}/addphoto.do?id=${candidate.id}">Добавить
-                                                <%--                                               href="${pageContext.servletContext.contextPath}/addphoto.do?id=${candidate}">Добавить--%>
+                                            <%--                                               href="${pageContext.servletContext.contextPath}/addphoto.do?id=${candidate.id}">Добавить--%>
+                                               href="${pageContext.servletContext.contextPath}/addphoto.do?photo=${requestScope.photo}">Добавить
                                                 фото</a>
                                         </p>
                                     </div>
@@ -69,10 +70,10 @@
                                 <td>
                                     <div class="form-group"><label>Имя<input
                                             class="form-control" name="name" type="text"
-                                            value="${requestScope.candidate.name}"></label></div>
+                                            value="${candidate.name}"></label></div>
                                     <div class="form-group"><label>Описание<input
                                             class="form-control" name="description" type="text"
-                                            value="${requestScope.candidate.description}"></label>
+                                            value="${candidate.description}"></label>
                                     </div>
                                     <button type="submit" class="btn btn-primary">Сохранить</button>
                                 </td>
@@ -105,7 +106,8 @@
                     Добавить фото
                     ${requestScope.keySet()}<br>
                     ${requestScope.values()}<br>
-                    <%--                    TODO вывести фотона экран--%>
+                    ${sessionScope.candidateSS}<br>
+
                     <div class="card-body">
 
                         <label>Фото <br>

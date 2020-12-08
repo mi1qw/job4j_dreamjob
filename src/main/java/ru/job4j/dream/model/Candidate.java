@@ -9,6 +9,7 @@ public class Candidate {
     private String description;
     private Date created;
     private int photoId;
+    private static Candidate cache = null;
 
     public Candidate(final int id, final String name, final String description,
                      final Date created, final int photoId) {
@@ -22,6 +23,24 @@ public class Candidate {
     public Candidate(final int id, final String name, final String description,
                      final Date created) {
         this(id, name, description, created, 0);
+    }
+
+    /**
+     * Gets cache.
+     *
+     * @return the cache
+     */
+    public static Candidate getCache() {
+        return cache;
+    }
+
+    /**
+     * Sets cache.
+     *
+     * @param cache the cache
+     */
+    public static void setCache(final Candidate cache) {
+        Candidate.cache = cache;
     }
 
     /**

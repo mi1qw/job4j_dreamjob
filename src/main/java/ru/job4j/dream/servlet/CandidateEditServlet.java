@@ -23,16 +23,25 @@ public class CandidateEditServlet extends HttpServlet {
      */
     @Override
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) {
+        Candidate candidate;
+        String photo = req.getParameter("file");
+        System.out.println(photo);
         try {
-            Candidate candidate;
-            String id = req.getParameter("id");
-            if (id != null) {
-                candidate = PsqlStore.instOf().findByIdCand(Integer.parseInt(id));
+            if (photo != null) {
+                req.setAttribute("photo", photo);
             } else {
-                candidate = new Candidate(0, "", "", new Date(), 1);
+                String id = req.getParameter("id");
+                if (id != null) {
+                    candidate = PsqlStore.instOf().findByIdCand(Integer.parseInt(id));
+                } else {
+                    candidate = new Candidate(0, "", "", new Date(), 1);
+                }
+                req.getSession().setAttribute("candidate", candidate);
+
+                //req.setAttribute("candidate", candidate);
+                req.setAttribute("photo", PsqlStore.instOf().findImgCand(candidate.getPhotoId()));
             }
-            req.setAttribute("candidate", candidate);
-            req.setAttribute("photo", PsqlStore.instOf().findImgCand(candidate.getPhotoId()));
+
             req.getRequestDispatcher("candidate/edit.jsp").forward(req, resp);
         } catch (ServletException | IOException e) {
             LOGGER.error(e.getMessage(), e);
