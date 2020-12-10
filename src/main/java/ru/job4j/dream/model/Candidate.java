@@ -9,7 +9,6 @@ public class Candidate {
     private String description;
     private Date created;
     private int photoId;
-    private static Candidate cache = null;
 
     public Candidate(final int id, final String name, final String description,
                      final Date created, final int photoId) {
@@ -26,30 +25,21 @@ public class Candidate {
     }
 
     /**
-     * Gets cache.
-     *
-     * @return the cache
-     */
-    public static Candidate getCache() {
-        return cache;
-    }
-
-    /**
-     * Sets cache.
-     *
-     * @param cache the cache
-     */
-    public static void setCache(final Candidate cache) {
-        Candidate.cache = cache;
-    }
-
-    /**
      * Gets photo.
      *
      * @return the photo
      */
     public int getPhotoId() {
         return photoId;
+    }
+
+    /**
+     * Sets photo id.
+     *
+     * @param photoId the photo id
+     */
+    public void setPhotoId(final int photoId) {
+        this.photoId = photoId;
     }
 
     /**

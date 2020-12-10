@@ -1,9 +1,14 @@
 package ru.job4j.dream.model;
 
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Date;
 import java.sql.*;
 import java.util.*;
@@ -12,6 +17,8 @@ import java.util.*;
  * The type Psql store.
  */
 public final class PsqlStore implements Store {
+    public static final Logger LOGGER = LoggerFactory.getLogger(PsqlStore.class);
+    public static final String LN = System.lineSeparator();
     private static final Store INST = new PsqlStore();
     private final BasicDataSource pool = new BasicDataSource();
 
@@ -136,8 +143,8 @@ public final class PsqlStore implements Store {
     private void update(final Object[] o, final Type t) {
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(
-                     String.format("UPDATE %s SET name =?, description =?, created =? "
-                             + "photo_id =? WHERE id = ?", t.getName()))) {
+                     String.format("UPDATE %s SET name =?, description =?, created =?, photo_id " +
+                             "=? WHERE id = ?", t.getName()))) {
             ps.setString(1, (String) o[1]);
             ps.setString(2, (String) o[2]);
             ps.setDate(3, new Date(((java.util.Date) o[3]).getTime()));
@@ -189,7 +196,7 @@ public final class PsqlStore implements Store {
      * @return res
      */
     @Override
-    public ImgName findImgCand(final int id) {
+    public ImgFile findImgCand(final int id) {
         return findPhoto(id, Type.CANDIDATE);
     }
 
@@ -200,16 +207,16 @@ public final class PsqlStore implements Store {
      * @param type type
      * @return res
      */
-    private ImgName findPhoto(final int id, final Type type) {
+    private ImgFile findPhoto(final int id, final Type type) {
         ResultSet rs;
-        ImgName img = null;
+        ImgFile img = null;
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(
                      String.format("SELECT * FROM %s  WHERE id = ?", type.getImgname()))) {
             ps.setInt(1, id);
             rs = ps.executeQuery();
             if (rs.next()) {
-                img = new ImgName(id, rs.getString("name"));
+                img = new ImgFile(id, rs.getString("name"));
             } else {
                 //img = "noimages.png";
                 img = null;
@@ -222,21 +229,23 @@ public final class PsqlStore implements Store {
 
     /**
      * saveImg.
+     * If their is new user or without photo (PhotoId=1) then, then saveImg/add new photo to DB
      *
      * @param photo name of photo
-     * @return
+     * @return photoId
      */
     @Override
     public int saveImgCand(final String photo, final Candidate candidate) {
-        if (candidate == null) {
+        int pId = candidate.getPhotoId();
+        if (pId == 1) {
             return saveImg(photo, Type.CANDIDATE);
         } else {
-            return updateImg(photo, candidate.getPhotoId(), Type.CANDIDATE);
+            return updateImg(photo, pId, Type.CANDIDATE);
         }
-        //return 0;
     }
 
     private int saveImg(final String photo, final Type type) {
+        //doQuery("SELECT SETVAL('photo_id_seq', 1, false)");
         int oId = 0;
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(
@@ -284,5 +293,49 @@ public final class PsqlStore implements Store {
             e.printStackTrace();
         }
         return map;
+    }
+
+    /**
+     * Выполнить как-то запрос/команду
+     *
+     * @param query query + строка для вывода в лог
+     */
+    private void doQuery(final String... query) {
+        try (Connection cn = pool.getConnection(); Statement st = cn.createStatement()) {
+            boolean isResult = st.execute(query[0]);
+            if (isResult) {
+                StringBuilder sb = new StringBuilder();
+                try (ResultSet resalt = st.getResultSet()) {
+                    while (resalt.next()) {
+                        for (int n = 1; n <= resalt.getMetaData().getColumnCount(); ++n) {
+                            sb.append(resalt.getObject(n));
+                            sb.append(" ");
+                        }
+                        sb.append(LN);
+                    }
+                }
+                String str = query.length > 1 ? query[1].concat(LN) : "";
+                if (query.length > 1) {
+                    LOGGER.info("Query {}{}", str, sb);
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Clean up.
+     * Delete file at the specified path
+     *
+     * @param path the path
+     */
+    @Override
+    public void cleanUp(final Path path) {
+        try {
+            Files.delete(path);
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
     }
 }

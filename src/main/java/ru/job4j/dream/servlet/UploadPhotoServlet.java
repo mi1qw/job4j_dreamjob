@@ -6,6 +6,7 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.job4j.dream.model.ImgFile;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -89,6 +90,11 @@ public class UploadPhotoServlet extends HttpServlet {
                 }
                 File file = new File(folder + File.separator + item.getName());
                 System.out.println(file.getName());
+
+                ImgFile newPhoto = (ImgFile) req.getSession().getAttribute("photo");
+                newPhoto.setName(file.getName());
+                System.out.println(newPhoto + "   ImgFile");
+
                 try (FileOutputStream out = new FileOutputStream(file)) {
                     out.write(item.getInputStream().readAllBytes());
                 } catch (IOException e) {
@@ -96,13 +102,23 @@ public class UploadPhotoServlet extends HttpServlet {
                 }
             }
         }
-        //doGet(req, resp);
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/newcandidate.do");
+
         try {
-            dispatcher.forward(req, resp);
-        } catch (IOException | ServletException e) {
+            resp.sendRedirect(req.getContextPath() + "/newcandidate.do");
+            //resp.sendRedirect(req.getContextPath() + "/candidate.do");
+        } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
+
+        //doGet(req, resp);
+
+        //RequestDispatcher dispatcher = req.getRequestDispatcher("/newcandidate.do");
+        ////RequestDispatcher dispatcher = req.getRequestDispatcher("/photos/upload.jsp");
+        //try {
+        //    dispatcher.forward(req, resp);
+        //} catch (IOException | ServletException e) {
+        //    LOGGER.error(e.getMessage(), e);
+        //}
     }
 
     /**

@@ -1,10 +1,10 @@
 package ru.job4j.dream.model;
 
-public class ImgName {
+public class ImgFile {
     private int id;
     private String name;
 
-    public ImgName(final int id, final String name) {
+    public ImgFile(final int id, final String name) {
         this.id = id;
         this.name = name;
     }
@@ -52,7 +52,7 @@ public class ImgName {
      */
     @Override
     public String toString() {
-        return "ImgName{"
+        return "ImgFile{"
                 + "id=" + id
                 + ", name='" + name + '\''
                 + '}';

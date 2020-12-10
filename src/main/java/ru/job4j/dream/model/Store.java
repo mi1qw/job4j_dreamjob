@@ -1,5 +1,6 @@
 package ru.job4j.dream.model;
 
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Map;
 
@@ -16,9 +17,11 @@ public interface Store {
 
     Candidate findByIdCand(int id);
 
-    ImgName findImgCand(int id);
+    ImgFile findImgCand(int id);
 
     int saveImgCand(String photo, Candidate candidate);
 
     Map<Integer, String> findAllImg(Type type);
+
+    void cleanUp(Path path);
 }

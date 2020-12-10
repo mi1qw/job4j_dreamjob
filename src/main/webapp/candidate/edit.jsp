@@ -45,29 +45,33 @@
 
                 <%--                TODO поменять на EL--%>
                 <%--                FIXME--%>
-                <form action="<%=request.getContextPath()%>/candidate.do?id=${requestScope.candidate.id}"
-                      method="post">
-                    <div class="form-group">
-                        <table align="center" border="1" cellpadding="25" cellspacing="1"
-                               style="height: 200px; width: 700px">
-                            <tbody>
-                            <tr>
-                                <td style="text-align:center;">
-                                    <img src="<c:url value='/download?name=${sessionScope.photo.name}'/>"
-                                         alt="photo"
-                                         width="200px"
-                                         height="200px"/>
-                                    <div class="nav-item">
-                                        <br>
-                                        <p>
-                                            <a class="nav-link"
-                                            <%--                                               href="${pageContext.servletContext.contextPath}/addphoto.do?id=${candidate.id}">Добавить--%>
-                                               href="${pageContext.servletContext.contextPath}/addphoto.do?photo=${sessionScope.photo.name}">Добавить
-                                                фото</a>
-                                        </p>
-                                    </div>
-                                </td>
-                                <td>
+
+                <div class="form-group">
+                    <table align="center" border="1" cellpadding="25" cellspacing="1"
+                           style="height: 200px; width: 700px">
+                        <tbody>
+                        <tr>
+                            <td style="text-align:center;">
+                                <img src="<c:url value='/download?name=${sessionScope.photo.name}'/>"
+                                     alt="photo"
+                                     width="200px"
+                                     height="200px"/>
+                                <div class="nav-item">
+                                    <br>
+                                    <p>
+                                        <a class="nav-link"
+                                        <%--                                               href="${pageContext.servletContext.contextPath}/addphoto.do?id=${candidate.id}">Добавить--%>
+                                           href="${pageContext.servletContext.contextPath}/addphoto.do?photo=${sessionScope.photo.name}">Добавить
+                                            фото</a>
+                                    </p>
+                                </div>
+                            </td>
+                            <td>
+                                <form id="reset" action="<c:url value="/newcandidate.do"/>"
+                                      method="post">
+                                </form>
+                                <form action="<%=request.getContextPath()%>/candidate.do?id=${requestScope.candidate.id}"
+                                      method="post">
                                     <div class="form-group"><label>Имя<input
                                             class="form-control" name="name" type="text"
                                             value="${candidate.name}"></label></div>
@@ -76,13 +80,17 @@
                                             value="${candidate.description}"></label>
                                     </div>
                                     <button type="submit" class="btn btn-primary">Сохранить</button>
-                                </td>
-                            </tr>
-                            </tbody>
+                                    <button form="reset" type="submit" class="btn btn-grey">Отмена
+                                    </button>
+                                </form>
+                                <%--                                <form action="${pageContext.request.contextPath}/newcandidate.do"--%>
 
-                        </table>
-                    </div>
-                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
             </div>
 
 
@@ -111,7 +119,7 @@
                     <div class="card-body">
 
                         <label>Фото <br>
-                            <img src="<c:url value='/download?name=${requestScope.photo}'/>"
+                            <img src="<c:url value='/download?name=${sessionScope.photo.name}'/>"
                                  alt="photo"
                                  width="100px"
                                  height="100px"/>
