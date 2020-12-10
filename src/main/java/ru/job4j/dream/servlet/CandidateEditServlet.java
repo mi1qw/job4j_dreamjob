@@ -28,12 +28,14 @@ public class CandidateEditServlet extends HttpServlet {
         System.out.println();
 
         try {
-            //if (photo != null) {
-            //    //req.setAttribute("photo", photo);
-            //} else {
+            String id = req.getParameter("id");
+            Candidate cnd = (Candidate) req.getSession().getAttribute("candidate");
+            if (id != null && cnd != null && id.equals(String.valueOf(cnd.getId()))) {
+
+            }
+
             if (req.getSession().getAttribute("candidate") == null) {
 
-                String id = req.getParameter("id");
                 if (id != null) {
                     candidate = PsqlStore.instOf().findByIdCand(Integer.parseInt(id));
                 } else {        // it`s a new candidate with id=0 and photoID=1
