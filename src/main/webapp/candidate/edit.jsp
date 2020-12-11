@@ -59,7 +59,7 @@
                                 <div class="nav-item">
                                     <br>
                                     <p>
-                                        <a class="nav-link"
+                                        <a class="badge badge-primary"
                                         <%--                                               href="${pageContext.servletContext.contextPath}/addphoto.do?id=${candidate.id}">Добавить--%>
                                            href="${pageContext.servletContext.contextPath}/addphoto.do?photo=${sessionScope.photo.name}">Добавить
                                             фото</a>
@@ -72,15 +72,15 @@
                                 </form>
                                 <form action="<%=request.getContextPath()%>/candidate.do?id=${requestScope.candidate.id}"
                                       method="post">
-                                    <div class="form-group"><label>Имя<input
-                                            class="form-control" name="name" type="text"
-                                            value="${candidate.name}"></label></div>
-                                    <div class="form-group"><label>Описание<input
-                                            class="form-control" name="description" type="text"
-                                            value="${candidate.description}"></label>
+                                    <div class="form-group"><label>Имя
+                                        <input class="form-control" name="name" type="text"
+                                               value="${candidate.name}"></label></div>
+                                    <div class="form-group"><label>Описание
+                                        <input class="form-control" name="description" type="text"
+                                               value="${candidate.description}"></label>
                                     </div>
                                     <button type="submit" class="btn btn-primary">Сохранить</button>
-                                    <button form="reset" type="submit" class="btn btn-grey">Отмена
+                                    <button form="reset" type="submit" class="btn btn-light">Отмена
                                     </button>
                                 </form>
                                 <%--                                <form action="${pageContext.request.contextPath}/newcandidate.do"--%>
@@ -90,63 +90,21 @@
                         </tbody>
                     </table>
                 </div>
+                <form style="text-align:center;" method="post"
+                      action="<c:url value="/candidate.do?id=${requestScope.candidate.id}"/>">
+                    <button class="btn btn-danger" type="submit" name="delete" value="delete">Delete
+                    </button>
+                </form>
 
             </div>
 
 
             <div class="card-body">
-                <form action="<%=request.getContextPath()%>/candidate.do?id=${requestScope.candidate.id}"
-                      method="post">
-                    <div class="form-group">
-                        <label>Имя
-                            <input type="text" class="form-control" name="name"
-                                   value="${requestScope.candidate.name}">
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <label>Описание
-                            <input type="text" class="form-control" name="description"
-                                   value="${requestScope.candidate.description}">
-                        </label>
-                    </div>
-
-
-                    Добавить фото
-                    ${requestScope.keySet()}<br>
-                    ${requestScope.values()}<br>
-                    ${sessionScope.candidateSS}<br>
-
-                    <div class="card-body">
-
-                        <label>Фото <br>
-                            <img src="<c:url value='/download?name=${sessionScope.photo.name}'/>"
-                                 alt="photo"
-                                 width="100px"
-                                 height="100px"/>
-                        </label>
-                        <p><input name="фото" type="button" value="кнопка значение">
-                            <input name="имя" type="submit" value="кнопка значение"></p>
-                        <%--                                <jsp:include page="/photos/upload.jsp"/>--%>
-                        <%--                                <jsp:forward page="/photos/upload.jsp"/>--%>
-                    </div>
-                </form>
+                Добавить фото<br>
+                ${requestScope.keySet()}<br>
+                ${requestScope.values()}<br>
+                ${sessionScope.candidateSS}<br>
             </div>
-
-
-            <form id="rendered-form">
-                <div class="rendered-form">
-                    <div class=""><h1 access="false" id="control-5948300">Header</h1></div>
-                    <div class=""><p access="false" id="control-256395">Paragraph</p></div>
-                    <div class="formbuilder-file form-group field-file-1606997307640">
-                        <label for="file-1606997307640" class="formbuilder-file-label">
-                            File Upload
-                        </label>
-                        <input type="file" class="form-control"
-                               name="file-1606997307640" access="false"
-                               multiple="false" id="file-1606997307640">
-                    </div>
-                </div>
-            </form>
         </div>
     </div>
 </div>

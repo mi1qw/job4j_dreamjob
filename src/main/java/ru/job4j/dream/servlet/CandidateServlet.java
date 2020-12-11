@@ -3,6 +3,7 @@ package ru.job4j.dream.servlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.job4j.dream.model.Candidate;
+import ru.job4j.dream.model.ImgFile;
 import ru.job4j.dream.model.PsqlStore;
 import ru.job4j.dream.model.Type;
 
@@ -11,10 +12,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
+import java.nio.file.Path;
 
 public class CandidateServlet extends HttpServlet {
     public static final Logger LOGGER = LoggerFactory.getLogger(CandidateServlet.class);
+    public static final String IMAGES = "images";
 
     /**
      * doPost.
@@ -25,24 +27,78 @@ public class CandidateServlet extends HttpServlet {
     @Override
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) {
 
-        System.out.println((Candidate) req.getAttribute("candidateMY") + "   CandidateServlet my");
+        System.out.println(req.getSession().getId() + "    .getSession().getId()");
 
-        String photoId = req.getParameter("photo");
-        String id = req.getParameter("id");
-        id = "";
+        Candidate candidate = (Candidate) req.getSession().getAttribute("candidate");
+        ImgFile oldPhoto = (ImgFile) req.getSession().getAttribute("oldPhoto");
+        String oldfile = oldPhoto.getName();
+        System.out.println(candidate);
+        if ("delete".equals(req.getParameter("delete"))) {
+            PsqlStore.instOf().deleteByIdCand(candidate.getId());
+            if (oldPhoto.getId() != 1) {
+                PsqlStore.instOf().deleteImgCand(candidate.getPhotoId());
+                PsqlStore.instOf().cleanUp(Path.of(IMAGES, oldfile));
+            }
+        } else {
+            candidate.setName(req.getParameter("name"));
+            candidate.setDescription(req.getParameter("description"));
+            System.out.println(candidate);
 
+            ImgFile newPhoto = (ImgFile) req.getSession().getAttribute("photo");
+            String file = newPhoto.getName();
+            System.out.println(newPhoto.getId());
+
+            System.out.println(oldPhoto.getId());
+            //try {
+            boolean delPhoto;
+            if (!file.equals(oldfile)) {
+                if ((delPhoto = PsqlStore.getNoimage().equals(file))) {
+                    int photoIdid = candidate.getPhotoId();
+                    candidate.setPhotoId(1);
+                    PsqlStore.instOf().save(candidate);
+                    PsqlStore.instOf().cleanUp(Path.of(IMAGES, oldfile));
+                    PsqlStore.instOf().deleteImgCand(photoIdid);
+                } else {
+                    //Candidate candidate = (Candidate) req.getSession().getAttribute("candidate");
+                    int photoId = PsqlStore.instOf().saveImgCand(file, candidate);
+                    if (candidate.getPhotoId() == 1) {
+                        candidate.setPhotoId(photoId);
+                        //PsqlStore.instOf().save(candidate);
+                    } else {
+                        PsqlStore.instOf().cleanUp(Path.of(IMAGES, oldfile));
+                        //File img = new File(req.getContextPath() + File.separator + imgName.getName());
+                        //img.delete();
+                    }
+                    PsqlStore.instOf().save(candidate);
+                }
+            } else {
+                PsqlStore.instOf().save(candidate);
+            }
+
+            //if (!delPhoto) {
+            //    PsqlStore.instOf().save(candidate);
+            //}
+            //}
+
+            //PsqlStore.instOf().save(
+            //        new Candidate(
+            //                Integer.parseInt(req.getParameter("id")),
+            //                req.getParameter("name"),
+            //                req.getParameter("description"),
+            //                new Date(),
+            //                Integer.parseInt(req.getParameter("photo"))
+            //                //TODO: photo
+            //        ));
+
+        }
+        req.getSession().removeAttribute("candidate");
+        req.getSession().removeAttribute("photo");
+        req.getSession().removeAttribute("oldPhoto");
+        req.getSession().removeAttribute("newPhoto");
         try {
             req.setCharacterEncoding("UTF-8");
-            PsqlStore.instOf().save(
-                    new Candidate(
-                            Integer.parseInt(req.getParameter("id")),
-                            req.getParameter("name"),
-                            req.getParameter("description"),
-                            new Date(),
-                            Integer.parseInt(req.getParameter("photo"))
-                            //TODO: photo
-                    ));
             resp.sendRedirect(req.getContextPath() + "/candidate.do");
+            //doGet(req, resp);
         } catch (IOException | NumberFormatException e) {
             LOGGER.error(e.getMessage(), e);
         }
@@ -56,6 +112,7 @@ public class CandidateServlet extends HttpServlet {
      */
     @Override
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) {
+
         try {
             req.setAttribute("candidates", PsqlStore.instOf().findAllCandidates());
             req.setAttribute("candidatesPhoto", PsqlStore.instOf().findAllImg(Type.CANDIDATE));

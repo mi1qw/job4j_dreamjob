@@ -13,8 +13,8 @@
 /* Style the button and place it in the middle of the container/image */
 .containerD .btnD {
     position: absolute;
-    /*top: 0%;*/
-    /*left: 99%;*/
+    top: 30%;
+    left: 47%;
     transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
     background-color: #B11B16;

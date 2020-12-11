@@ -7,8 +7,11 @@ import org.slf4j.LoggerFactory;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Date;
 import java.sql.*;
 import java.util.*;
@@ -21,6 +24,8 @@ public final class PsqlStore implements Store {
     public static final String LN = System.lineSeparator();
     private static final Store INST = new PsqlStore();
     private final BasicDataSource pool = new BasicDataSource();
+    private static String noimage;
+    public static final String IMAGES = "images";
 
     public PsqlStore() {
         Properties cfg = new Properties();
@@ -43,6 +48,7 @@ public final class PsqlStore implements Store {
         pool.setMinIdle(5);
         pool.setMaxIdle(10);
         pool.setMaxOpenPreparedStatements(100);
+        noimage = initImages();
     }
 
     private static final class Lazy {
@@ -51,6 +57,10 @@ public final class PsqlStore implements Store {
 
     public static Store instOf() {
         return INST;
+    }
+
+    public static String getNoimage() {
+        return noimage;
     }
 
     @Override
@@ -81,7 +91,7 @@ public final class PsqlStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         }
         return list;
     }
@@ -135,7 +145,7 @@ public final class PsqlStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         }
         return oId;
     }
@@ -143,8 +153,8 @@ public final class PsqlStore implements Store {
     private void update(final Object[] o, final Type t) {
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(
-                     String.format("UPDATE %s SET name =?, description =?, created =?, photo_id " +
-                             "=? WHERE id = ?", t.getName()))) {
+                     String.format("UPDATE %s SET name =?, description =?, created =?, photo_id "
+                             + "=? WHERE id = ?", t.getName()))) {
             ps.setString(1, (String) o[1]);
             ps.setString(2, (String) o[2]);
             ps.setDate(3, new Date(((java.util.Date) o[3]).getTime()));
@@ -152,7 +162,7 @@ public final class PsqlStore implements Store {
             ps.setInt(5, (Integer) o[0]);
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         }
     }
 
@@ -184,7 +194,7 @@ public final class PsqlStore implements Store {
                 );
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         }
         return item;
     }
@@ -222,7 +232,7 @@ public final class PsqlStore implements Store {
                 img = null;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         }
         return img;
     }
@@ -259,7 +269,7 @@ public final class PsqlStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         }
         return oId;
     }
@@ -272,7 +282,7 @@ public final class PsqlStore implements Store {
             ps.setInt(2, id);
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         }
         return id;
     }
@@ -290,7 +300,7 @@ public final class PsqlStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         }
         return map;
     }
@@ -321,6 +331,47 @@ public final class PsqlStore implements Store {
             }
         } catch (SQLException e) {
             LOGGER.error(e.getMessage(), e);
+        }
+    }
+
+    public boolean deleteByIdCand(final int id) {
+        return delete(id, Type.CANDIDATE.getName());
+    }
+
+    public boolean deleteImgCand(int id) {
+        return delete(id, Type.CANDIDATE.getImgname());
+    }
+
+    private boolean delete(final int id, final String name) {
+        String tableQuery = String.format("DELETE FROM %s WHERE id = ?", name);
+        try (Connection cn = pool.getConnection();
+             PreparedStatement st = cn.prepareStatement(tableQuery)) {
+            st.setInt(1, id);
+            return st.executeUpdate() > 0;
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+        return false;
+    }
+
+    public String initImages() {
+        doQuery("INSERT INTO photo VALUES(1,'noimages.png') on conflict DO NOTHING;");
+        Path path = Path.of(IMAGES, "noimages.png");
+        createNoimagFile(path);
+        return "noimages.png";
+    }
+
+    private void createNoimagFile(final Path path) {
+        URL pth = Thread.currentThread().getContextClassLoader()
+                .getResource("noimages.png");
+        if (Files.notExists(path)) {
+            try {
+                Files.createDirectories(path.getParent());
+                assert pth != null;
+                Files.copy(Paths.get(pth.toURI()), path);
+            } catch (IOException | URISyntaxException e) {
+                LOGGER.error(e.getMessage(), e);
+            }
         }
     }
 

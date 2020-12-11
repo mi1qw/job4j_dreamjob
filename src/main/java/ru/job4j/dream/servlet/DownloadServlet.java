@@ -26,10 +26,19 @@ public class DownloadServlet extends HttpServlet {
         resp.setContentType("image/png");
         File file = new File("images" + File.separator + name);
         try (FileInputStream in = new FileInputStream(file)) {
-            resp.setHeader("Content-Disposition", "attachment; filename=\"" + name + "\"");
+            resp.setHeader("Content-Disposition", "attachment; filename=\"" + getName(name)
+                    + "\"");
             resp.getOutputStream().write(in.readAllBytes());
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
+    }
+
+    private String getName(final String name) {
+        int n = name.indexOf("-");
+        if (n != -1) {
+            return name.substring(n + 1);
+        }
+        return name;
     }
 }

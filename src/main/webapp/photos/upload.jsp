@@ -12,10 +12,22 @@
 <html lang="en">
 <head>
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+    <%--    <link rel="stylesheet"--%>
+    <%--          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"--%>
+    <%--          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"--%>
+    <%--          crossorigin="anonymous">--%>
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
           crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+            crossorigin="anonymous"></script>
+
+
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
             integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
             crossorigin="anonymous"></script>
@@ -29,10 +41,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet"
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <%--    <link rel="stylesheet"--%>
+    <%--          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">--%>
+    <%--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>--%>
+    <%--    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>--%>
+
+    <%--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"--%>
+    <%--          rel="stylesheet"--%>
+    <%--          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"--%>
+    <%--          crossorigin="anonymous">--%>
+
 
 </head>
 <body>
@@ -42,20 +60,25 @@
     <br>
     <div class="card-body">
         <table align="center" border="1" cellpadding="25" cellspacing="1"
-               style="height: 200px; width: 700px">
+               style="height: 400px; width: 900px">
             <tbody>
             <tr>
-                <td style="text-align:center;">
+                <td class="col-6" style="text-align:center;">
                     <div class="containerD">
-                        <form id="some" action="${pageContext.request.contextPath}/newcandidate.do">
+                        <form id="some" action="${pageContext.request.contextPath}/addphoto.do"
+                              method="post">
                             <img src="<c:url value='/download?name=${sessionScope.photo.name}'/>"
                             <%--                                 class="img-rounded"--%>
-                                 class="img-rounded"
+                            <%--                                 class="img-rounded"--%>
+                            <%--                                 class="img-fluid— rounded mx-auto d-block"--%>
+                            <%--                                 class="img-fluid"--%>
+                                 class="rounded mx-auto d-block"
+                            <%--                                 class="img-fluid img-thumbnail"--%>
                                  alt="photo"
-                                 width="300px"
-                                 height="600px"
+                                 width="200px"
+                                 height="200px"
                             />
-                            <button form="some" class="btnD" value="Delete" name="file"
+                            <button form="some" class="btnD" value="delete" name="delete"
                                     type="submit">Delete
                             </button>
                         </form>
@@ -71,13 +94,11 @@
                 </td>
                 <td>
                     <div class="card-body" style="margin-left: 40px">
-                        "<c:url value='/upload'/>"
-                        <%--                        <form action="${pageContext.request.contextPath}/addphoto.do"--%>
                         <h2>Upload image</h2>
                         <form action="<c:url value='/addphoto.do'/>"
                               enctype="multipart/form-data" method="post">
-                            <div class="checkbox">
-                                <input type="file" name="file">
+                            <div class="mb-3">
+                                <input class="form-control" type="file" name="file">
                             </div>
                             <br>
                             <button type="submit" class="btn btn-primary">Submit</button>

@@ -29,33 +29,49 @@ public class CandidateEditServlet extends HttpServlet {
 
         try {
             String id = req.getParameter("id");
-            Candidate cnd = (Candidate) req.getSession().getAttribute("candidate");
-            if (id != null && cnd != null && id.equals(String.valueOf(cnd.getId()))) {
+            Candidate sesn = (Candidate) req.getSession().getAttribute("candidate");
 
-            }
-
-            if (req.getSession().getAttribute("candidate") == null) {
-
-                if (id != null) {
+            if (id == null) {
+                candidate = new Candidate(0, "", "", new Date(), 1);
+                setSession(req, candidate);
+            } else {
+                if (sesn == null || !id.equals(String.valueOf(sesn.getId()))) {
                     candidate = PsqlStore.instOf().findByIdCand(Integer.parseInt(id));
-                } else {        // it`s a new candidate with id=0 and photoID=1
-                    candidate = new Candidate(0, "", "", new Date(), 1);
+                    setSession(req, candidate);
                 }
-                req.getSession().setAttribute("candidate", candidate);
-                ImgFile imgFile = PsqlStore.instOf().findImgCand(candidate.getPhotoId());
-                req.getSession().setAttribute("photo", PsqlStore.instOf().
-                        findImgCand(candidate.getPhotoId()));
-                req.getSession().setAttribute("oldPhoto", imgFile);
-                req.getSession().setAttribute("newPhoto", new ImgFile(0, null));
-                //}
             }
-            //else {
+
+            //(sesn != null && id.equals(String.valueOf(sesn.getId())))){
+            //    //if (req.getSession().getAttribute("candidate") == null) {
             //
+            //    if (id != null) {
+            //
+            //    } else {        // it`s a new candidate with id=0 and photoID=1
+            //
+            //    }
+            //    //req.getSession().setAttribute("candidate", candidate);
+            //    //ImgFile imgFile = PsqlStore.instOf().findImgCand(candidate.getPhotoId());
+            //    //req.getSession().setAttribute("photo", PsqlStore.instOf().
+            //    //        findImgCand(candidate.getPhotoId()));
+            //    //req.getSession().setAttribute("oldPhoto", imgFile);
+            //    //req.getSession().setAttribute("newPhoto", new ImgFile(0, null));
+            //    //}
+            //    //}
             //}
+
             req.getRequestDispatcher("candidate/edit.jsp").forward(req, resp);
         } catch (ServletException | IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
+    }
+
+    private void setSession(final HttpServletRequest req, final Candidate candidate) {
+        req.getSession().setAttribute("candidate", candidate);
+        ImgFile imgFile = PsqlStore.instOf().findImgCand(candidate.getPhotoId());
+        req.getSession().setAttribute("photo", PsqlStore.instOf().
+                findImgCand(candidate.getPhotoId()));
+        req.getSession().setAttribute("oldPhoto", imgFile);
+        req.getSession().setAttribute("newPhoto", new ImgFile(0, null));
     }
 
     /**

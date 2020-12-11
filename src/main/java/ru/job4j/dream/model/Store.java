@@ -23,5 +23,9 @@ public interface Store {
 
     Map<Integer, String> findAllImg(Type type);
 
+    boolean deleteByIdCand(int id);
+
+    boolean deleteImgCand(int id);
+
     void cleanUp(Path path);
 }
