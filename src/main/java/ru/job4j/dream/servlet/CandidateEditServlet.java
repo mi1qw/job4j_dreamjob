@@ -40,25 +40,6 @@ public class CandidateEditServlet extends HttpServlet {
                     setSession(req, candidate);
                 }
             }
-
-            //(sesn != null && id.equals(String.valueOf(sesn.getId())))){
-            //    //if (req.getSession().getAttribute("candidate") == null) {
-            //
-            //    if (id != null) {
-            //
-            //    } else {        // it`s a new candidate with id=0 and photoID=1
-            //
-            //    }
-            //    //req.getSession().setAttribute("candidate", candidate);
-            //    //ImgFile imgFile = PsqlStore.instOf().findImgCand(candidate.getPhotoId());
-            //    //req.getSession().setAttribute("photo", PsqlStore.instOf().
-            //    //        findImgCand(candidate.getPhotoId()));
-            //    //req.getSession().setAttribute("oldPhoto", imgFile);
-            //    //req.getSession().setAttribute("newPhoto", new ImgFile(0, null));
-            //    //}
-            //    //}
-            //}
-
             req.getRequestDispatcher("candidate/edit.jsp").forward(req, resp);
         } catch (ServletException | IOException e) {
             LOGGER.error(e.getMessage(), e);
@@ -86,37 +67,10 @@ public class CandidateEditServlet extends HttpServlet {
         req.getSession().removeAttribute("photo");
         req.getSession().removeAttribute("oldPhoto");
         req.getSession().removeAttribute("newPhoto");
-
-        //ImgFile newPhoto = (ImgFile) req.getSession().getAttribute("photo");
-        //String file = newPhoto.getName();
-        //if (file.equals("Delete")) {
-        //    System.out.println("equals(\"Delete\")");
-        //} else {
-        //    Candidate candidate = (Candidate) req.getSession().getAttribute("candidate");
-        //    int photoId = PsqlStore.instOf().saveImgCand(file, candidate);
-        //    if (candidate.getPhotoId() != 1) {
-        //        ImgFile img = (ImgFile) req.getSession().getAttribute("photo");
-        //        PsqlStore.instOf().cleanUp(Path.of("images", img.getName()));
-        //        //File img = new File(req.getContextPath() + File.separator + imgName.getName());
-        //        //img.delete();
-        //    } else {
-        //        candidate.setPhotoId(photoId);
-        //        PsqlStore.instOf().save(candidate);
-        //    }
-        //}
-
         try {
             resp.sendRedirect(req.getContextPath() + "/candidate.do");
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
-        //this.doGet(req, resp);
-
-        //try {
-        //    req.getRequestDispatcher("candidate.do").forward(req, resp);
-        //} catch (IOException | ServletException e) {
-        //    LOGGER.error(e.getMessage(), e);
-        //}
-
     }
 }

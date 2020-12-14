@@ -49,47 +49,25 @@ public class CandidateServlet extends HttpServlet {
             System.out.println(newPhoto.getId());
 
             System.out.println(oldPhoto.getId());
-            //try {
-            boolean delPhoto;
             if (!file.equals(oldfile)) {
-                if ((delPhoto = PsqlStore.getNoimage().equals(file))) {
+                if (PsqlStore.getNoimage().equals(file)) {
                     int photoIdid = candidate.getPhotoId();
                     candidate.setPhotoId(1);
                     PsqlStore.instOf().save(candidate);
                     PsqlStore.instOf().cleanUp(Path.of(IMAGES, oldfile));
                     PsqlStore.instOf().deleteImgCand(photoIdid);
                 } else {
-                    //Candidate candidate = (Candidate) req.getSession().getAttribute("candidate");
                     int photoId = PsqlStore.instOf().saveImgCand(file, candidate);
                     if (candidate.getPhotoId() == 1) {
                         candidate.setPhotoId(photoId);
-                        //PsqlStore.instOf().save(candidate);
                     } else {
                         PsqlStore.instOf().cleanUp(Path.of(IMAGES, oldfile));
-                        //File img = new File(req.getContextPath() + File.separator + imgName.getName());
-                        //img.delete();
                     }
                     PsqlStore.instOf().save(candidate);
                 }
             } else {
                 PsqlStore.instOf().save(candidate);
             }
-
-            //if (!delPhoto) {
-            //    PsqlStore.instOf().save(candidate);
-            //}
-            //}
-
-            //PsqlStore.instOf().save(
-            //        new Candidate(
-            //                Integer.parseInt(req.getParameter("id")),
-            //                req.getParameter("name"),
-            //                req.getParameter("description"),
-            //                new Date(),
-            //                Integer.parseInt(req.getParameter("photo"))
-            //                //TODO: photo
-            //        ));
-
         }
         req.getSession().removeAttribute("candidate");
         req.getSession().removeAttribute("photo");
@@ -98,7 +76,6 @@ public class CandidateServlet extends HttpServlet {
         try {
             req.setCharacterEncoding("UTF-8");
             resp.sendRedirect(req.getContextPath() + "/candidate.do");
-            //doGet(req, resp);
         } catch (IOException | NumberFormatException e) {
             LOGGER.error(e.getMessage(), e);
         }
@@ -112,7 +89,6 @@ public class CandidateServlet extends HttpServlet {
      */
     @Override
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) {
-
         try {
             req.setAttribute("candidates", PsqlStore.instOf().findAllCandidates());
             req.setAttribute("candidatesPhoto", PsqlStore.instOf().findAllImg(Type.CANDIDATE));

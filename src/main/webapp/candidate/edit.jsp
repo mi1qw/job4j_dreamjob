@@ -42,10 +42,6 @@
                 </c:choose>
             </div>
             <div class="card-body">
-
-                <%--                TODO поменять на EL--%>
-                <%--                FIXME--%>
-
                 <div class="form-group">
                     <table align="center" border="1" cellpadding="25" cellspacing="1"
                            style="height: 200px; width: 700px">
@@ -60,7 +56,6 @@
                                     <br>
                                     <p>
                                         <a class="badge badge-primary"
-                                        <%--                                               href="${pageContext.servletContext.contextPath}/addphoto.do?id=${candidate.id}">Добавить--%>
                                            href="${pageContext.servletContext.contextPath}/addphoto.do?photo=${sessionScope.photo.name}">Добавить
                                             фото</a>
                                     </p>
@@ -83,8 +78,6 @@
                                     <button form="reset" type="submit" class="btn btn-light">Отмена
                                     </button>
                                 </form>
-                                <%--                                <form action="${pageContext.request.contextPath}/newcandidate.do"--%>
-
                             </td>
                         </tr>
                         </tbody>
@@ -95,15 +88,6 @@
                     <button class="btn btn-danger" type="submit" name="delete" value="delete">Delete
                     </button>
                 </form>
-
-            </div>
-
-
-            <div class="card-body">
-                Добавить фото<br>
-                ${requestScope.keySet()}<br>
-                ${requestScope.values()}<br>
-                ${sessionScope.candidateSS}<br>
             </div>
         </div>
     </div>

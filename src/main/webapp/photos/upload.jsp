@@ -41,17 +41,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <%--    <link rel="stylesheet"--%>
-    <%--          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">--%>
-    <%--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>--%>
-    <%--    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>--%>
-
-    <%--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"--%>
-    <%--          rel="stylesheet"--%>
-    <%--          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"--%>
-    <%--          crossorigin="anonymous">--%>
-
-
 </head>
 <body>
 <div class="container pt-3">
@@ -114,47 +103,5 @@
            class="btn btn-grey btn-raised">CANCEL</a>
     </div>
 </div>
-<a class="btn btn-red btn-raised"
-   href="${pageContext.servletContext.contextPath}/newcandidate.do?photo=${requestScope.photo}">Delete</a>
-
-
-<div class="example">
-    <div class="mt">
-        <button class="btn btn-blue btn-raised">Кнопка</button>
-        <button class="btn btn-green btn-raised">Кнопка</button>
-        <button class="btn btn-orange btn-raised">Кнопка</button>
-        <button class="btn btn-red btn-raised">Кнопка</button>
-        <button class="btn btn-black btn-raised">Кнопка</button>
-        <button class="btn btn-grey btn-raised">Кнопка</button>
-        <button class="btn btn-white btn-raised">Кнопка</button>
-    </div>
-    <div class="mt">
-        <button class="btn btn-blue btn-flat">Кнопка</button>
-        <button class="btn btn-green btn-flat">Кнопка</button>
-        <button class="btn btn-orange btn-flat">Кнопка</button>
-        <button class="btn btn-red btn-flat">Кнопка</button>
-        <button class="btn btn-black btn-flat">Кнопка</button>
-        <button class="btn btn-grey btn-flat">Кнопка</button>
-    </div>
-    <div class="mt">
-        <button class="btn btn-blue btn-fab"><em class="fa fa-plus"></em></button>
-        <button class="btn btn-green btn-fab"><i class="fa fa-plus"></i></button>
-        <button class="btn btn-orange btn-fab"><i class="fa fa-plus"></i></button>
-        <button class="btn btn-red btn-fab"><i class="fa fa-plus"></i></button>
-        <button class="btn btn-black btn-fab"><i class="fa fa-plus"></i></button>
-        <button class="btn btn-grey btn-fab"><i class="fa fa-plus"></i></button>
-        <button class="btn btn-white btn-fab"><i class="fa fa-plus"></i></button>
-    </div>
-    <div class="mt">
-        <button class="btn btn-blue btn-icon"><i class="fa fa-plus"></i></button>
-        <button class="btn btn-green btn-icon"><i class="fa fa-plus"></i></button>
-        <button class="btn btn-orange btn-icon"><i class="fa fa-plus"></i></button>
-        <button class="btn btn-red btn-icon"><i class="fa fa-plus"></i></button>
-        <button class="btn btn-black btn-icon"><i class="fa fa-plus"></i></button>
-        <button class="btn btn-grey btn-icon"><i class="fa fa-plus"></i></button>
-    </div>
-</div>
-
-
 </body>
 </html>

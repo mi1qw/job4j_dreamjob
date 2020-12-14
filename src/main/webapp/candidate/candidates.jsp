@@ -52,8 +52,6 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <%--                        удалить--%>
-                        ${requestScope.values()}<br>
                         <c:forEach items='${requestScope.candidates}' var='candidate'>
                             <tr>
                                 <th scope="row">${candidate.id}

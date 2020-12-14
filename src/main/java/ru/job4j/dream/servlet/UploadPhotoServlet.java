@@ -36,23 +36,6 @@ public class UploadPhotoServlet extends HttpServlet {
      */
     @Override
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) {
-
-        //System.out.println(req.getSession().getAttribute("candidateSS") + "   candidateSS");
-        //Candidate candidate;
-        //String id = req.getParameter("id");
-        //candidate = req.getParameter("candidate");
-
-        //if (!id.equals("0")) {
-        //    candidate = PsqlStore.instOf().findByIdCand(Integer.parseInt(id));
-        //} else {
-        //    candidate = new Candidate(0, "", "", new Date(), 1);
-        //}
-        //req.setAttribute("candidate", PsqlStore.instOf().findByIdCand(Integer.parseInt(id)));
-        //req.setAttribute("photo", PsqlStore.instOf().findImgCand(Integer.parseInt(id)));
-        //req.setAttribute("candidate", candidate);
-        //req.setAttribute("photo", PsqlStore.instOf().findImgCand(candidate.getPhotoId()));
-        //System.out.println(req.getParameter("photo"));
-        //req.setAttribute("photo", req.getParameter("photo"));
         RequestDispatcher dispatcher = req.getRequestDispatcher("/photos/upload.jsp");
         try {
             dispatcher.forward(req, resp);
@@ -71,7 +54,6 @@ public class UploadPhotoServlet extends HttpServlet {
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) {
         ImgFile newPhoto = (ImgFile) req.getSession().getAttribute("photo");
         if ("delete".equals(req.getParameter("delete"))) {
-            //newPhoto.setName(PsqlStore.instOf().findImgCand(1).getName());
             newPhoto.setName(PsqlStore.getNoimage());
         } else {
             DiskFileItemFactory factory = new DiskFileItemFactory();

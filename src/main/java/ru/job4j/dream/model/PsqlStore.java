@@ -51,10 +51,6 @@ public final class PsqlStore implements Store {
         noimage = initImages();
     }
 
-    private static final class Lazy {
-        private static final Store INST = new PsqlStore();
-    }
-
     public static Store instOf() {
         return INST;
     }
@@ -227,9 +223,6 @@ public final class PsqlStore implements Store {
             rs = ps.executeQuery();
             if (rs.next()) {
                 img = new ImgFile(id, rs.getString("name"));
-            } else {
-                //img = "noimages.png";
-                img = null;
             }
         } catch (SQLException e) {
             LOGGER.error(e.getMessage(), e);
@@ -255,7 +248,6 @@ public final class PsqlStore implements Store {
     }
 
     private int saveImg(final String photo, final Type type) {
-        //doQuery("SELECT SETVAL('photo_id_seq', 1, false)");
         int oId = 0;
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(
@@ -288,7 +280,6 @@ public final class PsqlStore implements Store {
     }
 
     public Map<Integer, String> findAllImg(final Type type) {
-        //List<String> list = new ArrayList<>();
         Map<Integer, String> map = new HashMap<>();
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(
@@ -296,7 +287,6 @@ public final class PsqlStore implements Store {
             try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
                     map.put(it.getInt("id"), it.getString("name"));
-                    //list.add(it.getString("name"));
                 }
             }
         } catch (Exception e) {

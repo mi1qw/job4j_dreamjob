@@ -47,6 +47,5 @@ public class PsqlMain {
         Candidate cc = store.findByIdCand(1);
         System.out.println(pp);
         System.out.println(cc);
-        //System.out.println(store.findPostById(3));
     }
 }
