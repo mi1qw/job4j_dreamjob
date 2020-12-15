@@ -10,6 +10,10 @@
     version="4.0">
 
     <display-name>Archetype Created Web Application</display-name>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/notFoundError.jsp</location>
+    </error-page>
 
     <servlet>
         <servlet-name>PostServlet</servlet-name>

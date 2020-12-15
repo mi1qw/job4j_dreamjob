@@ -11,10 +11,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Date;
 
 public class CandidateEditServlet extends HttpServlet {
     public static final Logger LOGGER = LoggerFactory.getLogger(CandidateEditServlet.class);
+    public static final String IMAGES = "images";
 
     /**
      * doGet.
@@ -63,6 +65,11 @@ public class CandidateEditServlet extends HttpServlet {
      */
     @Override
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) {
+        ImgFile photo = (ImgFile) req.getSession().getAttribute("photo");
+        ImgFile oldPhoto = (ImgFile) req.getSession().getAttribute("oldPhoto");
+        if (!photo.getName().equals(oldPhoto.getName())) {
+            PsqlStore.instOf().cleanUp(Path.of(IMAGES, photo.getName()));
+        }
         req.getSession().removeAttribute("candidate");
         req.getSession().removeAttribute("photo");
         req.getSession().removeAttribute("oldPhoto");

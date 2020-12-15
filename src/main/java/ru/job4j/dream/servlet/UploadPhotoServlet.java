@@ -20,7 +20,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 public class UploadPhotoServlet extends HttpServlet {
@@ -52,33 +51,36 @@ public class UploadPhotoServlet extends HttpServlet {
      */
     @Override
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) {
-        ImgFile newPhoto = (ImgFile) req.getSession().getAttribute("photo");
-        if ("delete".equals(req.getParameter("delete"))) {
-            newPhoto.setName(PsqlStore.getNoimage());
-        } else {
-            DiskFileItemFactory factory = new DiskFileItemFactory();
-            ServletContext servletContext = this.getServletConfig().getServletContext();
-            File repository = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
-            factory.setRepository(repository);
-            ServletFileUpload upload = new ServletFileUpload(factory);
-            List<FileItem> items = null;
-            try {
-                items = upload.parseRequest(req);
-            } catch (FileUploadException e) {
-                LOGGER.error(e.getMessage(), e);
-            }
-            File folder = new File(IMAGES);
-            if (!folder.exists()) {
-                folder.mkdir();
-            }
-            try {
-                assert items != null;
+        try {
+            ImgFile newPhoto = (ImgFile) req.getSession().getAttribute("photo");
+            Candidate sesn = (Candidate) req.getSession().getAttribute("candidate");
+            if ("delete".equals(req.getParameter("delete"))) {
+                newPhoto.setName(PsqlStore.getNoimage());
+            } else {
+                DiskFileItemFactory factory = new DiskFileItemFactory();
+                ServletContext servletContext = this.getServletConfig().getServletContext();
+                File repository = (File) servletContext.
+                        getAttribute("javax.servlet.context.tempdir");
+                factory.setRepository(repository);
+                ServletFileUpload upload = new ServletFileUpload(factory);
+                List<FileItem> items = null;
+                try {
+                    items = upload.parseRequest(req);
+                } catch (FileUploadException e) {
+                    LOGGER.error(e.getMessage(), e);
+                }
+                File folder = new File(IMAGES);
+                if (!folder.exists()) {
+                    folder.mkdir();
+                }
                 for (FileItem item : items) {
                     if (!item.isFormField()) {
                         if (!validate(item.getName())) {
+                            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
                             throw new IllegalArgumentException("Wrong file name !");
                         }
-                        File file = new File(folder + File.separator + rename(item.getName()));
+                        File file = new File(folder + File.separator
+                                + rename(item.getName(), sesn.getId()));
                         newPhoto.setName(file.getName());
                         try (FileOutputStream out = new FileOutputStream(file)) {
                             out.write(item.getInputStream().readAllBytes());
@@ -87,15 +89,9 @@ public class UploadPhotoServlet extends HttpServlet {
                         }
                     }
                 }
-            } catch (IllegalArgumentException e) {
-                LOGGER.error(e.getMessage(), e);
             }
-        }
-
-        Candidate sesn = (Candidate) req.getSession().getAttribute("candidate");
-        try {
             resp.sendRedirect(req.getContextPath() + "/newcandidate.do" + "?id=" + sesn.getId());
-        } catch (IOException e) {
+        } catch (IOException | IllegalArgumentException e) {
             LOGGER.error(e.getMessage(), e);
         }
     }
@@ -110,8 +106,7 @@ public class UploadPhotoServlet extends HttpServlet {
         return name.matches("([^\\s]+(\\.(?i)(jpe?g|png|gif|bmp))$)");
     }
 
-    private synchronized String rename(final String img) {
-        String date = time.format(new Date(System.currentTimeMillis()));
-        return date.concat("-").concat(img);
+    private String rename(final String img, final int id) {
+        return String.valueOf(id).concat("-").concat(img);
     }
 }

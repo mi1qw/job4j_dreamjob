@@ -11,6 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
@@ -57,10 +58,16 @@ public class CandidateServlet extends HttpServlet {
                     PsqlStore.instOf().cleanUp(Path.of(IMAGES, oldfile));
                     PsqlStore.instOf().deleteImgCand(photoIdid);
                 } else {
-                    int photoId = PsqlStore.instOf().saveImgCand(file, candidate);
+
                     if (candidate.getPhotoId() == 1) {
+                        if ((candidate.getId() == 0)) {
+                            PsqlStore.instOf().save(candidate);
+                            file = rename(file, candidate.getId());
+                        }
+                        int photoId = PsqlStore.instOf().saveImgCand(file, candidate);
                         candidate.setPhotoId(photoId);
                     } else {
+                        PsqlStore.instOf().saveImgCand(file, candidate);
                         PsqlStore.instOf().cleanUp(Path.of(IMAGES, oldfile));
                     }
                     PsqlStore.instOf().save(candidate);
@@ -96,5 +103,16 @@ public class CandidateServlet extends HttpServlet {
         } catch (IOException | ServletException e) {
             LOGGER.error(e.getMessage(), e);
         }
+    }
+
+    private String rename(final String img, final int id) {
+        String name = String.valueOf(id).concat(img.substring(1));
+        File folder = new File(IMAGES);
+        File file = new File(folder + File.separator + name);
+        File old = new File(folder + File.separator + img);
+        if (!old.renameTo(file)) {
+            LOGGER.error("Failed to rename");
+        }
+        return name;
     }
 }
