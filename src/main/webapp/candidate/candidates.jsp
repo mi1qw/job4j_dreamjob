@@ -4,6 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page isELIgnored="false" %>
 
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -45,6 +46,7 @@
                         <thead>
                         <tr>
                             <th scope="col">#</th>
+                            <th scope="col"></th>
                             <th scope="col">Названия</th>
                             <th scope="col">Описание</th>
                             <th scope="col">Дата</th>
@@ -55,6 +57,13 @@
                             <tr>
                                 <th scope="row">${candidate.id}
                                 </th>
+                                <td><img
+                                        src="<c:url
+                                        value='/download?name=${requestScope.candidatesPhoto[candidate.photoId]}'/>"
+                                        alt="photo"
+                                        width="100px"
+                                        height="100px"/>
+                                </td>
                                 <td>
                                     <a href=${pageContext.servletContext.contextPath}/newcandidate.do?id=${candidate.id}>
                                         <em class="fa fa-edit mr-3"></em>

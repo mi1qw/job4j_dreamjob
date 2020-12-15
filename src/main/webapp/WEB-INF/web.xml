@@ -10,6 +10,10 @@
     version="4.0">
 
     <display-name>Archetype Created Web Application</display-name>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/notFoundError.jsp</location>
+    </error-page>
 
     <servlet>
         <servlet-name>PostServlet</servlet-name>
@@ -65,4 +69,30 @@
         <url-pattern>/imag.do</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>UploadServlet</servlet-name>
+        <servlet-class>ru.job4j.dream.servlet.UploadServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UploadServlet</servlet-name>
+        <url-pattern>/upload</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DownloadServlet</servlet-name>
+        <servlet-class>ru.job4j.dream.servlet.DownloadServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DownloadServlet</servlet-name>
+        <url-pattern>/download</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>uploadphoto</servlet-name>
+        <servlet-class>ru.job4j.dream.servlet.UploadPhotoServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>uploadphoto</servlet-name>
+        <url-pattern>/addphoto.do</url-pattern>
+    </servlet-mapping>
 </web-app>

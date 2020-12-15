@@ -11,12 +11,29 @@ public class Post {
     private String name;
     private String description;
     private Date created;
+    private int photo;
 
-    public Post(final int id, final String name, final String description, final Date created) {
+    public Post(final int id, final String name, final String description,
+                final Date created, final int photo) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.created = created;
+        this.photo = photo;
+    }
+
+    public Post(final int id, final String name, final String description,
+                final Date created) {
+        this(id, name, description, created, 0);
+    }
+
+    /**
+     * Gets photo.
+     *
+     * @return the photo
+     */
+    public int getPhoto() {
+        return photo;
     }
 
     /**
@@ -120,7 +137,8 @@ public class Post {
                 + "id=" + id
                 + ", name='" + name + '\''
                 + ", description='" + description + '\''
-                + ", created=" + created + '}';
+                + ", created=" + created
+                + ", photo=" + photo + '}';
     }
 
     /**

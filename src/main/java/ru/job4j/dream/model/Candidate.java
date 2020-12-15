@@ -8,13 +8,38 @@ public class Candidate {
     private String name;
     private String description;
     private Date created;
+    private int photoId;
 
     public Candidate(final int id, final String name, final String description,
-                     final Date created) {
+                     final Date created, final int photoId) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.created = created;
+        this.photoId = photoId;
+    }
+
+    public Candidate(final int id, final String name, final String description,
+                     final Date created) {
+        this(id, name, description, created, 0);
+    }
+
+    /**
+     * Gets photo.
+     *
+     * @return the photo
+     */
+    public int getPhotoId() {
+        return photoId;
+    }
+
+    /**
+     * Sets photo id.
+     *
+     * @param photoId the photo id
+     */
+    public void setPhotoId(final int photoId) {
+        this.photoId = photoId;
     }
 
     /**
@@ -104,7 +129,7 @@ public class Candidate {
             return false;
         }
         Candidate candidate = (Candidate) o;
-        return id == candidate.id && Objects.equals(name, candidate.name);
+        return id == candidate.id;
     }
 
     /**
@@ -118,7 +143,8 @@ public class Candidate {
                 + "id=" + id
                 + ", name='" + name + '\''
                 + ", description='" + description + '\''
-                + ", created=" + created + '}';
+                + ", created=" + created
+                + ", photo=" + photoId + '}';
     }
 
     /**
