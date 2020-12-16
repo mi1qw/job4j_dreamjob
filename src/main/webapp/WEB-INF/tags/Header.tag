@@ -1,6 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@tag pageEncoding="UTF-8" description="some description" %>
-<%--<%@ page isELIgnored="false" %>--%>
+<%@ tag pageEncoding="UTF-8" description="some description" %>
 
 
 <img src="images/DyT.jpg" alt="1"><br>      <%--"DyT.jpg" in root--%>
@@ -32,7 +31,14 @@
         </li>
         <li class="nav-item">
             <a class="nav-link"
-               href="<c:url value="/login.jsp"/>">Войти</a>
+               href="<c:url value="/login.jsp"/>">
+                <c:if test="${empty sessionScope.user.name}">
+                    <c:out value="Гость "/> | Войти
+                </c:if>
+                <c:if test="${not empty sessionScope.user.name}">
+                    <c:out value="${sessionScope.user.name}"/> | Выйти
+                </c:if>
+            </a>
         </li>
     </ul>
 </div>
