@@ -49,6 +49,7 @@ public final class PsqlStore implements Store {
         pool.setMaxIdle(10);
         pool.setMaxOpenPreparedStatements(100);
         noimage = initImages();
+        initUsers();
     }
 
     public static Store instOf() {
@@ -328,7 +329,7 @@ public final class PsqlStore implements Store {
         return delete(id, Type.CANDIDATE.getName());
     }
 
-    public boolean deleteImgCand(int id) {
+    public boolean deleteImgCand(final int id) {
         return delete(id, Type.CANDIDATE.getImgname());
     }
 
@@ -349,6 +350,10 @@ public final class PsqlStore implements Store {
         Path path = Path.of(IMAGES, "noimages.png");
         createNoimagFile(path);
         return "noimages.png";
+    }
+
+    public void initUsers() {
+        doQuery("INSERT INTO users VALUES(1,'Admin','root@local','root') on conflict DO NOTHING;");
     }
 
     private void createNoimagFile(final Path path) {
@@ -378,5 +383,85 @@ public final class PsqlStore implements Store {
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
+    }
+
+    @Override
+    public void saveUser(final User user) {
+        if (user.getId() == 0) {
+            user.setId(createUser(user));
+        } else {
+            updateUser(user);
+        }
+    }
+
+    private int createUser(final User user) {
+        int id = 0;
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement(
+                     String.format("INSERT INTO %s VALUES (DEFAULT,?,?,?)", "users"),
+                     PreparedStatement.RETURN_GENERATED_KEYS)) {
+            ps.setString(1, user.getName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPassword());
+            ps.execute();
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    id = rs.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+        return id;
+    }
+
+    private void updateUser(final User user) {
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement(
+                     "UPDATE users SET name =?, email =?, password =? WHERE id = ?")) {
+            ps.setString(1, user.getName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPassword());
+            ps.setInt(4, user.getId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public User findByEmail(final String email) {
+        ResultSet rs;
+        User user = null;
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement(
+                     String.format("SELECT * FROM %s  WHERE email = ?", email))) {
+            ps.setString(1, email);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                user = new User(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("email"),
+                        rs.getString("password")
+                );
+            }
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+        return user;
+    }
+
+    @Override
+    public boolean deleteUser(final User user) {
+        String tableQuery = String.format("DELETE FROM %s WHERE id = ?", "users");
+        try (Connection cn = pool.getConnection();
+             PreparedStatement st = cn.prepareStatement(tableQuery)) {
+            st.setInt(1, user.getId());
+            return st.executeUpdate() > 0;
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+        return false;
     }
 }

@@ -28,4 +28,10 @@ public interface Store {
     boolean deleteImgCand(int id);
 
     void cleanUp(Path path);
+
+    User findByEmail(String email);
+
+    void saveUser(User user);
+
+    boolean deleteUser(User user);
 }

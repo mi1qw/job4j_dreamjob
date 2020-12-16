@@ -8,6 +8,16 @@ public class User {
     private String email;
     private String password;
 
+    public User() {
+    }
+
+    public User(final int id, final String name, final String email, final String password) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
     /**
      * Gets id.
      *
