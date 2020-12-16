@@ -49,7 +49,7 @@ public class AuthServlet extends HttpServlet {
      */
     @Override
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) {
-        //req.getSession().removeAttribute("user");
+        req.getSession().removeAttribute("user");
         doPost(req, resp);
     }
 }

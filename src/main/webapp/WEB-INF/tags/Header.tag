@@ -35,6 +35,11 @@
                 <c:if test="${empty sessionScope.user.name}">
                     <c:out value="Гость "/> | Войти
                 </c:if>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link"
+               href="<c:url value="/auth.do"/>">
                 <c:if test="${not empty sessionScope.user.name}">
                     <c:out value="${sessionScope.user.name}"/> | Выйти
                 </c:if>
