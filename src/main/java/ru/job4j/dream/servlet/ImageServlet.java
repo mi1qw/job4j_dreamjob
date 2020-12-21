@@ -23,7 +23,8 @@ public class ImageServlet extends HttpServlet {
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) {
         resp.setContentType("image/jpg");                                   //"DyT.jpg"
         try (ServletOutputStream out = resp.getOutputStream();
-             InputStream in = getServletContext().getResourceAsStream("images/DyT.jpg")) {
+             //InputStream in = getServletContext().getResourceAsStream("images/DyT.jpg")) {
+            InputStream in = getServletContext().getResourceAsStream("images/Steve-Carell.jpg")) {
             out.write(in.readAllBytes());
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);

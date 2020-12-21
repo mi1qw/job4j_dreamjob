@@ -435,7 +435,7 @@ public final class PsqlStore implements Store {
         User user = null;
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(
-                     String.format("SELECT * FROM %s  WHERE email = ?", email))) {
+                     "SELECT * FROM users WHERE email = ?")) {
             ps.setString(1, email);
             rs = ps.executeQuery();
             if (rs.next()) {

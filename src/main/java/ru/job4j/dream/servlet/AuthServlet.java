@@ -2,6 +2,8 @@ package ru.job4j.dream.servlet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.job4j.dream.model.PsqlStore;
+import ru.job4j.dream.model.Store;
 import ru.job4j.dream.model.User;
 
 import javax.servlet.ServletException;
@@ -24,17 +26,20 @@ public class AuthServlet extends HttpServlet {
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) {
         String email = req.getParameter("email");
         String password = req.getParameter("password");
+        HttpSession sc = req.getSession();
         try {
-            if ("root@local".equals(email) && "root".equals(password)) {
-                HttpSession sc = req.getSession();
-                User admin = new User();
-                admin.setName("Admin");
-                admin.setEmail(email);
-                sc.setAttribute("user", admin);
-                resp.sendRedirect(req.getContextPath() + "/posts.do");
+            if (sc.getAttribute("user") != null) {
+                resp.sendRedirect(req.getContextPath() + "/candidate.do");
             } else {
-                req.setAttribute("error", "Не верный email или пароль");
-                req.getRequestDispatcher("login.jsp").forward(req, resp);
+                Store sql = PsqlStore.instOf();
+                User user = sql.findByEmail(email);
+                if (user != null && user.getPassword().equals(password)) {
+                    sc.setAttribute("user", user);
+                    resp.sendRedirect(req.getContextPath() + "/candidate.do");
+                } else {
+                    req.setAttribute("error", "Неверный e-mail или пароль");
+                    req.getRequestDispatcher("login.jsp").forward(req, resp);
+                }
             }
         } catch (IOException | ServletException e) {
             LOGGER.error(e.getMessage(), e);
@@ -49,7 +54,11 @@ public class AuthServlet extends HttpServlet {
      */
     @Override
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) {
-        req.getSession().removeAttribute("user");
-        doPost(req, resp);
+        try {
+            req.getSession().removeAttribute("user");
+            resp.sendRedirect("login.jsp");
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
     }
 }

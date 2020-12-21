@@ -116,11 +116,20 @@
         <url-pattern>/auth.do</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>newuser</servlet-name>
+        <servlet-class>ru.job4j.dream.servlet.NewuserServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>newuser</servlet-name>
+        <url-pattern>/register.do</url-pattern>
+    </servlet-mapping>
+
+
     <filter>
         <filter-name>AuthFilter</filter-name>
         <filter-class>ru.job4j.dream.filter.AuthFilter</filter-class>
     </filter>
-
     <filter-mapping>
         <filter-name>AuthFilter</filter-name>
         <url-pattern>*.do</url-pattern>
