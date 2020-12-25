@@ -2,14 +2,25 @@
         "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
         "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
-<web-app>
-    xmlns="http://xmlns.jcp.org/xml/ns/javaee"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+<web-app
+        xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
     http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
-    version="4.0">
+        version="4.0"
+        metadata-complete="true">
+
 
     <display-name>Archetype Created Web Application</display-name>
+
+    <jsp-config>
+        <jsp-property-group>
+            <url-pattern>*.jsp</url-pattern>
+            <el-ignored>false</el-ignored>
+            <scripting-invalid>false</scripting-invalid>
+        </jsp-property-group>
+    </jsp-config>
+
     <error-page>
         <error-code>404</error-code>
         <location>/notFoundError.jsp</location>
@@ -95,4 +106,32 @@
         <servlet-name>uploadphoto</servlet-name>
         <url-pattern>/addphoto.do</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>AuthServlet</servlet-name>
+        <servlet-class>ru.job4j.dream.servlet.AuthServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AuthServlet</servlet-name>
+        <url-pattern>/auth.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>newuser</servlet-name>
+        <servlet-class>ru.job4j.dream.servlet.NewuserServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>newuser</servlet-name>
+        <url-pattern>/register.do</url-pattern>
+    </servlet-mapping>
+
+
+    <filter>
+        <filter-name>AuthFilter</filter-name>
+        <filter-class>ru.job4j.dream.filter.AuthFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>*.do</url-pattern>
+    </filter-mapping>
 </web-app>
