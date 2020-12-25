@@ -32,7 +32,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>PostServlet</servlet-name>
-        <url-pattern>/posts.do</url-pattern>
+        <url-pattern>/post.do</url-pattern>
     </servlet-mapping>
 
     <servlet>

@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.job4j.dream.model.Candidate;
 import ru.job4j.dream.model.ImgFile;
+import ru.job4j.dream.model.Post;
 import ru.job4j.dream.model.PsqlStore;
 
 import javax.servlet.RequestDispatcher;
@@ -16,6 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -52,8 +54,15 @@ public class UploadPhotoServlet extends HttpServlet {
     @Override
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) {
         try {
-            ImgFile newPhoto = (ImgFile) req.getSession().getAttribute("photo");
-            Candidate sesn = (Candidate) req.getSession().getAttribute("candidate");
+            int id;
+            HttpSession ss = req.getSession();
+            ImgFile newPhoto = (ImgFile) ss.getAttribute("photo");
+            Candidate candidate = (Candidate) ss.getAttribute("candidate");
+            if (candidate == null) {
+                id = ((Post) ss.getAttribute("post")).getId();
+            } else {
+                id = candidate.getId();
+            }
             if ("delete".equals(req.getParameter("delete"))) {
                 newPhoto.setName(PsqlStore.getNoimage());
             } else {
@@ -80,7 +89,7 @@ public class UploadPhotoServlet extends HttpServlet {
                             throw new IllegalArgumentException("Wrong file name !");
                         }
                         File file = new File(folder + File.separator
-                                + rename(item.getName(), sesn.getId()));
+                                + rename(item.getName(), id));
                         newPhoto.setName(file.getName());
                         try (FileOutputStream out = new FileOutputStream(file)) {
                             out.write(item.getInputStream().readAllBytes());
@@ -90,7 +99,11 @@ public class UploadPhotoServlet extends HttpServlet {
                     }
                 }
             }
-            resp.sendRedirect(req.getContextPath() + "/newcandidate.do" + "?id=" + sesn.getId());
+            if (candidate == null) {
+                resp.sendRedirect(req.getContextPath() + "/newpost.do" + "?id=" + id);
+            } else {
+                resp.sendRedirect(req.getContextPath() + "/newcandidate.do" + "?id=" + id);
+            }
         } catch (IOException | IllegalArgumentException e) {
             LOGGER.error(e.getMessage(), e);
         }

@@ -11,7 +11,7 @@
     <ul class="nav">
         <li class="nav-item">
             <a class="nav-link"
-               href="<c:url value="/posts.do"/>">Вакансии</a>
+               href="<c:url value="/post.do"/>">Вакансии</a>
         </li>
         <li class="nav-item">
             <a class="nav-link"

@@ -27,13 +27,9 @@ public class CandidateServlet extends HttpServlet {
      */
     @Override
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) {
-
-        System.out.println(req.getSession().getId() + "    .getSession().getId()");
-
         Candidate candidate = (Candidate) req.getSession().getAttribute("candidate");
         ImgFile oldPhoto = (ImgFile) req.getSession().getAttribute("oldPhoto");
         String oldfile = oldPhoto.getName();
-        System.out.println(candidate);
         if ("delete".equals(req.getParameter("delete"))) {
             PsqlStore.instOf().deleteByIdCand(candidate.getId());
             if (oldPhoto.getId() != 1) {
@@ -43,22 +39,16 @@ public class CandidateServlet extends HttpServlet {
         } else {
             candidate.setName(req.getParameter("name"));
             candidate.setDescription(req.getParameter("description"));
-            System.out.println(candidate);
-
             ImgFile newPhoto = (ImgFile) req.getSession().getAttribute("photo");
             String file = newPhoto.getName();
-            System.out.println(newPhoto.getId());
-
-            System.out.println(oldPhoto.getId());
             if (!file.equals(oldfile)) {
                 if (PsqlStore.getNoimage().equals(file)) {
-                    int photoIdid = candidate.getPhotoId();
+                    int photoId = candidate.getPhotoId();
                     candidate.setPhotoId(1);
                     PsqlStore.instOf().save(candidate);
                     PsqlStore.instOf().cleanUp(Path.of(IMAGES, oldfile));
-                    PsqlStore.instOf().deleteImgCand(photoIdid);
+                    PsqlStore.instOf().deleteImgCand(photoId);
                 } else {
-
                     if (candidate.getPhotoId() == 1) {
                         if ((candidate.getId() == 0)) {
                             PsqlStore.instOf().save(candidate);

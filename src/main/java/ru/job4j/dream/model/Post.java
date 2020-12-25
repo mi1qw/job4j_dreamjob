@@ -11,15 +11,15 @@ public class Post {
     private String name;
     private String description;
     private Date created;
-    private int photo;
+    private int photoId;
 
     public Post(final int id, final String name, final String description,
-                final Date created, final int photo) {
+                final Date created, final int photoId) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.created = created;
-        this.photo = photo;
+        this.photoId = photoId;
     }
 
     public Post(final int id, final String name, final String description,
@@ -32,8 +32,17 @@ public class Post {
      *
      * @return the photo
      */
-    public int getPhoto() {
-        return photo;
+    public int getPhotoId() {
+        return photoId;
+    }
+
+    /**
+     * Sets photo id.
+     *
+     * @param photoId the photo id
+     */
+    public void setPhotoId(final int photoId) {
+        this.photoId = photoId;
     }
 
     /**
@@ -73,9 +82,9 @@ public class Post {
     }
 
     /**
-     * getId.
+     * Gets id.
      *
-     * @return id
+     * @return the id
      */
     public int getId() {
         return id;
@@ -112,7 +121,7 @@ public class Post {
      * equals.
      *
      * @param o o
-     * @return bool
+     * @return boolean
      */
     @Override
     public boolean equals(final Object o) {
@@ -138,7 +147,7 @@ public class Post {
                 + ", name='" + name + '\''
                 + ", description='" + description + '\''
                 + ", created=" + created
-                + ", photo=" + photo + '}';
+                + ", photo=" + photoId + '}';
     }
 
     /**

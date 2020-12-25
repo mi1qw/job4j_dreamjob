@@ -19,13 +19,21 @@ public interface Store {
 
     ImgFile findImgCand(int id);
 
+    ImgFile findImgPost(int id);
+
     int saveImgCand(String photo, Candidate candidate);
+
+    int saveImgPost(String photo, Post post);
 
     Map<Integer, String> findAllImg(Type type);
 
     boolean deleteByIdCand(int id);
 
+    boolean deleteByIdPost(int id);
+
     boolean deleteImgCand(int id);
+
+    boolean deleteImgPost(int id);
 
     void cleanUp(Path path);
 

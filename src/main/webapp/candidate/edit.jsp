@@ -34,10 +34,10 @@
             <div class="card-header">
                 <c:choose>
                     <c:when test="${sessionScope.candidate.id==0}">
-                        Новая вакансия.
+                        Новый кандидат.
                     </c:when>
                     <c:otherwise>
-                        Редактирование вакансии.
+                        Редактирование кандидата.
                     </c:otherwise>
                 </c:choose>
             </div>

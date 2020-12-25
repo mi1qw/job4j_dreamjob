@@ -2,18 +2,22 @@ package ru.job4j.dream.servlet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.job4j.dream.model.ImgFile;
 import ru.job4j.dream.model.Post;
 import ru.job4j.dream.model.PsqlStore;
+import ru.job4j.dream.model.Type;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
-import java.util.Date;
+import java.nio.file.Path;
 
 public class PostServlet extends HttpServlet {
     public static final Logger LOGGER = LoggerFactory.getLogger(PostServlet.class);
+    public static final String IMAGES = "images";
 
     /**
      * doPost.
@@ -23,16 +27,53 @@ public class PostServlet extends HttpServlet {
      */
     @Override
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) {
+        Post post = (Post) req.getSession().getAttribute("post");
+        ImgFile oldPhoto = (ImgFile) req.getSession().getAttribute("oldPhoto");
+        String oldfile = oldPhoto.getName();
+        if ("delete".equals(req.getParameter("delete"))) {
+            PsqlStore.instOf().deleteByIdPost(post.getId());
+            if (oldPhoto.getId() != 1) {
+                PsqlStore.instOf().deleteImgPost(post.getPhotoId());
+                PsqlStore.instOf().cleanUp(Path.of(IMAGES, oldfile));
+            }
+        } else {
+            post.setName(req.getParameter("name"));
+            post.setDescription(req.getParameter("description"));
+            ImgFile newPhoto = (ImgFile) req.getSession().getAttribute("photo");
+            String file = newPhoto.getName();
+            if (!file.equals(oldfile)) {
+                if (PsqlStore.getNoimage().equals(file)) {
+                    int photoId = post.getPhotoId();
+                    post.setPhotoId(1);
+                    PsqlStore.instOf().save(post);
+                    PsqlStore.instOf().cleanUp(Path.of(IMAGES, oldfile));
+                    PsqlStore.instOf().deleteImgPost(photoId);
+                } else {
+                    if (post.getPhotoId() == 1) {
+                        if ((post.getId() == 0)) {
+                            PsqlStore.instOf().save(post);
+                            file = rename(file, post.getId());
+                        }
+                        int photoId = PsqlStore.instOf().saveImgPost(file, post);
+                        post.setPhotoId(photoId);
+                    } else {
+                        PsqlStore.instOf().saveImgPost(file, post);
+                        PsqlStore.instOf().cleanUp(Path.of(IMAGES, oldfile));
+                    }
+                    PsqlStore.instOf().save(post);
+                }
+            } else {
+                PsqlStore.instOf().save(post);
+            }
+        }
+        req.getSession().removeAttribute("post");
+        req.getSession().removeAttribute("photo");
+        req.getSession().removeAttribute("oldPhoto");
+        req.getSession().removeAttribute("newPhoto");
+        //todo нужен ли newPhoto ?
         try {
             req.setCharacterEncoding("UTF-8");
-            PsqlStore.instOf().save(
-                    new Post(
-                            Integer.parseInt(req.getParameter("id")),
-                            req.getParameter("name"),
-                            req.getParameter("description"),
-                            new Date()
-                    ));
-            resp.sendRedirect(req.getContextPath() + "/posts.do");
+            resp.sendRedirect(req.getContextPath() + "/post.do");
         } catch (IOException | NumberFormatException e) {
             LOGGER.error(e.getMessage(), e);
         }
@@ -48,9 +89,21 @@ public class PostServlet extends HttpServlet {
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) {
         try {
             req.setAttribute("posts", PsqlStore.instOf().findAllPosts());
+            req.setAttribute("postsPhoto", PsqlStore.instOf().findAllImg(Type.POST));
             req.getRequestDispatcher("post/posts.jsp").forward(req, resp);
         } catch (IOException | ServletException e) {
             LOGGER.error(e.getMessage(), e);
         }
+    }
+
+    private String rename(final String img, final int id) {
+        String name = String.valueOf(id).concat(img.substring(1));
+        File folder = new File(IMAGES);
+        File file = new File(folder + File.separator + name);
+        File old = new File(folder + File.separator + img);
+        if (!old.renameTo(file)) {
+            LOGGER.error("Failed to rename");
+        }
+        return name;
     }
 }

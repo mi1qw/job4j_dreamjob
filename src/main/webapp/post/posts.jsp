@@ -2,7 +2,9 @@
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ page isELIgnored="false" %>
+<%--<%@ page isELIgnored="false" %>--%>
+
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -44,6 +46,7 @@
                         <thead>
                         <tr>
                             <th scope="col">#</th>
+                            <th scope="col"></th>
                             <th scope="col">Объявления</th>
                             <th scope="col">Описание</th>
                             <th scope="col">Дата</th>
@@ -54,6 +57,13 @@
                             <tr>
                                 <th scope="row">${post.id}
                                 </th>
+                                <td><img
+                                        src="<c:url
+                                        value='/download?name=${requestScope.postsPhoto[post.photoId]}'/>"
+                                        alt="photo"
+                                        width="100px"
+                                        height="100px"/>
+                                </td>
                                 <td>
                                     <a href=${pageContext.servletContext.contextPath}/newpost.do?id=${post.id}>
                                         <em class="fa fa-edit mr-3"></em>

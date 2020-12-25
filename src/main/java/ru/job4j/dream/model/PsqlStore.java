@@ -100,7 +100,7 @@ public final class PsqlStore implements Store {
                 post.getName(),
                 post.getDescription(),
                 post.getCreated(),
-                post.getPhoto()
+                post.getPhotoId()
         };
         if (post.getId() == 0) {
             post.setId(create(o, Type.POST));
@@ -210,6 +210,17 @@ public final class PsqlStore implements Store {
     /**
      * find Photo By Id.
      *
+     * @param id id
+     * @return res
+     */
+    @Override
+    public ImgFile findImgPost(final int id) {
+        return findPhoto(id, Type.POST);
+    }
+
+    /**
+     * find Photo By Id.
+     *
      * @param id   id
      * @param type type
      * @return res
@@ -229,6 +240,23 @@ public final class PsqlStore implements Store {
             LOGGER.error(e.getMessage(), e);
         }
         return img;
+    }
+
+    /**
+     * saveImg.
+     * If their is new user or without photo (PhotoId=1) then, then saveImg/add new photo to DB
+     *
+     * @param photo name of photo
+     * @return photoId
+     */
+    @Override
+    public int saveImgPost(final String photo, final Post post) {
+        int pId = post.getPhotoId();
+        if (pId == 1) {
+            return saveImg(photo, Type.POST);
+        } else {
+            return updateImg(photo, pId, Type.POST);
+        }
     }
 
     /**
@@ -329,8 +357,16 @@ public final class PsqlStore implements Store {
         return delete(id, Type.CANDIDATE.getName());
     }
 
+    public boolean deleteByIdPost(final int id) {
+        return delete(id, Type.POST.getName());
+    }
+
     public boolean deleteImgCand(final int id) {
         return delete(id, Type.CANDIDATE.getImgname());
+    }
+
+    public boolean deleteImgPost(final int id) {
+        return delete(id, Type.POST.getImgname());
     }
 
     private boolean delete(final int id, final String name) {
@@ -347,6 +383,7 @@ public final class PsqlStore implements Store {
 
     public String initImages() {
         doQuery("INSERT INTO photo VALUES(1,'noimages.png') on conflict DO NOTHING;");
+        doQuery("INSERT INTO photopost VALUES(1,'noimages.png') on conflict DO NOTHING;");
         Path path = Path.of(IMAGES, "noimages.png");
         createNoimagFile(path);
         return "noimages.png";

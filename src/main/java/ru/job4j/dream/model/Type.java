@@ -6,7 +6,7 @@ package ru.job4j.dream.model;
  * ссылка на конструктор, имя таблицы "Type", имя таблицы с фото
  */
 public enum Type {
-    POST(Post::new, "post", null),
+    POST(Post::new, "post", "photopost"),
     CANDIDATE(Candidate::new, "candidate", "photo");
     private final TabFactory<?> tab;
     private final String name;

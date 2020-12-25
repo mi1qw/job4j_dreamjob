@@ -1,8 +1,7 @@
-<%@ page import="ru.job4j.dream.model.Post" %>
-<%@ page import="ru.job4j.dream.model.PsqlStore" %>
-<%@ page import="java.util.Date" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page isELIgnored="false" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -28,41 +27,66 @@
     <title>Работа мечты</title>
 </head>
 <body>
-<%
-    String id = request.getParameter("id");
-    Post post = new Post(0, "", "", new Date());
-    if (id != null) {
-        post = PsqlStore.instOf().findByIdPost(Integer.parseInt(id));
-    }
-%>
 <div class="container pt-3">
     <my:Header/>
-    <%--    <jsp:include page="/Header.jsp"/>--%>
     <div class="row">
         <div class="card" style="width: 100%">
             <div class="card-header">
-                <% if (id == null) { %>
-                Новая вакансия.
-                <% } else { %>
-                Редактирование вакансии.
-                <% } %>
+                <c:choose>
+                    <c:when test="${sessionScope.post.id==0}">
+                        Новая вакансия.
+                    </c:when>
+                    <c:otherwise>
+                        Редактирование вакансии.
+                    </c:otherwise>
+                </c:choose>
             </div>
             <div class="card-body">
-                <form action="<%=request.getContextPath()%>/posts.do?id=<%=post.getId()%>"
-                      method="post">
-                    <div class="form-group">
-                        <label>Имя
-                            <input type="text" class="form-control" name="name"
-                                   value="<%=post.getName()%>">
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <label>Описание
-                            <input type="text" class="form-control" name="description"
-                                   value="<%=post.getDescription()%>">
-                        </label>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                <div class="form-group">
+                    <table align="center" border="1" cellpadding="25" cellspacing="1"
+                           style="height: 200px; width: 700px">
+                        <tbody>
+                        <tr>
+                            <td style="text-align:center;">
+                                <img src="<c:url value='/download?name=${sessionScope.photo.name}'/>"
+                                     alt="photo"
+                                     width="200px"
+                                     height="200px"/>
+                                <div class="nav-item">
+                                    <br>
+                                    <p>
+                                        <a class="badge badge-primary"
+                                           href="${pageContext.servletContext.contextPath}/addphoto.do?photo=${sessionScope.photo.name}">Добавить
+                                            фото</a>
+                                    </p>
+                                </div>
+                            </td>
+                            <td>
+                                <form id="reset" action="<c:url value="/newpost.do"/>"
+                                      method="post">
+                                </form>
+                                <form action="<%=request.getContextPath()%>/post.do?id=${requestScope.post.id}"
+                                      method="post">
+                                    <div class="form-group"><label>Имя
+                                        <input class="form-control" name="name" type="text"
+                                               value="${post.name}"></label></div>
+                                    <div class="form-group"><label>Описание
+                                        <input class="form-control" name="description" type="text"
+                                               value="${post.description}"></label>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                                    <button form="reset" type="submit" class="btn btn-light">Отмена
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <form style="text-align:center;" method="post"
+                      action="<c:url value="/post.do?id=${requestScope.post.id}"/>">
+                    <button class="btn btn-danger" type="submit" name="delete" value="delete">Delete
+                    </button>
                 </form>
             </div>
         </div>

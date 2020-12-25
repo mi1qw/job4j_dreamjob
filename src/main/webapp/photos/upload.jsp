@@ -86,6 +86,7 @@
                         <h2>Upload image</h2>
                         <form action="<c:url value='/addphoto.do'/>"
                               enctype="multipart/form-data" method="post">
+<%--                            ${sessionScope.}--%>
                             <div class="mb-3">
                                 <input class="form-control" type="file" name="file">
                             </div>

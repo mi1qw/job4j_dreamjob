@@ -27,8 +27,6 @@ public class CandidateEditServlet extends HttpServlet {
     @Override
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) {
         Candidate candidate;
-        System.out.println();
-
         try {
             String id = req.getParameter("id");
             Candidate sesn = (Candidate) req.getSession().getAttribute("candidate");
