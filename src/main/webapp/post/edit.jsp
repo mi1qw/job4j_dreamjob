@@ -48,7 +48,8 @@
                         <tbody>
                         <tr>
                             <td style="text-align:center;">
-                                <img src="<c:url value='/download?name=${sessionScope.photo.name}'/>"
+                                <img src="<c:url
+                                value='/download?folder=${sessionScope.post.folder}&name=${sessionScope.photo.name}'/>"
                                      alt="photo"
                                      width="200px"
                                      height="200px"/>

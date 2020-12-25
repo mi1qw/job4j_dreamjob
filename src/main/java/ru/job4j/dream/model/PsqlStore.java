@@ -26,6 +26,7 @@ public final class PsqlStore implements Store {
     private final BasicDataSource pool = new BasicDataSource();
     private static String noimage;
     public static final String IMAGES = "images";
+    public static final String IMAGESPOST = "imagespost";
 
     public PsqlStore() {
         Properties cfg = new Properties();

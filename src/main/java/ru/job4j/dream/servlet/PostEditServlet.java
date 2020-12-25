@@ -16,7 +16,7 @@ import java.util.Date;
 
 public class PostEditServlet extends HttpServlet {
     public static final Logger LOGGER = LoggerFactory.getLogger(PostEditServlet.class);
-    public static final String IMAGES = "images";
+    public static final String IMAGES = PsqlStore.IMAGESPOST;
 
     /**
      * doGet.

@@ -17,7 +17,7 @@ import java.nio.file.Path;
 
 public class PostServlet extends HttpServlet {
     public static final Logger LOGGER = LoggerFactory.getLogger(PostServlet.class);
-    public static final String IMAGES = "images";
+    public static final String IMAGES = PsqlStore.IMAGESPOST;
 
     /**
      * doPost.

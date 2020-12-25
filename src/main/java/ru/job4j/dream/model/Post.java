@@ -12,6 +12,8 @@ public class Post {
     private String description;
     private Date created;
     private int photoId;
+    private String folder = PsqlStore.IMAGESPOST;
+    public static final String FOLDER = PsqlStore.IMAGESPOST;
 
     public Post(final int id, final String name, final String description,
                 final Date created, final int photoId) {
@@ -25,6 +27,19 @@ public class Post {
     public Post(final int id, final String name, final String description,
                 final Date created) {
         this(id, name, description, created, 0);
+    }
+
+    public static String getFOLDER() {
+        return FOLDER;
+    }
+
+    /**
+     * Gets folder.
+     *
+     * @return the folder
+     */
+    public String getFolder() {
+        return folder;
     }
 
     /**

@@ -26,7 +26,6 @@ import java.util.List;
 
 public class UploadPhotoServlet extends HttpServlet {
     public static final Logger LOGGER = LoggerFactory.getLogger(UploadPhotoServlet.class);
-    public static final String IMAGES = "images";
     private final SimpleDateFormat time = new SimpleDateFormat("yyyy_M_dd_HH_mm_ss_SSS");
 
     /**
@@ -55,12 +54,15 @@ public class UploadPhotoServlet extends HttpServlet {
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) {
         try {
             int id;
+            String images;
             HttpSession ss = req.getSession();
             ImgFile newPhoto = (ImgFile) ss.getAttribute("photo");
             Candidate candidate = (Candidate) ss.getAttribute("candidate");
             if (candidate == null) {
+                images = PsqlStore.IMAGESPOST;
                 id = ((Post) ss.getAttribute("post")).getId();
             } else {
+                images = PsqlStore.IMAGES;
                 id = candidate.getId();
             }
             if ("delete".equals(req.getParameter("delete"))) {
@@ -78,7 +80,7 @@ public class UploadPhotoServlet extends HttpServlet {
                 } catch (FileUploadException e) {
                     LOGGER.error(e.getMessage(), e);
                 }
-                File folder = new File(IMAGES);
+                File folder = new File(images);
                 if (!folder.exists()) {
                     folder.mkdir();
                 }

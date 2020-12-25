@@ -9,6 +9,7 @@ public class Candidate {
     private String description;
     private Date created;
     private int photoId;
+    private String folder = PsqlStore.IMAGES;
 
     public Candidate(final int id, final String name, final String description,
                      final Date created, final int photoId) {
@@ -22,6 +23,15 @@ public class Candidate {
     public Candidate(final int id, final String name, final String description,
                      final Date created) {
         this(id, name, description, created, 0);
+    }
+
+    /**
+     * Gets folder.
+     *
+     * @return the folder
+     */
+    public String getFolder() {
+        return folder;
     }
 
     /**

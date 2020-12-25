@@ -22,9 +22,13 @@ public class DownloadServlet extends HttpServlet {
     @Override
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) {
         String name = req.getParameter("name");
+        String folder = req.getParameter("folder");
         resp.setContentType("name=" + name);
         resp.setContentType("image/png");
-        File file = new File("images" + File.separator + name);
+
+        //req.
+        File file = new File(folder + File.separator + name);
+        //File file = new File("images" + File.separator + name);
         try (FileInputStream in = new FileInputStream(file)) {
             resp.setHeader("Content-Disposition", "attachment; filename=\"" + getName(name)
                     + "\"");
