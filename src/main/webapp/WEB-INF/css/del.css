@@ -1,0 +1,39 @@
+/* Container needed to position the button. Adjust the width as needed */
+.containerD {
+    position: relative;
+    width: 100%;
+}
+
+/*!* Make the image responsive *!*/
+.containerD img {
+    width: 100%;
+    height: auto;
+}
+
+/* Style the button and place it in the middle of the container/image */
+.containerD .btnD {
+    position: absolute;
+    top: 0%;
+    left: 95%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    background-color: #B11B16;
+    color: white;
+    font-size: 16px;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+    /*border-radius: 5px;*/
+
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    background-image: -moz-linear-gradient(top, #FF0000, #8B0000 89%);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.00, #FF0000), color-stop(0.89, #8B0000));
+    text-align: center;
+}
+
+.containerD .btnD:hover {
+    background-image: -moz-linear-gradient(top, #FF0000, #8B0000 89%);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.00, #BE0E0E), color-stop(0.89, #4E0000));
+    /*background-color: black;*/
+}

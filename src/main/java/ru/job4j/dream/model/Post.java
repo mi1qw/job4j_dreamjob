@@ -1,5 +1,6 @@
 package ru.job4j.dream.model;
 
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -9,13 +10,30 @@ public class Post {
     private int id;
     private String name;
     private String description;
-    private String created;
+    private Date created;
+    private int photo;
 
-    public Post(final int id, final String name, final String description, final String created) {
+    public Post(final int id, final String name, final String description,
+                final Date created, final int photo) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.created = created;
+        this.photo = photo;
+    }
+
+    public Post(final int id, final String name, final String description,
+                final Date created) {
+        this(id, name, description, created, 0);
+    }
+
+    /**
+     * Gets photo.
+     *
+     * @return the photo
+     */
+    public int getPhoto() {
+        return photo;
     }
 
     /**
@@ -41,7 +59,7 @@ public class Post {
      *
      * @return the created
      */
-    public String getCreated() {
+    public Date getCreated() {
         return created;
     }
 
@@ -50,7 +68,7 @@ public class Post {
      *
      * @param created the created
      */
-    public void setCreated(final String created) {
+    public void setCreated(final Date created) {
         this.created = created;
     }
 
@@ -106,6 +124,21 @@ public class Post {
         }
         Post post = (Post) o;
         return id == post.id;
+    }
+
+    /**
+     * toString.
+     *
+     * @return String
+     */
+    @Override
+    public String toString() {
+        return "Post{"
+                + "id=" + id
+                + ", name='" + name + '\''
+                + ", description='" + description + '\''
+                + ", created=" + created
+                + ", photo=" + photo + '}';
     }
 
     /**

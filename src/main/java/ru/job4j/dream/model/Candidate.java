@@ -1,19 +1,45 @@
 package ru.job4j.dream.model;
 
+import java.util.Date;
 import java.util.Objects;
 
 public class Candidate {
     private int id;
     private String name;
     private String description;
-    private String created;
+    private Date created;
+    private int photoId;
 
     public Candidate(final int id, final String name, final String description,
-                     final String created) {
+                     final Date created, final int photoId) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.created = created;
+        this.photoId = photoId;
+    }
+
+    public Candidate(final int id, final String name, final String description,
+                     final Date created) {
+        this(id, name, description, created, 0);
+    }
+
+    /**
+     * Gets photo.
+     *
+     * @return the photo
+     */
+    public int getPhotoId() {
+        return photoId;
+    }
+
+    /**
+     * Sets photo id.
+     *
+     * @param photoId the photo id
+     */
+    public void setPhotoId(final int photoId) {
+        this.photoId = photoId;
     }
 
     /**
@@ -39,7 +65,7 @@ public class Candidate {
      *
      * @return the created
      */
-    public String getCreated() {
+    public Date getCreated() {
         return created;
     }
 
@@ -48,7 +74,7 @@ public class Candidate {
      *
      * @param created the created
      */
-    public void setCreated(final String created) {
+    public void setCreated(final Date created) {
         this.created = created;
     }
 
@@ -103,7 +129,22 @@ public class Candidate {
             return false;
         }
         Candidate candidate = (Candidate) o;
-        return id == candidate.id && Objects.equals(name, candidate.name);
+        return id == candidate.id;
+    }
+
+    /**
+     * toString.
+     *
+     * @return String
+     */
+    @Override
+    public String toString() {
+        return "Candidate{"
+                + "id=" + id
+                + ", name='" + name + '\''
+                + ", description='" + description + '\''
+                + ", created=" + created
+                + ", photo=" + photoId + '}';
     }
 
     /**
