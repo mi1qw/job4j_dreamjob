@@ -86,7 +86,7 @@
                         <h2>Upload image</h2>
                         <form action="<c:url value='/addphoto.do'/>"
                               enctype="multipart/form-data" method="post">
-<%--                            ${sessionScope.}--%>
+                            <%--                            ${sessionScope.}--%>
                             <div class="mb-3">
                                 <input class="form-control" type="file" name="file">
                             </div>
@@ -100,8 +100,16 @@
         </table>
     </div>
     <div align="center">
-        <a href="${pageContext.request.contextPath}/newcandidate.do?id=${sessionScope.candidate.id}"
-           class="btn btn-grey btn-raised">CANCEL</a>
+        <c:choose>
+            <c:when test="${empty sessionScope.post}">
+                <a href="${pageContext.request.contextPath}/newcandidate.do?id=${sessionScope.candidate.id}"
+                   class="btn btn-grey btn-raised">CANCEL</a>
+            </c:when>
+            <c:otherwise>
+                <a href="${pageContext.request.contextPath}/newpost.do?id=${sessionScope.post.id}"
+                   class="btn btn-grey btn-raised">CANCEL</a>
+            </c:otherwise>
+        </c:choose>
     </div>
 </div>
 </body>

@@ -25,12 +25,12 @@ public class DownloadServlet extends HttpServlet {
         String folder = req.getParameter("folder");
         resp.setContentType("name=" + name);
         resp.setContentType("image/png");
-
-        //req.
-        File file = new File(folder + File.separator + name);
+        File file = new File(getFolder(name) + File.separator + name);
+        //File file = new File(getFolder(name) + File.separator + name);
         //File file = new File("images" + File.separator + name);
-        try (FileInputStream in = new FileInputStream(file)) {
-            resp.setHeader("Content-Disposition", "attachment; filename=\"" + getName(name)
+`        try (FileInputStream in = new FileInputStream(file)) {
+            resp.setHeader("Content-Disposition", "attachment; filename=\""
+                    + getName(name)
                     + "\"");
             resp.getOutputStream().write(in.readAllBytes());
         } catch (IOException e) {
@@ -39,9 +39,26 @@ public class DownloadServlet extends HttpServlet {
     }
 
     private String getName(final String name) {
+        String[] m = name.split("-", 3);
+        //int n = 0;
+        //if (n != -1) {
+        //    return name.substring(n + 1);
+        //}
+        //return name;
+        return m[m.length - 1];
+    }
+    //private String getName(final String name) {
+    //    int n = name.indexOf("-");
+    //    if (n != -1) {
+    //        return name.substring(n + 1);
+    //    }
+    //    return name;
+    //}
+
+    private String getFolder(final String name) {
         int n = name.indexOf("-");
         if (n != -1) {
-            return name.substring(n + 1);
+            return name.substring(0, n);
         }
         return name;
     }

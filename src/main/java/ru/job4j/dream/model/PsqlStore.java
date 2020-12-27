@@ -25,6 +25,8 @@ public final class PsqlStore implements Store {
     private static final Store INST = new PsqlStore();
     private final BasicDataSource pool = new BasicDataSource();
     private static String noimage;
+    public static final String POSTNOIMAGES = "imagespost-noimages.png";
+    public static final String NOIMAGES = "images-noimages.png";
     public static final String IMAGES = "images";
     public static final String IMAGESPOST = "imagespost";
 
@@ -383,10 +385,16 @@ public final class PsqlStore implements Store {
     }
 
     public String initImages() {
-        doQuery("INSERT INTO photo VALUES(1,'noimages.png') on conflict DO NOTHING;");
-        doQuery("INSERT INTO photopost VALUES(1,'noimages.png') on conflict DO NOTHING;");
-        Path path = Path.of(IMAGES, "noimages.png");
-        createNoimagFile(path);
+        //doQuery("INSERT INTO photo VALUES(1,'noimages.png') on conflict DO NOTHING;");
+        //doQuery("INSERT INTO photopost VALUES(1,'noimages.png') on conflict DO NOTHING;");
+        doQuery(String.format("INSERT INTO photo VALUES(1,'%s') on conflict DO NOTHING;",
+                IMAGES + "-noimages.png"));
+        doQuery(String.format("INSERT INTO photopost VALUES(1,'%s') on conflict DO NOTHING;",
+                IMAGESPOST + "-noimages.png"));
+        //Path path = Path.of(IMAGES, "noimages.png");
+        //createNoimagFile(path);
+        createNoimagFile(Path.of(IMAGES, "images-noimages.png"));
+        createNoimagFile(Path.of(IMAGESPOST, "imagespost-noimages.png"));
         return "noimages.png";
     }
 

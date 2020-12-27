@@ -55,18 +55,21 @@ public class UploadPhotoServlet extends HttpServlet {
         try {
             int id;
             String images;
+            String noimage;
             HttpSession ss = req.getSession();
             ImgFile newPhoto = (ImgFile) ss.getAttribute("photo");
             Candidate candidate = (Candidate) ss.getAttribute("candidate");
             if (candidate == null) {
                 images = PsqlStore.IMAGESPOST;
                 id = ((Post) ss.getAttribute("post")).getId();
+                noimage = PsqlStore.POSTNOIMAGES;
             } else {
                 images = PsqlStore.IMAGES;
                 id = candidate.getId();
+                noimage = PsqlStore.NOIMAGES;
             }
             if ("delete".equals(req.getParameter("delete"))) {
-                newPhoto.setName(PsqlStore.getNoimage());
+                newPhoto.setName(noimage);
             } else {
                 DiskFileItemFactory factory = new DiskFileItemFactory();
                 ServletContext servletContext = this.getServletConfig().getServletContext();
@@ -91,7 +94,8 @@ public class UploadPhotoServlet extends HttpServlet {
                             throw new IllegalArgumentException("Wrong file name !");
                         }
                         File file = new File(folder + File.separator
-                                + rename(item.getName(), id));
+                                //+ rename(item.getName(), id));
+                                + rename(item.getName(), id, images));
                         newPhoto.setName(file.getName());
                         try (FileOutputStream out = new FileOutputStream(file)) {
                             out.write(item.getInputStream().readAllBytes());
@@ -123,5 +127,9 @@ public class UploadPhotoServlet extends HttpServlet {
 
     private String rename(final String img, final int id) {
         return String.valueOf(id).concat("-").concat(img);
+    }
+
+    private String rename(final String img, final int id, final String folder) {
+        return folder.concat("-").concat(String.valueOf(id)).concat("-").concat(img);
     }
 }

@@ -23,10 +23,11 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
             crossorigin="anonymous"></script>
-
+    <script type="text/javascript" src="${pageContext.request.contextPath}/script/rememberfiels.js">
+    </script>
     <title>Работа мечты</title>
 </head>
-<body>
+<body onload="writeFields()">
 <div class="container pt-3">
     <my:Header/>
     <div class="row">
@@ -55,7 +56,7 @@
                                 <div class="nav-item">
                                     <br>
                                     <p>
-                                        <a class="badge badge-primary"
+                                        <a class="badge badge-primary" onclick="getFields()"
                                            href="${pageContext.servletContext.contextPath}/addphoto.do?photo=${sessionScope.photo.name}">Добавить
                                             фото</a>
                                     </p>
@@ -66,12 +67,14 @@
                                       method="post">
                                 </form>
                                 <form action="<%=request.getContextPath()%>/candidate.do?id=${requestScope.candidate.id}"
-                                      method="post">
+                                      method="post" accept-charset="ISO-8859-1">
                                     <div class="form-group"><label>Имя
                                         <input class="form-control" name="name" type="text"
+                                               id="name"
                                                value="${candidate.name}"></label></div>
                                     <div class="form-group"><label>Описание
                                         <input class="form-control" name="description" type="text"
+                                               id="description"
                                                value="${candidate.description}"></label>
                                     </div>
                                     <button type="submit" class="btn btn-primary">Сохранить</button>

@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Comparator;
 
 public class PostServlet extends HttpServlet {
     public static final Logger LOGGER = LoggerFactory.getLogger(PostServlet.class);
@@ -30,8 +32,13 @@ public class PostServlet extends HttpServlet {
         Post post = (Post) req.getSession().getAttribute("post");
         ImgFile oldPhoto = (ImgFile) req.getSession().getAttribute("oldPhoto");
         String oldfile = oldPhoto.getName();
+        ImgFile newPhoto = (ImgFile) req.getSession().getAttribute("photo");
+        String file = newPhoto.getName();
         if ("delete".equals(req.getParameter("delete"))) {
             PsqlStore.instOf().deleteByIdPost(post.getId());
+            if (!oldfile.equals(file)) {
+                PsqlStore.instOf().cleanUp(Path.of(IMAGES, file));
+            }
             if (oldPhoto.getId() != 1) {
                 PsqlStore.instOf().deleteImgPost(post.getPhotoId());
                 PsqlStore.instOf().cleanUp(Path.of(IMAGES, oldfile));
@@ -39,10 +46,8 @@ public class PostServlet extends HttpServlet {
         } else {
             post.setName(req.getParameter("name"));
             post.setDescription(req.getParameter("description"));
-            ImgFile newPhoto = (ImgFile) req.getSession().getAttribute("photo");
-            String file = newPhoto.getName();
             if (!file.equals(oldfile)) {
-                if (PsqlStore.getNoimage().equals(file)) {
+                if (PsqlStore.POSTNOIMAGES.equals(file)) {
                     int photoId = post.getPhotoId();
                     post.setPhotoId(1);
                     PsqlStore.instOf().save(post);
@@ -88,7 +93,9 @@ public class PostServlet extends HttpServlet {
     @Override
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) {
         try {
-            req.setAttribute("posts", PsqlStore.instOf().findAllPosts());
+            ArrayList<Post> list = (ArrayList<Post>) PsqlStore.instOf().findAllPosts();
+            list.sort(Comparator.comparing(Post::getCreated).reversed());
+            req.setAttribute("posts", list);
             req.setAttribute("postsPhoto", PsqlStore.instOf().findAllImg(Type.POST));
             req.getRequestDispatcher("post/posts.jsp").forward(req, resp);
         } catch (IOException | ServletException e) {
@@ -97,12 +104,25 @@ public class PostServlet extends HttpServlet {
     }
 
     private String rename(final String img, final int id) {
-        String name = String.valueOf(id).concat(img.substring(1));
-        File folder = new File(IMAGES);
+        String folder = getFolder(img);
+        String name = folder + "-" + id + "-" + getName(img);
         File file = new File(folder + File.separator + name);
         File old = new File(folder + File.separator + img);
         if (!old.renameTo(file)) {
             LOGGER.error("Failed to rename");
+        }
+        return name;
+    }
+
+    private String getName(final String name) {
+        String[] m = name.split("-", 3);
+        return m[m.length - 1];
+    }
+
+    private String getFolder(final String name) {
+        int n = name.indexOf("-");
+        if (n != -1) {
+            return name.substring(0, n);
         }
         return name;
     }
