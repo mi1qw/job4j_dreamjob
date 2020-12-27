@@ -52,7 +52,6 @@ public class CandidateEditServlet extends HttpServlet {
         req.getSession().setAttribute("photo", PsqlStore.instOf().
                 findImgCand(candidate.getPhotoId()));
         req.getSession().setAttribute("oldPhoto", imgFile);
-        req.getSession().setAttribute("newPhoto", new ImgFile(0, null));
     }
 
     /**
@@ -71,7 +70,6 @@ public class CandidateEditServlet extends HttpServlet {
         req.getSession().removeAttribute("candidate");
         req.getSession().removeAttribute("photo");
         req.getSession().removeAttribute("oldPhoto");
-        req.getSession().removeAttribute("newPhoto");
         try {
             resp.sendRedirect(req.getContextPath() + "/candidate.do");
         } catch (IOException e) {

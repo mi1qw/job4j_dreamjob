@@ -74,7 +74,6 @@ public class CandidateServlet extends HttpServlet {
         req.getSession().removeAttribute("candidate");
         req.getSession().removeAttribute("photo");
         req.getSession().removeAttribute("oldPhoto");
-        req.getSession().removeAttribute("newPhoto");
         try {
             req.setCharacterEncoding("UTF-8");
             resp.sendRedirect(req.getContextPath() + "/candidate.do");

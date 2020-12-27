@@ -74,8 +74,6 @@ public class PostServlet extends HttpServlet {
         req.getSession().removeAttribute("post");
         req.getSession().removeAttribute("photo");
         req.getSession().removeAttribute("oldPhoto");
-        req.getSession().removeAttribute("newPhoto");
-        //todo нужен ли newPhoto ?
         try {
             req.setCharacterEncoding("UTF-8");
             resp.sendRedirect(req.getContextPath() + "/post.do");

@@ -12,12 +12,6 @@
 <html lang="en">
 <head>
     <!-- Bootstrap CSS -->
-    <%--    <link rel="stylesheet"--%>
-    <%--          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"--%>
-    <%--          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"--%>
-    <%--          crossorigin="anonymous">--%>
-
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
           rel="stylesheet"
           integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
@@ -44,7 +38,6 @@
 </head>
 <body>
 <div class="container pt-3">
-    <%--<div class="container">--%>
     <my:Header/>
     <br>
     <div class="card-body">
@@ -86,7 +79,6 @@
                         <h2>Upload image</h2>
                         <form action="<c:url value='/addphoto.do'/>"
                               enctype="multipart/form-data" method="post">
-                            <%--                            ${sessionScope.}--%>
                             <div class="mb-3">
                                 <input class="form-control" type="file" name="file">
                             </div>

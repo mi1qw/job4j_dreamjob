@@ -94,7 +94,6 @@ public class UploadPhotoServlet extends HttpServlet {
                             throw new IllegalArgumentException("Wrong file name !");
                         }
                         File file = new File(folder + File.separator
-                                //+ rename(item.getName(), id));
                                 + rename(item.getName(), id, images));
                         newPhoto.setName(file.getName());
                         try (FileOutputStream out = new FileOutputStream(file)) {

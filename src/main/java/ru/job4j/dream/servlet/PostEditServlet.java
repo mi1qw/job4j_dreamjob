@@ -52,8 +52,6 @@ public class PostEditServlet extends HttpServlet {
         req.getSession().setAttribute("photo", PsqlStore.instOf().
                 findImgPost(post.getPhotoId()));
         req.getSession().setAttribute("oldPhoto", imgFile);
-        req.getSession().setAttribute("newPhoto", new ImgFile(0, null));
-        //todo нужен ли newPhoto ?
     }
 
     /**
@@ -72,7 +70,6 @@ public class PostEditServlet extends HttpServlet {
         req.getSession().removeAttribute("post");
         req.getSession().removeAttribute("photo");
         req.getSession().removeAttribute("oldPhoto");
-        req.getSession().removeAttribute("newPhoto");
         try {
             resp.sendRedirect(req.getContextPath() + "/post.do");
         } catch (IOException e) {
