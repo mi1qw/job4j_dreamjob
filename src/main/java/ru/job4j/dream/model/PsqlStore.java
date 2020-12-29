@@ -24,7 +24,6 @@ public final class PsqlStore implements Store {
     public static final String LN = System.lineSeparator();
     private static final Store INST = new PsqlStore();
     private final BasicDataSource pool = new BasicDataSource();
-    private static String noimage;
     public static final String POSTNOIMAGES = "imagespost-noimages.png";
     public static final String NOIMAGES = "images-noimages.png";
     public static final String IMAGES = "images";
@@ -51,16 +50,12 @@ public final class PsqlStore implements Store {
         pool.setMinIdle(5);
         pool.setMaxIdle(10);
         pool.setMaxOpenPreparedStatements(100);
-        noimage = initImages();
+        initImages();
         initUsers();
     }
 
     public static Store instOf() {
         return INST;
-    }
-
-    public static String getNoimage() {
-        return noimage;
     }
 
     @Override

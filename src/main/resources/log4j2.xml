@@ -4,7 +4,7 @@
     <Appenders>
         <Console name="ConsoleAppender" target="SYSTEM_OUT">
                         <PatternLayout disableAnsi="false"
-                                       pattern="%highlight{[%-5level]%d{HH:mm:ss.SSS} [%t] %c{1} - %ex{2} %n}%msg{FATAL=red blink, ERROR=red, WARN=yellow bold, INFO=black, DEBUG=green bold, TRACE=blue}"/>
+                                       pattern="%highlight{[%-5level]%d{HH:mm:ss.SSS} [%t] %c{1} - %ex{10} %n}%msg{FATAL=red blink, ERROR=red, WARN=yellow bold, INFO=black, DEBUG=green bold, TRACE=blue}%n"/>
             <!--            <PatternLayout disableAnsi="false"-->
             <!--                           pattern="%highlight{[%-5level] [%t] %c{1} - %ex{2} %n}%msg{FATAL=red blink, ERROR=red, WARN=yellow bold, INFO=black, DEBUG=green bold, TRACE=blue}"/>-->
 <!--            <PatternLayout disableAnsi="false"-->
