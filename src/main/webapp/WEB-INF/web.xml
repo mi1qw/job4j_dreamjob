@@ -125,6 +125,14 @@
         <url-pattern>/register.do</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>city</servlet-name>
+        <servlet-class>ru.job4j.dream.servlet.CityServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>city</servlet-name>
+        <url-pattern>/cities.do</url-pattern>
+    </servlet-mapping>
 
     <filter>
         <filter-name>AuthFilter</filter-name>

@@ -3,26 +3,40 @@ package ru.job4j.dream.model;
 import java.util.Date;
 import java.util.Objects;
 
+/**
+ * The type Candidate.
+ */
 public class Candidate {
     private int id;
     private String name;
     private String description;
     private Date created;
     private int photoId;
+    private int cityId;
+    //todo зачем folder
     private String folder = PsqlStore.IMAGES;
 
     public Candidate(final int id, final String name, final String description,
-                     final Date created, final int photoId) {
+                     final Date created, final int photoId, final int cityId) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.created = created;
         this.photoId = photoId;
+        this.cityId = cityId;
     }
 
     public Candidate(final int id, final String name, final String description,
                      final Date created) {
-        this(id, name, description, created, 0);
+        this(id, name, description, created, 0, 0);
+    }
+
+    public int getCityId() {
+        return cityId;
+    }
+
+    public void setCityId(final int cityId) {
+        this.cityId = cityId;
     }
 
     /**

@@ -6,4 +6,5 @@
     <include file="schema.sql" relativeToChangelogFile="true"/>
     <include file="schemaUser.sql" relativeToChangelogFile="true"/>
     <include file="schemaPost.sql" relativeToChangelogFile="true"/>
+    <include file="city.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>

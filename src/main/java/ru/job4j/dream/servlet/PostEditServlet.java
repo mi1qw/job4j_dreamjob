@@ -32,7 +32,7 @@ public class PostEditServlet extends HttpServlet {
             Post sesn = (Post) req.getSession().getAttribute("post");
 
             if (id == null) {
-                post = new Post(0, "", "", new Date(), 1);
+                post = new Post(0, "", "", new Date(), 1, 0);
                 setSession(req, post);
             } else {
                 if (sesn == null || !id.equals(String.valueOf(sesn.getId()))) {

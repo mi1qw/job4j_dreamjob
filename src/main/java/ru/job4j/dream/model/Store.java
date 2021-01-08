@@ -2,6 +2,7 @@ package ru.job4j.dream.model;
 
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 public interface Store {
@@ -42,4 +43,8 @@ public interface Store {
     void saveUser(User user);
 
     boolean deleteUser(User user);
+
+    List<String> findAllCities();
+
+    String findByIdCity(int cityId);
 }

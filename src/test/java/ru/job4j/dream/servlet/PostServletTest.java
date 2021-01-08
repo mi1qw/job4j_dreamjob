@@ -101,7 +101,7 @@ public class PostServletTest {
 
     @Test
     public void a0addNewPostWithouImgAndDelete() {            // добавить/удалить post без фото
-        Post post = new Post(0, "", "", new Date(), 1);
+        Post post = new Post(0, "", "", new Date(), 1, 0);
         ImgFile oldPhoto = new ImgFile(1, "imagespost-noimages.png");
         ImgFile newPhoto = new ImgFile(1, "imagespost-noimages.png");
 
@@ -119,7 +119,7 @@ public class PostServletTest {
     public void a1addNewPostWithAnyImgAndDeleteIt() {
         Post post;
         int id = addItem(
-                post = new Post(0, "", "", new Date(), 1),
+                post = new Post(0, "", "", new Date(), 1, 0),
                 new ImgFile(1, "imagespost-noimages.png"),
                 new ImgFile(1, "imagespost-0-1.png"),
                 "name", "description");
@@ -131,7 +131,7 @@ public class PostServletTest {
         when(req.getSession().getAttribute("post")).
                 thenReturn(
                         new Post(post.getId(), post.getName(), post.getDescription(),
-                                post.getCreated(), post.getPhotoId())
+                                post.getCreated(), post.getPhotoId(), post.getCityId())
                 );
         when(req.getSession().getAttribute("oldPhoto")).
                 thenReturn(new ImgFile(post.getPhotoId(), "anyImg"));
@@ -147,7 +147,7 @@ public class PostServletTest {
     @Test
     public void a2addNewPostWithAnyImgAndDeleteOnlyImage() {
         Post post;
-        addItem(post = new Post(0, "", "", new Date(), 1),
+        addItem(post = new Post(0, "", "", new Date(), 1, 0),
                 new ImgFile(1, "imagespost-noimages.png"),
                 new ImgFile(1, "imagespost-0-1.png"),
                 "name", "description");
@@ -165,7 +165,7 @@ public class PostServletTest {
     @Test
     public void a3addNewPostWithAnyImgAndDeleteOnlyImage() {
         Post post;
-        addItem(post = new Post(0, "", "", new Date(), 1),
+        addItem(post = new Post(0, "", "", new Date(), 1, 0),
                 new ImgFile(1, "imagespost-noimages.png"),
                 new ImgFile(1, "imagespost-0-1.png"),
                 "name", "description");
@@ -191,9 +191,9 @@ public class PostServletTest {
             return null;
         }).when(req).setAttribute(eq("posts"), any());
         List<Post> posts = List.of(
-                new Post(0, "Aname", "Adescription", new Date(100), 1),
-                new Post(0, "Bname", "Bdescription", new Date(100), 1),
-                new Post(0, "Cname", "Cdescription", new Date(100), 1)
+                new Post(0, "Aname", "Adescription", new Date(100), 1, 0),
+                new Post(0, "Bname", "Bdescription", new Date(100), 1, 0),
+                new Post(0, "Cname", "Cdescription", new Date(100), 1, 0)
         );
         posts.forEach(n ->
                 addItem(n,

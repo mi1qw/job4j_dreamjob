@@ -32,7 +32,7 @@ public class CandidateEditServlet extends HttpServlet {
             Candidate sesn = (Candidate) req.getSession().getAttribute("candidate");
 
             if (id == null) {
-                candidate = new Candidate(0, "", "", new Date(), 1);
+                candidate = new Candidate(0, "", "", new Date(), 1, 0);
                 setSession(req, candidate);
             } else {
                 if (sesn == null || !id.equals(String.valueOf(sesn.getId()))) {

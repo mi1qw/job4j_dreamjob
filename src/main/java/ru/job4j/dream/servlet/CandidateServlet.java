@@ -46,6 +46,7 @@ public class CandidateServlet extends HttpServlet {
         } else {
             candidate.setName(req.getParameter("name"));
             candidate.setDescription(req.getParameter("description"));
+            candidate.setCityId(Integer.parseInt(req.getParameter("city")));
             if (!file.equals(oldfile)) {
                 if (PsqlStore.NOIMAGES.equals(file)) {
                     int photoId = candidate.getPhotoId();

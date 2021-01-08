@@ -52,10 +52,44 @@ public final class PsqlStore implements Store {
         pool.setMaxOpenPreparedStatements(100);
         initImages();
         initUsers();
+        initCities();
     }
 
     public static Store instOf() {
         return INST;
+    }
+
+    @Override
+    public String findByIdCity(int cityId) {
+        String name = null;
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement(
+                     "SELECT * FROM city  WHERE id = ?")) {
+            ps.setInt(1, cityId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                name = rs.getString("name");
+            }
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+        return name;
+    }
+
+    @Override
+    public List<String> findAllCities() {
+        List<String> list = new ArrayList<>();
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("SELECT * FROM city")) {
+            try (ResultSet it = ps.executeQuery()) {
+                while (it.next()) {
+                    list.add(it.getString("name"));
+                }
+            }
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+        return list;
     }
 
     @Override
@@ -81,7 +115,8 @@ public final class PsqlStore implements Store {
                             it.getString("name"),
                             it.getString("description"),
                             it.getDate("created"),
-                            it.getInt("photo_id")
+                            it.getInt("photo_id"),
+                            it.getInt("city_id")
                     ));
                 }
             }
@@ -114,7 +149,8 @@ public final class PsqlStore implements Store {
                 candidate.getName(),
                 candidate.getDescription(),
                 candidate.getCreated(),
-                candidate.getPhotoId()
+                candidate.getPhotoId(),
+                candidate.getCityId()
         };
         if (candidate.getId() == 0) {
             candidate.setId(create(o, Type.CANDIDATE));
@@ -127,12 +163,13 @@ public final class PsqlStore implements Store {
         int oId = 0;
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(
-                     String.format("INSERT INTO %s VALUES (DEFAULT,?,?,?,?)", t.getName()),
+                     String.format("INSERT INTO %s VALUES (DEFAULT,?,?,?,?,?)", t.getName()),
                      PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, (String) o[1]);
             ps.setString(2, (String) o[2]);
             ps.setDate(3, new Date(((java.util.Date) o[3]).getTime()));
             ps.setInt(4, (Integer) o[4]);
+            ps.setInt(5, (Integer) o[5]);
             ps.execute();
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {
@@ -149,12 +186,13 @@ public final class PsqlStore implements Store {
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(
                      String.format("UPDATE %s SET name =?, description =?, created =?, photo_id "
-                             + "=? WHERE id = ?", t.getName()))) {
+                             + "=?, city_id =? WHERE id = ?", t.getName()))) {
             ps.setString(1, (String) o[1]);
             ps.setString(2, (String) o[2]);
             ps.setDate(3, new Date(((java.util.Date) o[3]).getTime()));
             ps.setInt(4, (Integer) o[4]);
-            ps.setInt(5, (Integer) o[0]);
+            ps.setInt(5, (Integer) o[5]);
+            ps.setInt(6, (Integer) o[0]);
             ps.executeUpdate();
         } catch (SQLException e) {
             LOGGER.error(e.getMessage(), e);
@@ -185,7 +223,8 @@ public final class PsqlStore implements Store {
                         rs.getString("name"),
                         rs.getString("description"),
                         rs.getDate("created"),
-                        rs.getInt("photo_id")
+                        rs.getInt("photo_id"),
+                        rs.getInt("city_id")
                 );
             }
         } catch (SQLException e) {
@@ -409,6 +448,13 @@ public final class PsqlStore implements Store {
                 LOGGER.error(e.getMessage(), e);
             }
         }
+    }
+
+    public void initCities() {
+        doQuery("INSERT INTO city VALUES(1,'Мос-Эйсли') on conflict DO NOTHING;");
+        doQuery("INSERT INTO city VALUES(2,'Джеда-Сити') on conflict DO NOTHING;");
+        doQuery("INSERT INTO city VALUES(3,'Цитадель ситхов') on conflict DO NOTHING;");
+        doQuery("INSERT INTO city VALUES(4,'Галактический город') on conflict DO NOTHING;");
     }
 
     /**

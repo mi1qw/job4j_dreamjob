@@ -12,34 +12,31 @@ public class Post {
     private String description;
     private Date created;
     private int photoId;
-    private String folder = PsqlStore.IMAGESPOST;
+    private int cityId;
+    //todo зачем folder
     public static final String FOLDER = PsqlStore.IMAGESPOST;
 
     public Post(final int id, final String name, final String description,
-                final Date created, final int photoId) {
+                final Date created, final int photoId, final int cityId) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.created = created;
         this.photoId = photoId;
+        this.cityId = cityId;
     }
 
     public Post(final int id, final String name, final String description,
                 final Date created) {
-        this(id, name, description, created, 0);
+        this(id, name, description, created, 0,0);
     }
 
-    public static String getFOLDER() {
-        return FOLDER;
+    public int getCityId() {
+        return cityId;
     }
 
-    /**
-     * Gets folder.
-     *
-     * @return the folder
-     */
-    public String getFolder() {
-        return folder;
+    public void setCityId(final int cityId) {
+        this.cityId = cityId;
     }
 
     /**
