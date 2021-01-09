@@ -133,7 +133,8 @@ public final class PsqlStore implements Store {
                 post.getName(),
                 post.getDescription(),
                 post.getCreated(),
-                post.getPhotoId()
+                post.getPhotoId(),
+                post.getCityId()
         };
         if (post.getId() == 0) {
             post.setId(create(o, Type.POST));

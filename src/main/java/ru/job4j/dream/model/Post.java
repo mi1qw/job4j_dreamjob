@@ -13,8 +13,6 @@ public class Post {
     private Date created;
     private int photoId;
     private int cityId;
-    //todo зачем folder
-    public static final String FOLDER = PsqlStore.IMAGESPOST;
 
     public Post(final int id, final String name, final String description,
                 final Date created, final int photoId, final int cityId) {
@@ -28,7 +26,7 @@ public class Post {
 
     public Post(final int id, final String name, final String description,
                 final Date created) {
-        this(id, name, description, created, 0,0);
+        this(id, name, description, created, 0, 0);
     }
 
     public int getCityId() {
@@ -159,7 +157,8 @@ public class Post {
                 + ", name='" + name + '\''
                 + ", description='" + description + '\''
                 + ", created=" + created
-                + ", photo=" + photoId + '}';
+                + ", photo=" + photoId
+                + ", city=" + cityId + '}';
     }
 
     /**

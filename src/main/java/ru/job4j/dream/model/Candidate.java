@@ -13,8 +13,6 @@ public class Candidate {
     private Date created;
     private int photoId;
     private int cityId;
-    //todo зачем folder
-    private String folder = PsqlStore.IMAGES;
 
     public Candidate(final int id, final String name, final String description,
                      final Date created, final int photoId, final int cityId) {
@@ -37,15 +35,6 @@ public class Candidate {
 
     public void setCityId(final int cityId) {
         this.cityId = cityId;
-    }
-
-    /**
-     * Gets folder.
-     *
-     * @return the folder
-     */
-    public String getFolder() {
-        return folder;
     }
 
     /**
@@ -168,7 +157,8 @@ public class Candidate {
                 + ", name='" + name + '\''
                 + ", description='" + description + '\''
                 + ", created=" + created
-                + ", photo=" + photoId + '}';
+                + ", photo=" + photoId
+                + ", city=" + cityId + '}';
     }
 
     /**

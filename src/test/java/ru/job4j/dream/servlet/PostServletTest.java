@@ -14,10 +14,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.modules.junit4.PowerMockRunnerDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.job4j.dream.model.ImgFile;
-import ru.job4j.dream.model.Post;
-import ru.job4j.dream.model.PsqlStore;
-import ru.job4j.dream.model.Type;
+import ru.job4j.dream.model.*;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
@@ -85,7 +82,7 @@ public class PostServletTest {
     }
 
     private int addItem(final Post post, final ImgFile oldPhoto, final ImgFile newPhoto,
-                        final String... param) {
+                        final int cityId, final String... param) {
 
         //todo может не нужен post в методах
         when(req.getSession().getAttribute("post")).thenReturn(post);
@@ -94,19 +91,21 @@ public class PostServletTest {
 
         when(req.getParameter("name")).thenReturn(param[0]);
         when(req.getParameter("description")).thenReturn(param[1]);
+        when(req.getParameter("city")).thenReturn(String.valueOf(cityId));
 
         psvt.doPost(req, resp);
         return post.getId();
     }
 
     @Test
-    public void a0addNewPostWithouImgAndDelete() {            // добавить/удалить post без фото
+    public void a0addNewPostWithoutImgAndDelete() {            // добавить/удалить post без фото
         Post post = new Post(0, "", "", new Date(), 1, 0);
         ImgFile oldPhoto = new ImgFile(1, "imagespost-noimages.png");
         ImgFile newPhoto = new ImgFile(1, "imagespost-noimages.png");
 
-        int id = addItem(post, oldPhoto, newPhoto, "name", "description");
-        assertTrue(post.getName().equals("name") & post.getDescription().equals("description"));
+        int id = addItem(post, oldPhoto, newPhoto, 1, "name", "description");
+        assertTrue(post.getName().equals("name") & post.getDescription().equals("description")
+                & post.getCityId() == 1);
 
         assertNotNull(PsqlStore.instOf().findByIdPost(id));
         when(req.getParameter("delete")).thenReturn("delete");
@@ -115,6 +114,24 @@ public class PostServletTest {
         when(req.getParameter("delete")).thenReturn(null);
     }
 
+    //@Test
+    //public void a01addNewCandidateWithouImgAndDelete() {            // добавить/удалить post без
+    //    // фото
+    //    Candidate candidate = new Candidate(0, "", "", new Date(), 1, 0);
+    //    ImgFile oldPhoto = new ImgFile(1, "imagespost-noimages.png");
+    //    ImgFile newPhoto = new ImgFile(1, "imagespost-noimages.png");
+    //
+    //    int id = addItem(candidate, oldPhoto, newPhoto, 1, "name", "description");
+    //    assertTrue(candidate.getName().equals("name") & candidate.getDescription().equals("description")
+    //            & candidate.getCityId() == 1);
+    //
+    //    assertNotNull(PsqlStore.instOf().findByIdPost(id));
+    //    when(req.getParameter("delete")).thenReturn("delete");
+    //    psvt.doPost(req, resp);
+    //    assertNull(PsqlStore.instOf().findByIdPost(id));
+    //    when(req.getParameter("delete")).thenReturn(null);
+    //}
+
     @Test
     public void a1addNewPostWithAnyImgAndDeleteIt() {
         Post post;
@@ -122,6 +139,7 @@ public class PostServletTest {
                 post = new Post(0, "", "", new Date(), 1, 0),
                 new ImgFile(1, "imagespost-noimages.png"),
                 new ImgFile(1, "imagespost-0-1.png"),
+                1,
                 "name", "description");
 
         Map<Integer, String> map = PsqlStore.instOf().findAllImg(Type.POST);
@@ -150,12 +168,14 @@ public class PostServletTest {
         addItem(post = new Post(0, "", "", new Date(), 1, 0),
                 new ImgFile(1, "imagespost-noimages.png"),
                 new ImgFile(1, "imagespost-0-1.png"),
+                1,
                 "name", "description");
         int photoId = post.getPhotoId();
 
         addItem(post,
                 new ImgFile(post.getPhotoId(), "anyImg"),
                 new ImgFile(post.getPhotoId(), "imagespost-noimages.png"),
+                1,
                 "name", "description");
 
         assertEquals(1, PsqlStore.instOf().findByIdPost(post.getId()).getPhotoId());
@@ -168,12 +188,14 @@ public class PostServletTest {
         addItem(post = new Post(0, "", "", new Date(), 1, 0),
                 new ImgFile(1, "imagespost-noimages.png"),
                 new ImgFile(1, "imagespost-0-1.png"),
+                1,
                 "name", "description");
         int photoId = post.getPhotoId();
 
         addItem(post,
                 new ImgFile(post.getPhotoId(), "anyImg"),
                 new ImgFile(post.getPhotoId(), "newImage.png"),
+                1,
                 "name", "description");
         assertEquals(photoId,
                 PsqlStore.instOf().findByIdPost(post.getId()).getPhotoId());
@@ -191,14 +213,15 @@ public class PostServletTest {
             return null;
         }).when(req).setAttribute(eq("posts"), any());
         List<Post> posts = List.of(
-                new Post(0, "Aname", "Adescription", new Date(100), 1, 0),
-                new Post(0, "Bname", "Bdescription", new Date(100), 1, 0),
-                new Post(0, "Cname", "Cdescription", new Date(100), 1, 0)
+                new Post(0, "Aname", "Adescription", new Date(100), 1, 1),
+                new Post(0, "Bname", "Bdescription", new Date(100), 1, 1),
+                new Post(0, "Cname", "Cdescription", new Date(100), 1, 1)
         );
         posts.forEach(n ->
                 addItem(n,
                         new ImgFile(n.getPhotoId(), PsqlStore.POSTNOIMAGES),
                         new ImgFile(n.getPhotoId(), PsqlStore.POSTNOIMAGES),
+                        1,
                         n.getName(), n.getDescription()));
         assertTrue(list.isEmpty());
         psvt.doGet(req, resp);

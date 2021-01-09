@@ -46,6 +46,7 @@ public class PostServlet extends HttpServlet {
         } else {
             post.setName(req.getParameter("name"));
             post.setDescription(req.getParameter("description"));
+            post.setCityId(Integer.parseInt(req.getParameter("city")));
             if (!file.equals(oldfile)) {
                 if (PsqlStore.POSTNOIMAGES.equals(file)) {
                     int photoId = post.getPhotoId();
