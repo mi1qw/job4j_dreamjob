@@ -114,24 +114,6 @@ public class PostServletTest {
         when(req.getParameter("delete")).thenReturn(null);
     }
 
-    //@Test
-    //public void a01addNewCandidateWithouImgAndDelete() {            // добавить/удалить post без
-    //    // фото
-    //    Candidate candidate = new Candidate(0, "", "", new Date(), 1, 0);
-    //    ImgFile oldPhoto = new ImgFile(1, "imagespost-noimages.png");
-    //    ImgFile newPhoto = new ImgFile(1, "imagespost-noimages.png");
-    //
-    //    int id = addItem(candidate, oldPhoto, newPhoto, 1, "name", "description");
-    //    assertTrue(candidate.getName().equals("name") & candidate.getDescription().equals("description")
-    //            & candidate.getCityId() == 1);
-    //
-    //    assertNotNull(PsqlStore.instOf().findByIdPost(id));
-    //    when(req.getParameter("delete")).thenReturn("delete");
-    //    psvt.doPost(req, resp);
-    //    assertNull(PsqlStore.instOf().findByIdPost(id));
-    //    when(req.getParameter("delete")).thenReturn(null);
-    //}
-
     @Test
     public void a1addNewPostWithAnyImgAndDeleteIt() {
         Post post;
