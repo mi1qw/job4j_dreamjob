@@ -82,8 +82,8 @@
                                     <div class="form-group" id="citydiv"><label>Город
                                         <select class="form-select" id="city" name="city"
                                                 aria-label="Default select example">
-                                            <option selected id="selected" value=${candidate.cityId}>
-                                                Укажите город
+                                            <option selected id="selected"
+                                                    value=${candidate.cityId}>Укажите город
                                             </option>
                                         </select>
                                     </label>

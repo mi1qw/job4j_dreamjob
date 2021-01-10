@@ -28,7 +28,8 @@
             crossorigin="anonymous"></script>
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="${pageContext.request.contextPath}/script/listAjax.js"></script>
     <title>Работа мечты</title>
 </head>
 <body>
@@ -49,6 +50,7 @@
                             <th scope="col"></th>
                             <th scope="col">Названия</th>
                             <th scope="col">Описание</th>
+                            <th scope="col">Город</th>
                             <th scope="col">Дата</th>
                         </tr>
                         </thead>
@@ -71,6 +73,7 @@
                                 </td>
                                 <td>${candidate.description}
                                 </td>
+                                <td datatype="${candidate.cityId}"></td>
                                 <td>
                                     <fmt:formatDate value="${candidate.created}"
                                                     pattern="dd.MM.yyyy"/>

@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
+import static java.lang.Integer.parseInt;
+
 public class CityServlet extends HttpServlet {
     public static final Logger LOGGER = LoggerFactory.getLogger(CityServlet.class);
 
@@ -25,19 +27,23 @@ public class CityServlet extends HttpServlet {
      */
     @Override
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) {
-        //List<String> list;
+        String city;
         String cityid = req.getParameter("cityid");
         Store sql = PsqlStore.instOf();
         if (cityid != null) {
-            String city = sql.findByIdCity(Integer.valueOf(cityid));
-            System.out.println(cityid);
-
-            city = "<option selected id = \"selected\" value ="
-                    + cityid + ">"
-                    + city
-                    + "</option>";
-
-            out(city, resp);
+            try {
+                city = sql.findByIdCity(parseInt(cityid));
+                String ref = req.getHeader("referer");
+                if (ref.contains("newcandidate.do") || ref.contains("newpost.do")) {
+                    city = "<option selected id = \"selected\" value ="
+                            + cityid + ">"
+                            + city
+                            + "</option>";
+                }
+                out(city, resp);
+            } catch (NumberFormatException e) {
+                LOGGER.error(e.getMessage(), e);
+            }
         } else {
             List<String> list = sql.findAllCities();
             out(listToJson(list), resp);
