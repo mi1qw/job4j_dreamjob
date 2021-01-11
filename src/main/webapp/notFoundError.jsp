@@ -12,6 +12,7 @@
 <html>
 <head>
     <title>Title</title>
+    <link rel="shortcut icon" href="${pageContext.request.contextPath}/favicon.ico"/>
 </head>
 <body>
 <img style="align-content: center" src="images/error404.jpg" alt="1"><br>

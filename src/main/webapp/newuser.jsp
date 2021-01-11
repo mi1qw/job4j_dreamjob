@@ -13,6 +13,8 @@
 <head>
     <meta charset="utf-8">
     <title>Register new user</title>
+    <link rel="shortcut icon" href="${pageContext.request.contextPath}/favicon.ico"/>
+
     <link href="css/registr.css" rel="stylesheet" type="text/css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
           rel="stylesheet"
