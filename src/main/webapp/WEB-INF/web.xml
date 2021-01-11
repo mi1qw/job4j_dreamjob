@@ -134,6 +134,16 @@
         <url-pattern>/cities.do</url-pattern>
     </servlet-mapping>
 
+
+    <filter>
+        <filter-name>CORS</filter-name>
+        <filter-class>ru.job4j.dream.filter.CORSFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CORS</filter-name>
+        <url-pattern>*.do</url-pattern>
+    </filter-mapping>
+
     <filter>
         <filter-name>AuthFilter</filter-name>
         <filter-class>ru.job4j.dream.filter.AuthFilter</filter-class>
@@ -142,4 +152,6 @@
         <filter-name>AuthFilter</filter-name>
         <url-pattern>*.do</url-pattern>
     </filter-mapping>
+
+
 </web-app>
