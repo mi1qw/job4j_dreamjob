@@ -62,7 +62,7 @@ public class CityServlet extends HttpServlet {
         }
     }
 
-    private String listToJson(List<String> list) {
+    private String listToJson(final List<String> list) {
         String json = null;
         ObjectMapper objectMapper = new ObjectMapper();
         try {

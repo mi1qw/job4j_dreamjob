@@ -12,9 +12,13 @@ import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.modules.junit4.PowerMockRunnerDelegate;
+import org.powermock.reflect.Whitebox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.job4j.dream.model.*;
+import ru.job4j.dream.model.Candidate;
+import ru.job4j.dream.model.ImgFile;
+import ru.job4j.dream.model.PsqlStore;
+import ru.job4j.dream.model.Type;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
@@ -40,6 +44,11 @@ import static org.powermock.api.mockito.PowerMockito.*;
 public class CandidateServletTest {
     public static final Logger LOGGER = LoggerFactory.getLogger(CandidateServletTest.class);
     private static Connection conn;
+    private static HttpServletRequest req;
+    private static HttpServletResponse resp;
+    private static HttpSession ssn;
+    private static CandidateServlet csvt;
+    private static PsqlStore psql;
 
     static {
         try {
@@ -49,31 +58,25 @@ public class CandidateServletTest {
         }
     }
 
-    private static HttpServletRequest req;
-    private static HttpServletResponse resp;
-    private static HttpSession ssn;
-    private static CandidateServlet csvt;
-    private static PsqlStore psql;
-
     @Before
     public void before() throws Exception {
-        BasicDataSource bds = mock(BasicDataSource.class);
-        req = mock(HttpServletRequest.class);
-        resp = mock(HttpServletResponse.class);
-        ssn = mock(HttpSession.class);
-
-        when(bds.getConnection()).thenReturn(conn);
-        whenNew(BasicDataSource.class).withNoArguments().thenReturn(bds);
-        when(req.getSession()).thenReturn(ssn);
-
         spy(PsqlStore.class);
         psql = spy(new PsqlStore());
         when(PsqlStore.instOf()).thenReturn(psql);
         doNothing().when(psql).cleanUp(any());
 
+        BasicDataSource bds = mock(BasicDataSource.class);
+        when(bds.getConnection()).thenReturn(conn);
+        Whitebox.setInternalState(psql, "pool", bds);
+
         spy(CandidateServlet.class);
         csvt = spy(new CandidateServlet());
         doReturn("anyImg").when(csvt, "rename", anyString(), anyInt());
+
+        req = mock(HttpServletRequest.class);
+        resp = mock(HttpServletResponse.class);
+        ssn = mock(HttpSession.class);
+        when(req.getSession()).thenReturn(ssn);
     }
 
     @AfterClass
@@ -83,8 +86,6 @@ public class CandidateServletTest {
 
     private int addItem(final Candidate cand, final ImgFile oldPhoto, final ImgFile newPhoto,
                         final int cityId, final String... param) {
-
-        //todo может не нужен post в методах
         when(req.getSession().getAttribute("candidate")).thenReturn(cand);
         when(req.getSession().getAttribute("oldPhoto")).thenReturn(oldPhoto);
         when(req.getSession().getAttribute("photo")).thenReturn(newPhoto);

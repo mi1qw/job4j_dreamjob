@@ -2,11 +2,12 @@
 <%@ tag pageEncoding="UTF-8" description="some description" %>
 
 
-<img src="images/DyT.jpg" alt="1"><br>      <%--"DyT.jpg" in root--%>
-<h3 data-select-like-a-boss="1" style="text-align: center;">
-        <span style="font-size: x-large; "><span style="font-family: Georgia, serif; "><span
-                style="color: #B22222; "><em>Найм высококвалифицированных&quot;пинателей&quot;!</em>
-        </span></span></span></h3>
+<img src="images/DyT.png" alt="1"><br>      <%--"DyT.jpg" in root--%>
+<h3 class="pt-3" style="text-align: center;">
+        <span style="font-size: x-large; font-family: Georgia, serif;color: #B22222;">
+            <em>Найм высококвалифицированных сотрудников</em>
+        </span>
+</h3>
 <div class="row">
     <ul class="nav">
         <li class="nav-item">

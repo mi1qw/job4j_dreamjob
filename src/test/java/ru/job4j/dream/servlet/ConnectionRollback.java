@@ -17,8 +17,6 @@ import java.util.Properties;
  */
 final class ConnectionRollback {
     private static final Logger LOG = LoggerFactory.getLogger(ConnectionRollback.class);
-    //private static String fileDb = Objects.requireNonNull(ConnectionRollback.class.getClassLoader().
-    //        getResource("/db.properties")).getFile();
     private static String fileDb = "db.properties";
 
     /**
@@ -36,6 +34,7 @@ final class ConnectionRollback {
                     Object rsl = null;
                     //LOG.info("Connection ......{}", method.getName());
                     if ("close".equals(method.getName())) {
+                        return rsl;
                         //connection.rollback();
                         //rsl = method.invoke(connection, args);
                     } else if ("commit".equals(method.getName())) {

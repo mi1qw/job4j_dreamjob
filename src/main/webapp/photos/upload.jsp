@@ -39,11 +39,11 @@
 
 </head>
 <body>
-<div class="container pt-3">
+<div class="container">
     <my:Header/>
     <br>
     <div class="card-body">
-        <table align="center" border="1" cellpadding="25" cellspacing="1"
+        <table align="center" border="0" cellpadding="25" cellspacing="1"
                style="height: 400px; width: 900px">
             <tbody>
             <tr>

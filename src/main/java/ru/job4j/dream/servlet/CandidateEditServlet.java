@@ -26,10 +26,11 @@ public class CandidateEditServlet extends HttpServlet {
      */
     @Override
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) {
-        Candidate candidate;
+        Candidate candidate = null;
         try {
             String id = req.getParameter("id");
             Candidate sesn = (Candidate) req.getSession().getAttribute("candidate");
+            ImgFile photo = (ImgFile) req.getSession().getAttribute("photo");
 
             if (id == null) {
                 candidate = new Candidate(0, "", "", new Date(), 1, 0);
@@ -38,6 +39,8 @@ public class CandidateEditServlet extends HttpServlet {
                 if (sesn == null || !id.equals(String.valueOf(sesn.getId()))) {
                     candidate = PsqlStore.instOf().findByIdCand(Integer.parseInt(id));
                     setSession(req, candidate);
+                } else if (sesn.getPhotoId() != photo.getId()) {
+                    setSession(req, sesn);
                 }
             }
             req.getRequestDispatcher("candidate/edit.jsp").forward(req, resp);
@@ -49,8 +52,7 @@ public class CandidateEditServlet extends HttpServlet {
     private void setSession(final HttpServletRequest req, final Candidate candidate) {
         req.getSession().setAttribute("candidate", candidate);
         ImgFile imgFile = PsqlStore.instOf().findImgCand(candidate.getPhotoId());
-        req.getSession().setAttribute("photo", PsqlStore.instOf().
-                findImgCand(candidate.getPhotoId()));
+        req.getSession().setAttribute("photo", imgFile);
         req.getSession().setAttribute("oldPhoto", imgFile);
     }
 

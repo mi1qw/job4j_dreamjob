@@ -31,83 +31,88 @@
     <title>Работа мечты</title>
 </head>
 <body onload="writeFields()">
-<div class="container pt-3">
+<div class="container">
     <my:Header/>
-    <div class="row">
-        <div class="card" style="width: 100%">
-            <div class="card-header">
-                <c:choose>
-                    <c:when test="${sessionScope.candidate.id==0}">
-                        Новый кандидат.
-                    </c:when>
-                    <c:otherwise>
-                        Редактирование кандидата.
-                    </c:otherwise>
-                </c:choose>
-            </div>
-            <div class="card-body">
-                <div class="form-group">
-                    <table align="center" border="1" cellpadding="25" cellspacing="1"
-                           style="height: 200px; width: 700px">
-                        <tbody>
-                        <tr>
-                            <td style="text-align:center;">
-                                <img src="<c:url value='/download?name=${sessionScope.photo.name}'/>"
-                                     alt="photo"
-                                     width="200px"
-                                     height="200px"/>
-                                <div class="nav-item">
-                                    <br>
-                                    <p>
-                                        <a class="badge badge-primary" onclick="getFields()"
-                                           href="${pageContext.servletContext.contextPath}/addphoto.do?photo=${sessionScope.photo.name}">Добавить
-                                            фото</a>
-                                    </p>
-                                </div>
-                            </td>
-                            <td>
-                                <form id="reset" action="<c:url value="/newcandidate.do"/>"
-                                      method="post">
-                                </form>
-                                <form action="<%=request.getContextPath()%>/candidate.do?id=${requestScope.candidate.id}"
-                                      method="post" accept-charset="ISO-8859-1">
-                                    <div class="form-group"><label>Имя
-                                        <input class="form-control" name="name" type="text"
-                                               id="name"
-                                               value="${candidate.name}"></label></div>
-                                    <div class="form-group"><label>Описание
-                                        <input class="form-control" name="description" type="text"
-                                               id="description"
-                                               value="${candidate.description}"></label>
-                                    </div>
-                                    <div class="form-group" id="citydiv"><label>Город
-                                        <select class="form-select" id="city" name="city"
-                                                aria-label="Default select example">
-                                            <option selected id="selected"
-                                                    value=${candidate.cityId}>Укажите город
-                                            </option>
-                                        </select>
-                                    </label>
-                                    </div>
-                                    <br>
-                                    <button type="submit" class="btn btn-primary" id="submit"
-                                            disabled>
-                                        Сохранить
-                                    </button>
-                                    <button form="reset" type="submit" class="btn btn-light">
-                                        Отмена
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+    <div class="container pt-3">
+        <div class="row">
+            <div class="card border-white mb-3" style="width: 100%">
+                <div class="card-header fst-italic">
+                    <c:choose>
+                        <c:when test="${sessionScope.candidate.id==0}">
+                            Новый кандидат
+                        </c:when>
+                        <c:otherwise>
+                            Редактирование кандидата
+                        </c:otherwise>
+                    </c:choose>
                 </div>
-                <form style="text-align:center;" method="post"
-                      action="<c:url value="/candidate.do?id=${requestScope.candidate.id}"/>">
-                    <button class="btn btn-danger" type="submit" name="delete" value="delete">Delete
-                    </button>
-                </form>
+                <div class="card-body">
+                    <div class="form-group">
+                        <table align="center" border="0" cellpadding="25" cellspacing="1"
+                               style="height: 200px; width: 700px">
+                            <tbody>
+                            <tr>
+                                <td style="text-align:center;">
+                                    <img src="<c:url value='/download?name=${sessionScope.photo.name}'/>"
+                                         class="rounded mx-auto d-block"
+                                         alt="photo"
+                                    <%--                                         width="200px"--%>
+                                         height="400px"/>
+                                    <div class="nav-item">
+                                        <br>
+                                        <p>
+                                            <a class="nav-link" onclick="getFields()"
+                                               href="${pageContext.servletContext.contextPath}/addphoto.do?photo=${sessionScope.photo.name}">добавить
+                                                фото</a>
+                                        </p>
+                                    </div>
+                                </td>
+                                <td>
+                                    <form id="reset" action="<c:url value="/newcandidate.do"/>"
+                                          method="post">
+                                    </form>
+                                    <form action="<%=request.getContextPath()%>/candidate.do?id=${requestScope.candidate.id}"
+                                          method="post" accept-charset="ISO-8859-1">
+                                        <div class="form-group"><label>Имя
+                                            <input class="form-control" name="name" type="text"
+                                                   id="name"
+                                                   value="${candidate.name}"></label></div>
+                                        <div class="form-group"><label>Описание
+                                            <input class="form-control" name="description"
+                                                   type="text"
+                                                   id="description"
+                                                   value="${candidate.description}"></label>
+                                        </div>
+                                        <div class="form-group" id="citydiv"><label>Город
+                                            <select class="form-select" id="city" name="city"
+                                                    aria-label="Default select example">
+                                                <option selected id="selected"
+                                                        value=${candidate.cityId}>Укажите город
+                                                </option>
+                                            </select>
+                                        </label>
+                                        </div>
+                                        <br>
+                                        <button type="submit" class="btn btn-primary" id="submit"
+                                                disabled>
+                                            Сохранить
+                                        </button>
+                                        <button form="reset" type="submit" class="btn btn-light">
+                                            Отмена
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <form style="text-align:center;" method="post"
+                          action="<c:url value="/candidate.do?id=${requestScope.candidate.id}"/>">
+                        <button class="btn btn-danger" type="submit" name="delete" value="delete">
+                            Delete
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

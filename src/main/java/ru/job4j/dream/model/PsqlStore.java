@@ -60,7 +60,7 @@ public final class PsqlStore implements Store {
     }
 
     @Override
-    public String findByIdCity(int cityId) {
+    public String findByIdCity(final int cityId) {
         String name = null;
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(

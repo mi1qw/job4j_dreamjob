@@ -29,10 +29,19 @@ public class Candidate {
         this(id, name, description, created, 0, 0);
     }
 
+    /**
+     * getCityId.
+     *
+     * @return return
+     */
     public int getCityId() {
         return cityId;
     }
 
+    /**
+     * setCityId.
+     * @param cityId cityId
+     */
     public void setCityId(final int cityId) {
         this.cityId = cityId;
     }
