@@ -5,11 +5,13 @@ import org.slf4j.LoggerFactory;
 import ru.job4j.dream.model.ImgFile;
 import ru.job4j.dream.model.Post;
 import ru.job4j.dream.model.PsqlStore;
+import ru.job4j.dream.model.Type;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Date;
@@ -26,18 +28,22 @@ public class PostEditServlet extends HttpServlet {
      */
     @Override
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) {
-        Post post;
+        HttpSession ss = req.getSession();
+        Post post = null;
         try {
             String id = req.getParameter("id");
-            Post sesn = (Post) req.getSession().getAttribute("post");
+            Post sesn = (Post) ss.getAttribute("post");
+            ImgFile photo = (ImgFile) ss.getAttribute("photo");
 
             if (id == null) {
                 post = new Post(0, "", "", new Date(), 1, 0);
-                setSession(req, post);
+                setSession(ss, post);
             } else {
                 if (sesn == null || !id.equals(String.valueOf(sesn.getId()))) {
                     post = PsqlStore.instOf().findByIdPost(Integer.parseInt(id));
-                    setSession(req, post);
+                    setSession(ss, post);
+                } else if (sesn.getPhotoId() != photo.getId()) {
+                    setSession(ss, sesn);
                 }
             }
             req.getRequestDispatcher("post/edit.jsp").forward(req, resp);
@@ -46,12 +52,12 @@ public class PostEditServlet extends HttpServlet {
         }
     }
 
-    private void setSession(final HttpServletRequest req, final Post post) {
-        req.getSession().setAttribute("post", post);
+    private void setSession(final HttpSession ss, final Post post) {
+        ss.setAttribute("post", post);
         ImgFile imgFile = PsqlStore.instOf().findImgPost(post.getPhotoId());
-        req.getSession().setAttribute("photo", PsqlStore.instOf().
+        ss.setAttribute("photo", PsqlStore.instOf().
                 findImgPost(post.getPhotoId()));
-        req.getSession().setAttribute("oldPhoto", imgFile);
+        ss.setAttribute("oldPhoto", imgFile);
     }
 
     /**
@@ -62,14 +68,16 @@ public class PostEditServlet extends HttpServlet {
      */
     @Override
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) {
-        ImgFile photo = (ImgFile) req.getSession().getAttribute("photo");
-        ImgFile oldPhoto = (ImgFile) req.getSession().getAttribute("oldPhoto");
+        HttpSession ss = req.getSession();
+        ImgFile photo = (ImgFile) ss.getAttribute("photo");
+        ImgFile oldPhoto = (ImgFile) ss.getAttribute("oldPhoto");
+        PsqlStore.instOf().clearListImg(ss, photo, Type.POST);
         if (!photo.getName().equals(oldPhoto.getName())) {
             PsqlStore.instOf().cleanUp(Path.of(IMAGES, photo.getName()));
         }
-        req.getSession().removeAttribute("post");
-        req.getSession().removeAttribute("photo");
-        req.getSession().removeAttribute("oldPhoto");
+        ss.removeAttribute("post");
+        ss.removeAttribute("photo");
+        ss.removeAttribute("oldPhoto");
         try {
             resp.sendRedirect(req.getContextPath() + "/post.do");
         } catch (IOException e) {

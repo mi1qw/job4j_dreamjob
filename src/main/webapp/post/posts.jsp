@@ -39,7 +39,7 @@
     <%--    <jsp:include page="/Header.jsp"/>--%>
     <div class="container pt-3">
         <div class="row">
-            <div class="card border-white mb-3" >
+            <div class="card border-white mb-3">
                 <div class="card-header">
                     Вакансии
                 </div>
@@ -60,12 +60,11 @@
                             <tr>
                                 <th scope="row">${post.id}
                                 </th>
-                                <td><img
-                                        src="<c:url
-                                        value='/download?name=${requestScope.postsPhoto[post.photoId]}'/>"
-                                        alt="photo"
-                                        width="100px"
-                                        height="100px"/>
+                                <td><img class="rounded-3 mx-auto d-block"
+                                         src="<c:url
+                                         value='/download?name=${requestScope.postsPhoto[post.photoId]}'/>"
+                                         alt="photo"
+                                         height="150px"/>
                                 </td>
                                 <td>
                                     <a href=${pageContext.servletContext.contextPath}/newpost.do?id=${post.id}>

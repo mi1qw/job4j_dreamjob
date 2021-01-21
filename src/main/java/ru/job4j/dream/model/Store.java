@@ -1,5 +1,6 @@
 package ru.job4j.dream.model;
 
+import javax.servlet.http.HttpSession;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
@@ -37,6 +38,8 @@ public interface Store {
     boolean deleteImgPost(int id);
 
     void cleanUp(Path path);
+
+    void clearListImg(HttpSession ss, ImgFile img, Type type);
 
     User findByEmail(String email);
 

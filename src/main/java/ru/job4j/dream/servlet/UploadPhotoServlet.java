@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UploadPhotoServlet extends HttpServlet {
@@ -101,6 +102,10 @@ public class UploadPhotoServlet extends HttpServlet {
                         } catch (IOException e) {
                             LOGGER.error(e.getMessage(), e);
                         }
+                        if (file != null) {
+                            List<String> lisImg = getlistImg(req);
+                            lisImg.add(file.getName());
+                        }
                     }
                 }
             }
@@ -111,6 +116,18 @@ public class UploadPhotoServlet extends HttpServlet {
             }
         } catch (IOException | IllegalArgumentException e) {
             LOGGER.error(e.getMessage(), e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private List<String> getlistImg(final HttpServletRequest req) {
+        HttpSession ss = req.getSession();
+        ArrayList<String> list = (ArrayList<String>) ss.getAttribute("listImg");
+        if (list == null) {
+            ss.setAttribute("listImg", new ArrayList<>());
+            return (ArrayList<String>) ss.getAttribute("listImg");
+        } else {
+            return list;
         }
     }
 
@@ -132,3 +149,4 @@ public class UploadPhotoServlet extends HttpServlet {
         return folder.concat("-").concat(String.valueOf(id)).concat("-").concat(img);
     }
 }
+

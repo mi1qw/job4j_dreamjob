@@ -60,11 +60,10 @@
                             <tr>
                                 <th scope="row">${candidate.id}
                                 </th>
-                                <td><img class="rounded mx-auto d-block"
+                                <td><img class="rounded-3 mx-auto d-block"
                                          src="<c:url
-                                        value='/download?name=${requestScope.candidatesPhoto[candidate.photoId]}'/>"
+                                         value='/download?name=${requestScope.candidatesPhoto[candidate.photoId]}'/>"
                                          alt="photo"
-                                    <%--                                         width="100px"--%>
                                          height="150px"/>
                                 </td>
                                 <td>

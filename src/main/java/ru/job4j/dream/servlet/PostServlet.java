@@ -11,6 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -29,11 +30,13 @@ public class PostServlet extends HttpServlet {
      */
     @Override
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) {
+        HttpSession ss = req.getSession();
         Post post = (Post) req.getSession().getAttribute("post");
-        ImgFile oldPhoto = (ImgFile) req.getSession().getAttribute("oldPhoto");
+        ImgFile oldPhoto = (ImgFile) ss.getAttribute("oldPhoto");
         String oldfile = oldPhoto.getName();
-        ImgFile newPhoto = (ImgFile) req.getSession().getAttribute("photo");
+        ImgFile newPhoto = (ImgFile) ss.getAttribute("photo");
         String file = newPhoto.getName();
+        PsqlStore.instOf().clearListImg(ss, newPhoto, Type.POST);
         if ("delete".equals(req.getParameter("delete"))) {
             PsqlStore.instOf().deleteByIdPost(post.getId());
             if (!oldfile.equals(file)) {
@@ -72,9 +75,9 @@ public class PostServlet extends HttpServlet {
                 PsqlStore.instOf().save(post);
             }
         }
-        req.getSession().removeAttribute("post");
-        req.getSession().removeAttribute("photo");
-        req.getSession().removeAttribute("oldPhoto");
+        ss.removeAttribute("post");
+        ss.removeAttribute("photo");
+        ss.removeAttribute("oldPhoto");
         try {
             req.setCharacterEncoding("UTF-8");
             resp.sendRedirect(req.getContextPath() + "/post.do");

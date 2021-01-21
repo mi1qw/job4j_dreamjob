@@ -11,6 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -19,7 +20,7 @@ import java.util.Comparator;
 
 public class CandidateServlet extends HttpServlet {
     public static final Logger LOGGER = LoggerFactory.getLogger(CandidateServlet.class);
-    public static final String IMAGES = "images";
+    public static final String IMAGES = PsqlStore.IMAGES;
 
     /**
      * doPost.
@@ -29,11 +30,13 @@ public class CandidateServlet extends HttpServlet {
      */
     @Override
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) {
-        Candidate candidate = (Candidate) req.getSession().getAttribute("candidate");
-        ImgFile oldPhoto = (ImgFile) req.getSession().getAttribute("oldPhoto");
+        HttpSession ss = req.getSession();
+        Candidate candidate = (Candidate) ss.getAttribute("candidate");
+        ImgFile oldPhoto = (ImgFile) ss.getAttribute("oldPhoto");
         String oldfile = oldPhoto.getName();
-        ImgFile newPhoto = (ImgFile) req.getSession().getAttribute("photo");
+        ImgFile newPhoto = (ImgFile) ss.getAttribute("photo");
         String file = newPhoto.getName();
+        PsqlStore.instOf().clearListImg(ss, newPhoto, Type.CANDIDATE);
         if ("delete".equals(req.getParameter("delete"))) {
             PsqlStore.instOf().deleteByIdCand(candidate.getId());
             if (!oldfile.equals(file)) {
@@ -72,9 +75,9 @@ public class CandidateServlet extends HttpServlet {
                 PsqlStore.instOf().save(candidate);
             }
         }
-        req.getSession().removeAttribute("candidate");
-        req.getSession().removeAttribute("photo");
-        req.getSession().removeAttribute("oldPhoto");
+        ss.removeAttribute("candidate");
+        ss.removeAttribute("photo");
+        ss.removeAttribute("oldPhoto");
         try {
             req.setCharacterEncoding("UTF-8");
             resp.sendRedirect(req.getContextPath() + "/candidate.do");

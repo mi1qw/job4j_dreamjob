@@ -4,6 +4,7 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -463,9 +464,30 @@ public final class PsqlStore implements Store {
     @Override
     public void cleanUp(final Path path) {
         try {
-            Files.delete(path);
+            Path name = path.getFileName();
+            if (!NOIMAGES.equals(name) && !POSTNOIMAGES.equals(name)) {
+                Files.delete(path);
+            }
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Remove previously added images.
+     *
+     * @param ss   HttpSession
+     * @param img  ImgFile
+     * @param type
+     */
+    @SuppressWarnings("unchecked")
+    public void clearListImg(final HttpSession ss, final ImgFile img, final Type type) {
+        List<String> list = (List<String>) ss.getAttribute("listImg");
+        if (list != null && img != null) {
+            String photo = img.getName();
+            list.stream().filter(n -> !n.equals(photo)).forEach(
+                    n -> PsqlStore.instOf().cleanUp(Path.of(type.getFoldImg(), n)));
+            ss.removeAttribute("listImg");
         }
     }
 

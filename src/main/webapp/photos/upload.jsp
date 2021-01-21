@@ -18,6 +18,8 @@
           rel="stylesheet"
           integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
           crossorigin="anonymous">
+    <link rel="Stylesheet" type="text/css"
+          href="${pageContext.request.contextPath}/css/croppie.css">
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
@@ -33,6 +35,9 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
             crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="${pageContext.request.contextPath}/script/upload.js"></script>
+    <script src="${pageContext.request.contextPath}/script/croppie.js"></script>
     <title>Upload</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -40,29 +45,21 @@
 </head>
 <body>
 <div class="container">
-    <my:Header/>
+    <my:Header disable="true"/>
     <br>
     <div class="card-body">
-        <table align="center" border="0" cellpadding="25" cellspacing="1"
-               style="height: 400px; width: 900px">
-            <tbody>
-            <tr>
-                <td class="col-6" style="text-align:center;">
+        <div class="row align-items-center">
+            <div class="col-sm" style="text-align:center;" id="crop">
+                <div id="some" class="rounded-3">
                     <div class="containerD">
-                        <form id="some" action="${pageContext.request.contextPath}/addphoto.do"
+                        <form action="${pageContext.request.contextPath}/addphoto.do"
                               method="post">
                             <img src="<c:url value='/download?name=${sessionScope.photo.name}'/>"
-                            <%--                                 class="img-rounded"--%>
-                            <%--                                 class="img-rounded"--%>
-                            <%--                                 class="img-fluid— rounded mx-auto d-block"--%>
-                            <%--                                 class="img-fluid"--%>
-                                 class="rounded mx-auto d-block"
-                            <%--                                 class="img-fluid img-thumbnail"--%>
+                                 class="rounded-3 mx-auto d-block"
                                  alt="photo"
-                                 width="200px"
-                                 height="200px"
+                                 style="max-height: 550px;"
                             />
-                            <button form="some" class="btnD" value="delete" name="delete"
+                            <button class="btnD" value="delete" name="delete"
                                     type="submit">Delete
                             </button>
                         </form>
@@ -75,36 +72,36 @@
                         </a>
                         </p>
                     </div>
-                </td>
-                <td>
-                    <div class="card-body" style="margin-left: 40px">
-                        <h2>Upload image</h2>
-                        <form action="<c:url value='/addphoto.do'/>"
-                              enctype="multipart/form-data" method="post">
-                            <div class="mb-3">
-                                <input class="form-control" type="file" name="file">
-                            </div>
-                            <br>
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </form>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+                </div>
+            </div>
+            <div class="col-sm" style="text-align:center;">
+                <div class="card-body" style="margin-left: 40px">
+                    <h2>Upload image</h2>
+                    <form action="<c:url value='/addphoto.do'/>"
+                          enctype="multipart/form-data" method="post">
+                        <div class="mb-3">
+                            <input class="form-control" type="file" name="file">
+                        </div>
+                        <br>
+                        <button hidden type="submit" class="btn btn-primary">Submit</button>
+                        <div align="center">
+                            <a id="send"
+                                    <c:choose>
+                                        <c:when test="${empty sessionScope.post}">
+                                            href="${pageContext.request.contextPath}/newcandidate.do?id=${sessionScope.candidate.id}"
+                                        </c:when>
+                                        <c:otherwise>
+                                            href="${pageContext.request.contextPath}/newpost.do?id=${sessionScope.post.id}"
+                                        </c:otherwise>
+                                    </c:choose>
+                               class="btn btn-grey btn-raised">Готово</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-    <div align="center">
-        <c:choose>
-            <c:when test="${empty sessionScope.post}">
-                <a href="${pageContext.request.contextPath}/newcandidate.do?id=${sessionScope.candidate.id}"
-                   class="btn btn-grey btn-raised">CANCEL</a>
-            </c:when>
-            <c:otherwise>
-                <a href="${pageContext.request.contextPath}/newpost.do?id=${sessionScope.post.id}"
-                   class="btn btn-grey btn-raised">CANCEL</a>
-            </c:otherwise>
-        </c:choose>
-    </div>
+
 </div>
 </body>
 </html>

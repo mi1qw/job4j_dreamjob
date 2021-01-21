@@ -32,7 +32,7 @@
 </head>
 <body onload="writeFields()">
 <div class="container">
-    <my:Header/>
+    <my:Header disable="true"/>
     <div class="container pt-3">
         <div class="row">
             <div class="card border-white mb-3" style="width: 100%">
@@ -55,9 +55,9 @@
                                 <td style="text-align:center;">
                                     <img src="<c:url
                                 value='/download?name=${sessionScope.photo.name}'/>"
+                                         class="rounded-3 mx-auto d-block"
                                          alt="photo"
-                                         width="200px"
-                                         height="200px"/>
+                                         height="300px"/>
                                     <div class="nav-item">
                                         <br>
                                         <p>
