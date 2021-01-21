@@ -1,7 +1,9 @@
 package ru.job4j.dream.model;
 
+import javax.servlet.http.HttpSession;
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 public interface Store {
@@ -19,19 +21,33 @@ public interface Store {
 
     ImgFile findImgCand(int id);
 
+    ImgFile findImgPost(int id);
+
     int saveImgCand(String photo, Candidate candidate);
+
+    int saveImgPost(String photo, Post post);
 
     Map<Integer, String> findAllImg(Type type);
 
     boolean deleteByIdCand(int id);
 
+    boolean deleteByIdPost(int id);
+
     boolean deleteImgCand(int id);
 
+    boolean deleteImgPost(int id);
+
     void cleanUp(Path path);
+
+    void clearListImg(HttpSession ss, ImgFile img, Type type);
 
     User findByEmail(String email);
 
     void saveUser(User user);
 
     boolean deleteUser(User user);
+
+    List<String> findAllCities();
+
+    String findByIdCity(int cityId);
 }

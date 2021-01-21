@@ -39,9 +39,9 @@ install:
 
 build_script:
   #  - chcp 65001 && mvn clean package --batch-mode -DskipTest
-  #  - createdb product
+  - createdb dreamjob
 
-  - mvn clean package --batch-mode -DskipTest
+#  - mvn clean package --batch-mode -DskipTest
 test_script:
   #  - chcp 65001 && mvn clean install --batch-mode
   - mvn clean install --batch-mode

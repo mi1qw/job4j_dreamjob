@@ -11,13 +11,16 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Comparator;
 
 public class CandidateServlet extends HttpServlet {
     public static final Logger LOGGER = LoggerFactory.getLogger(CandidateServlet.class);
-    public static final String IMAGES = "images";
+    public static final String IMAGES = PsqlStore.IMAGES;
 
     /**
      * doPost.
@@ -27,15 +30,18 @@ public class CandidateServlet extends HttpServlet {
      */
     @Override
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) {
-
-        System.out.println(req.getSession().getId() + "    .getSession().getId()");
-
-        Candidate candidate = (Candidate) req.getSession().getAttribute("candidate");
-        ImgFile oldPhoto = (ImgFile) req.getSession().getAttribute("oldPhoto");
+        HttpSession ss = req.getSession();
+        Candidate candidate = (Candidate) ss.getAttribute("candidate");
+        ImgFile oldPhoto = (ImgFile) ss.getAttribute("oldPhoto");
         String oldfile = oldPhoto.getName();
-        System.out.println(candidate);
+        ImgFile newPhoto = (ImgFile) ss.getAttribute("photo");
+        String file = newPhoto.getName();
+        PsqlStore.instOf().clearListImg(ss, newPhoto, Type.CANDIDATE);
         if ("delete".equals(req.getParameter("delete"))) {
             PsqlStore.instOf().deleteByIdCand(candidate.getId());
+            if (!oldfile.equals(file)) {
+                PsqlStore.instOf().cleanUp(Path.of(IMAGES, file));
+            }
             if (oldPhoto.getId() != 1) {
                 PsqlStore.instOf().deleteImgCand(candidate.getPhotoId());
                 PsqlStore.instOf().cleanUp(Path.of(IMAGES, oldfile));
@@ -43,22 +49,15 @@ public class CandidateServlet extends HttpServlet {
         } else {
             candidate.setName(req.getParameter("name"));
             candidate.setDescription(req.getParameter("description"));
-            System.out.println(candidate);
-
-            ImgFile newPhoto = (ImgFile) req.getSession().getAttribute("photo");
-            String file = newPhoto.getName();
-            System.out.println(newPhoto.getId());
-
-            System.out.println(oldPhoto.getId());
+            candidate.setCityId(Integer.parseInt(req.getParameter("city")));
             if (!file.equals(oldfile)) {
-                if (PsqlStore.getNoimage().equals(file)) {
-                    int photoIdid = candidate.getPhotoId();
+                if (PsqlStore.NOIMAGES.equals(file)) {
+                    int photoId = candidate.getPhotoId();
                     candidate.setPhotoId(1);
                     PsqlStore.instOf().save(candidate);
                     PsqlStore.instOf().cleanUp(Path.of(IMAGES, oldfile));
-                    PsqlStore.instOf().deleteImgCand(photoIdid);
+                    PsqlStore.instOf().deleteImgCand(photoId);
                 } else {
-
                     if (candidate.getPhotoId() == 1) {
                         if ((candidate.getId() == 0)) {
                             PsqlStore.instOf().save(candidate);
@@ -76,10 +75,9 @@ public class CandidateServlet extends HttpServlet {
                 PsqlStore.instOf().save(candidate);
             }
         }
-        req.getSession().removeAttribute("candidate");
-        req.getSession().removeAttribute("photo");
-        req.getSession().removeAttribute("oldPhoto");
-        req.getSession().removeAttribute("newPhoto");
+        ss.removeAttribute("candidate");
+        ss.removeAttribute("photo");
+        ss.removeAttribute("oldPhoto");
         try {
             req.setCharacterEncoding("UTF-8");
             resp.sendRedirect(req.getContextPath() + "/candidate.do");
@@ -97,7 +95,10 @@ public class CandidateServlet extends HttpServlet {
     @Override
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) {
         try {
-            req.setAttribute("candidates", PsqlStore.instOf().findAllCandidates());
+            ArrayList<Candidate> list = (ArrayList<Candidate>) PsqlStore.instOf().
+                    findAllCandidates();
+            list.sort(Comparator.comparing(Candidate::getCreated).reversed());
+            req.setAttribute("candidates", list);
             req.setAttribute("candidatesPhoto", PsqlStore.instOf().findAllImg(Type.CANDIDATE));
             req.getRequestDispatcher("candidate/candidates.jsp").forward(req, resp);
         } catch (IOException | ServletException e) {
@@ -106,12 +107,25 @@ public class CandidateServlet extends HttpServlet {
     }
 
     private String rename(final String img, final int id) {
-        String name = String.valueOf(id).concat(img.substring(1));
-        File folder = new File(IMAGES);
+        String folder = getFolder(img);
+        String name = folder + "-" + id + "-" + getName(img);
         File file = new File(folder + File.separator + name);
         File old = new File(folder + File.separator + img);
         if (!old.renameTo(file)) {
             LOGGER.error("Failed to rename");
+        }
+        return name;
+    }
+
+    private String getName(final String name) {
+        String[] m = name.split("-", 3);
+        return m[m.length - 1];
+    }
+
+    private String getFolder(final String name) {
+        int n = name.indexOf("-");
+        if (n != -1) {
+            return name.substring(0, n);
         }
         return name;
     }

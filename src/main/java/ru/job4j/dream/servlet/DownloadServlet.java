@@ -24,9 +24,10 @@ public class DownloadServlet extends HttpServlet {
         String name = req.getParameter("name");
         resp.setContentType("name=" + name);
         resp.setContentType("image/png");
-        File file = new File("images" + File.separator + name);
+        File file = new File(getFolder(name) + File.separator + name);
         try (FileInputStream in = new FileInputStream(file)) {
-            resp.setHeader("Content-Disposition", "attachment; filename=\"" + getName(name)
+            resp.setHeader("Content-Disposition", "attachment; filename=\""
+                    + getName(name)
                     + "\"");
             resp.getOutputStream().write(in.readAllBytes());
         } catch (IOException e) {
@@ -35,9 +36,14 @@ public class DownloadServlet extends HttpServlet {
     }
 
     private String getName(final String name) {
+        String[] m = name.split("-", 3);
+        return m[m.length - 1];
+    }
+
+    private String getFolder(final String name) {
         int n = name.indexOf("-");
         if (n != -1) {
-            return name.substring(n + 1);
+            return name.substring(0, n);
         }
         return name;
     }
