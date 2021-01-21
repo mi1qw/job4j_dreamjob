@@ -32,7 +32,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>PostServlet</servlet-name>
-        <url-pattern>/posts.do</url-pattern>
+        <url-pattern>/post.do</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -125,6 +125,24 @@
         <url-pattern>/register.do</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>city</servlet-name>
+        <servlet-class>ru.job4j.dream.servlet.CityServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>city</servlet-name>
+        <url-pattern>/cities.do</url-pattern>
+    </servlet-mapping>
+
+
+    <filter>
+        <filter-name>CORS</filter-name>
+        <filter-class>ru.job4j.dream.filter.CORSFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CORS</filter-name>
+        <url-pattern>*.do</url-pattern>
+    </filter-mapping>
 
     <filter>
         <filter-name>AuthFilter</filter-name>
@@ -134,4 +152,6 @@
         <filter-name>AuthFilter</filter-name>
         <url-pattern>*.do</url-pattern>
     </filter-mapping>
+
+
 </web-app>

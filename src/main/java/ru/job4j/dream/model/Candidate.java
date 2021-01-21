@@ -3,25 +3,47 @@ package ru.job4j.dream.model;
 import java.util.Date;
 import java.util.Objects;
 
+/**
+ * The type Candidate.
+ */
 public class Candidate {
     private int id;
     private String name;
     private String description;
     private Date created;
     private int photoId;
+    private int cityId;
 
     public Candidate(final int id, final String name, final String description,
-                     final Date created, final int photoId) {
+                     final Date created, final int photoId, final int cityId) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.created = created;
         this.photoId = photoId;
+        this.cityId = cityId;
     }
 
     public Candidate(final int id, final String name, final String description,
                      final Date created) {
-        this(id, name, description, created, 0);
+        this(id, name, description, created, 0, 0);
+    }
+
+    /**
+     * getCityId.
+     *
+     * @return return
+     */
+    public int getCityId() {
+        return cityId;
+    }
+
+    /**
+     * setCityId.
+     * @param cityId cityId
+     */
+    public void setCityId(final int cityId) {
+        this.cityId = cityId;
     }
 
     /**
@@ -144,7 +166,8 @@ public class Candidate {
                 + ", name='" + name + '\''
                 + ", description='" + description + '\''
                 + ", created=" + created
-                + ", photo=" + photoId + '}';
+                + ", photo=" + photoId
+                + ", city=" + cityId + '}';
     }
 
     /**
@@ -154,6 +177,6 @@ public class Candidate {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(id);
     }
 }

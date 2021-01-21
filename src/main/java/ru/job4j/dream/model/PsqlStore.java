@@ -4,6 +4,7 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -24,8 +25,10 @@ public final class PsqlStore implements Store {
     public static final String LN = System.lineSeparator();
     private static final Store INST = new PsqlStore();
     private final BasicDataSource pool = new BasicDataSource();
-    private static String noimage;
+    public static final String POSTNOIMAGES = "imagespost-noimages.png";
+    public static final String NOIMAGES = "images-noimages.png";
     public static final String IMAGES = "images";
+    public static final String IMAGESPOST = "imagespost";
 
     public PsqlStore() {
         Properties cfg = new Properties();
@@ -48,16 +51,46 @@ public final class PsqlStore implements Store {
         pool.setMinIdle(5);
         pool.setMaxIdle(10);
         pool.setMaxOpenPreparedStatements(100);
-        noimage = initImages();
+        initImages();
         initUsers();
+        initCities();
     }
 
     public static Store instOf() {
         return INST;
     }
 
-    public static String getNoimage() {
-        return noimage;
+    @Override
+    public String findByIdCity(final int cityId) {
+        String name = null;
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement(
+                     "SELECT * FROM city  WHERE id = ?")) {
+            ps.setInt(1, cityId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                name = rs.getString("name");
+            }
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+        return name;
+    }
+
+    @Override
+    public List<String> findAllCities() {
+        List<String> list = new ArrayList<>();
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("SELECT * FROM city")) {
+            try (ResultSet it = ps.executeQuery()) {
+                while (it.next()) {
+                    list.add(it.getString("name"));
+                }
+            }
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+        return list;
     }
 
     @Override
@@ -83,7 +116,8 @@ public final class PsqlStore implements Store {
                             it.getString("name"),
                             it.getString("description"),
                             it.getDate("created"),
-                            it.getInt("photo_id")
+                            it.getInt("photo_id"),
+                            it.getInt("city_id")
                     ));
                 }
             }
@@ -100,7 +134,8 @@ public final class PsqlStore implements Store {
                 post.getName(),
                 post.getDescription(),
                 post.getCreated(),
-                post.getPhoto()
+                post.getPhotoId(),
+                post.getCityId()
         };
         if (post.getId() == 0) {
             post.setId(create(o, Type.POST));
@@ -116,7 +151,8 @@ public final class PsqlStore implements Store {
                 candidate.getName(),
                 candidate.getDescription(),
                 candidate.getCreated(),
-                candidate.getPhotoId()
+                candidate.getPhotoId(),
+                candidate.getCityId()
         };
         if (candidate.getId() == 0) {
             candidate.setId(create(o, Type.CANDIDATE));
@@ -129,12 +165,13 @@ public final class PsqlStore implements Store {
         int oId = 0;
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(
-                     String.format("INSERT INTO %s VALUES (DEFAULT,?,?,?,?)", t.getName()),
+                     String.format("INSERT INTO %s VALUES (DEFAULT,?,?,?,?,?)", t.getName()),
                      PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, (String) o[1]);
             ps.setString(2, (String) o[2]);
             ps.setDate(3, new Date(((java.util.Date) o[3]).getTime()));
             ps.setInt(4, (Integer) o[4]);
+            ps.setInt(5, (Integer) o[5]);
             ps.execute();
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {
@@ -151,12 +188,13 @@ public final class PsqlStore implements Store {
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(
                      String.format("UPDATE %s SET name =?, description =?, created =?, photo_id "
-                             + "=? WHERE id = ?", t.getName()))) {
+                             + "=?, city_id =? WHERE id = ?", t.getName()))) {
             ps.setString(1, (String) o[1]);
             ps.setString(2, (String) o[2]);
             ps.setDate(3, new Date(((java.util.Date) o[3]).getTime()));
             ps.setInt(4, (Integer) o[4]);
-            ps.setInt(5, (Integer) o[0]);
+            ps.setInt(5, (Integer) o[5]);
+            ps.setInt(6, (Integer) o[0]);
             ps.executeUpdate();
         } catch (SQLException e) {
             LOGGER.error(e.getMessage(), e);
@@ -187,7 +225,8 @@ public final class PsqlStore implements Store {
                         rs.getString("name"),
                         rs.getString("description"),
                         rs.getDate("created"),
-                        rs.getInt("photo_id")
+                        rs.getInt("photo_id"),
+                        rs.getInt("city_id")
                 );
             }
         } catch (SQLException e) {
@@ -205,6 +244,17 @@ public final class PsqlStore implements Store {
     @Override
     public ImgFile findImgCand(final int id) {
         return findPhoto(id, Type.CANDIDATE);
+    }
+
+    /**
+     * find Photo By Id.
+     *
+     * @param id id
+     * @return res
+     */
+    @Override
+    public ImgFile findImgPost(final int id) {
+        return findPhoto(id, Type.POST);
     }
 
     /**
@@ -229,6 +279,23 @@ public final class PsqlStore implements Store {
             LOGGER.error(e.getMessage(), e);
         }
         return img;
+    }
+
+    /**
+     * saveImg.
+     * If their is new user or without photo (PhotoId=1) then, then saveImg/add new photo to DB
+     *
+     * @param photo name of photo
+     * @return photoId
+     */
+    @Override
+    public int saveImgPost(final String photo, final Post post) {
+        int pId = post.getPhotoId();
+        if (pId == 1) {
+            return saveImg(photo, Type.POST);
+        } else {
+            return updateImg(photo, pId, Type.POST);
+        }
     }
 
     /**
@@ -329,8 +396,16 @@ public final class PsqlStore implements Store {
         return delete(id, Type.CANDIDATE.getName());
     }
 
+    public boolean deleteByIdPost(final int id) {
+        return delete(id, Type.POST.getName());
+    }
+
     public boolean deleteImgCand(final int id) {
         return delete(id, Type.CANDIDATE.getImgname());
+    }
+
+    public boolean deleteImgPost(final int id) {
+        return delete(id, Type.POST.getImgname());
     }
 
     private boolean delete(final int id, final String name) {
@@ -346,9 +421,12 @@ public final class PsqlStore implements Store {
     }
 
     public String initImages() {
-        doQuery("INSERT INTO photo VALUES(1,'noimages.png') on conflict DO NOTHING;");
-        Path path = Path.of(IMAGES, "noimages.png");
-        createNoimagFile(path);
+        doQuery(String.format("INSERT INTO photo VALUES(1,'%s') on conflict DO NOTHING;",
+                IMAGES + "-noimages.png"));
+        doQuery(String.format("INSERT INTO photopost VALUES(1,'%s') on conflict DO NOTHING;",
+                IMAGESPOST + "-noimages.png"));
+        createNoimagFile(Path.of(IMAGES, NOIMAGES));
+        createNoimagFile(Path.of(IMAGESPOST, POSTNOIMAGES));
         return "noimages.png";
     }
 
@@ -370,6 +448,13 @@ public final class PsqlStore implements Store {
         }
     }
 
+    public void initCities() {
+        doQuery("INSERT INTO city VALUES(1,'Мос-Эйсли') on conflict DO NOTHING;");
+        doQuery("INSERT INTO city VALUES(2,'Джеда-Сити') on conflict DO NOTHING;");
+        doQuery("INSERT INTO city VALUES(3,'Цитадель ситхов') on conflict DO NOTHING;");
+        doQuery("INSERT INTO city VALUES(4,'Галактический город') on conflict DO NOTHING;");
+    }
+
     /**
      * Clean up.
      * Delete file at the specified path
@@ -379,9 +464,30 @@ public final class PsqlStore implements Store {
     @Override
     public void cleanUp(final Path path) {
         try {
-            Files.delete(path);
+            Path name = path.getFileName();
+            if (!NOIMAGES.equals(name) && !POSTNOIMAGES.equals(name)) {
+                Files.delete(path);
+            }
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Remove previously added images.
+     *
+     * @param ss   HttpSession
+     * @param img  ImgFile
+     * @param type
+     */
+    @SuppressWarnings("unchecked")
+    public void clearListImg(final HttpSession ss, final ImgFile img, final Type type) {
+        List<String> list = (List<String>) ss.getAttribute("listImg");
+        if (list != null && img != null) {
+            String photo = img.getName();
+            list.stream().filter(n -> !n.equals(photo)).forEach(
+                    n -> PsqlStore.instOf().cleanUp(Path.of(type.getFoldImg(), n)));
+            ss.removeAttribute("listImg");
         }
     }
 

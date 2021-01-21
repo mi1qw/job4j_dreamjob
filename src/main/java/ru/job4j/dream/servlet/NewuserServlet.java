@@ -45,7 +45,6 @@ public class NewuserServlet extends HttpServlet {
             Store sql = PsqlStore.instOf();
             User user = sql.findByEmail(email);
             if (user != null && !password.equals(user.getPassword())) {
-
                 req.setAttribute("error", "Этот e-mail уже занят");
                 req.getRequestDispatcher("newuser.jsp").forward(req, resp);
             } else {
