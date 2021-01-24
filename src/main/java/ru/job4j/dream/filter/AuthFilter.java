@@ -11,10 +11,6 @@ import java.io.IOException;
 public class AuthFilter implements Filter {
     public static final Logger LOGGER = LoggerFactory.getLogger(AuthFilter.class);
 
-    @Override
-    public void init(final FilterConfig filterConfig) throws ServletException {
-    }
-
     /**
      * doFilter.
      *

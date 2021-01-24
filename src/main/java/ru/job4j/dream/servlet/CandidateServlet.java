@@ -18,6 +18,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+import static java.lang.Integer.parseInt;
+
 public class CandidateServlet extends HttpServlet {
     public static final Logger LOGGER = LoggerFactory.getLogger(CandidateServlet.class);
     public static final String IMAGES = PsqlStore.IMAGES;
@@ -28,6 +30,7 @@ public class CandidateServlet extends HttpServlet {
      * @param req  req
      * @param resp resp
      */
+    @SuppressWarnings("java:S3776")
     @Override
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) {
         HttpSession ss = req.getSession();
@@ -49,7 +52,11 @@ public class CandidateServlet extends HttpServlet {
         } else {
             candidate.setName(req.getParameter("name"));
             candidate.setDescription(req.getParameter("description"));
-            candidate.setCityId(Integer.parseInt(req.getParameter("city")));
+            try {
+                candidate.setCityId(parseInt(req.getParameter("city")));
+            } catch (NumberFormatException e) {
+                LOGGER.error(e.getMessage(), e);
+            }
             if (!file.equals(oldfile)) {
                 if (PsqlStore.NOIMAGES.equals(file)) {
                     int photoId = candidate.getPhotoId();
@@ -123,7 +130,7 @@ public class CandidateServlet extends HttpServlet {
     }
 
     private String getFolder(final String name) {
-        int n = name.indexOf("-");
+        int n = name.indexOf('-');
         if (n != -1) {
             return name.substring(0, n);
         }

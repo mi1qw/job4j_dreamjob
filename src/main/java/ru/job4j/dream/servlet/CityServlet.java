@@ -52,7 +52,6 @@ public class CityServlet extends HttpServlet {
 
     private void out(final String str, final HttpServletResponse resp) {
         resp.setContentType("application/json");
-        //resp.setCharacterEncoding("UTF-8");
         resp.setCharacterEncoding("windows-1251");
         try (PrintWriter writer = new PrintWriter(resp.getOutputStream())) {
             writer.println(str);

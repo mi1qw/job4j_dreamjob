@@ -2,7 +2,8 @@ language: java
 jdk:
   - openjdk14
 
-install: true
+install:
+  true
 dist: xenial
 os:
   - linux
@@ -20,10 +21,12 @@ addons:
     #      - master
 
 script:
-# the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
-#  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=mi1qw_-job4j_design
+  # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
+  #  - mvn clean install sonar:sonar -Dsonar.projectKey=mi1qw_job4j_dreamjob
 
-# JaCoCo is used to have code coverage, "-Pcoverage" activates the maven profile in the pom.xml
+  #  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=mi1qw_job4j_dreamjob
+
+  # JaCoCo is used to have code coverage, "-Pcoverage" activates the maven profile in the pom.xml
 #  - mvn clean verify sonar:sonar -Pcoverage
 
 cache:
@@ -33,10 +36,13 @@ cache:
 
 ## после выполнени¤ сборки запустить скрипт, который будет собирать статистику по JaCoCo
 after_success:
+  - mvn clean install
+  #  - mvn clean test jacoco:report coveralls:report -X
+
   - bash <(curl -s https://codecov.io/bash)
   - bash <(curl -Ls https://coverage.codacy.com/get.sh)
   #  - java -jar ~/codacy-coverage-reporter-assembly-latest.jar report -l Java -r target/jacoco/jacoco.xml
-  - mvn clean test jacoco:report coveralls:report
+
 
 # отправл¤ть уведомление на почтуyouremail@smtp.ru(»зменить на свою) если сборка упала
 notifications:
@@ -48,4 +54,5 @@ notifications:
 
 env:
   global:
-    - CODECOV_TOKEN="3823ab9c-7a7e-447a-80cb-21b2a3acce20"
+  - CODECOV_TOKEN="fa2c926f-3db5-488c-9a50-4e1e4fdf6913"
+  - TRAVIS_NODE_VERSION="10"

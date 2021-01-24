@@ -465,7 +465,7 @@ public final class PsqlStore implements Store {
     public void cleanUp(final Path path) {
         try {
             Path name = path.getFileName();
-            if (!NOIMAGES.equals(name) && !POSTNOIMAGES.equals(name)) {
+            if (!NOIMAGES.equals(name.toString()) && !POSTNOIMAGES.equals(name.toString())) {
                 Files.delete(path);
             }
         } catch (IOException e) {

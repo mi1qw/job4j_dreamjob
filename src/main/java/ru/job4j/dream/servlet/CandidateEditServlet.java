@@ -19,6 +19,9 @@ import java.util.Date;
 public class CandidateEditServlet extends HttpServlet {
     public static final Logger LOGGER = LoggerFactory.getLogger(CandidateEditServlet.class);
     public static final String IMAGES = PsqlStore.IMAGES;
+    private static final String CANDIDATE = "candidate";
+    private static final String PHOTO = "photo";
+    private static final String OLD_PHOTO = "oldPhoto";
 
     /**
      * doGet.
@@ -29,11 +32,11 @@ public class CandidateEditServlet extends HttpServlet {
     @Override
     protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) {
         HttpSession ss = req.getSession();
-        Candidate candidate = null;
+        Candidate candidate;
         try {
             String id = req.getParameter("id");
-            Candidate sesn = (Candidate) ss.getAttribute("candidate");
-            ImgFile photo = (ImgFile) ss.getAttribute("photo");
+            Candidate sesn = (Candidate) ss.getAttribute(CANDIDATE);
+            ImgFile photo = (ImgFile) ss.getAttribute(PHOTO);
 
             if (id == null) {
                 candidate = new Candidate(0, "", "", new Date(), 1, 0);
@@ -53,11 +56,11 @@ public class CandidateEditServlet extends HttpServlet {
     }
 
     private void setSession(final HttpSession ss, final Candidate candidate) {
-        ss.setAttribute("candidate", candidate);
+        ss.setAttribute(CANDIDATE, candidate);
         ImgFile imgFile = PsqlStore.instOf().findImgCand(candidate.getPhotoId());
-        ss.setAttribute("photo", PsqlStore.instOf().
+        ss.setAttribute(PHOTO, PsqlStore.instOf().
                 findImgCand(candidate.getPhotoId()));
-        ss.setAttribute("oldPhoto", imgFile);
+        ss.setAttribute(OLD_PHOTO, imgFile);
     }
 
     /**
@@ -69,15 +72,15 @@ public class CandidateEditServlet extends HttpServlet {
     @Override
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) {
         HttpSession ss = req.getSession();
-        ImgFile photo = (ImgFile) ss.getAttribute("photo");
-        ImgFile oldPhoto = (ImgFile) ss.getAttribute("oldPhoto");
+        ImgFile photo = (ImgFile) ss.getAttribute(PHOTO);
+        ImgFile oldPhoto = (ImgFile) ss.getAttribute(OLD_PHOTO);
         PsqlStore.instOf().clearListImg(ss, photo, Type.CANDIDATE);
         if (!photo.getName().equals(oldPhoto.getName())) {
             PsqlStore.instOf().cleanUp(Path.of(IMAGES, photo.getName()));
         }
-        ss.removeAttribute("candidate");
-        ss.removeAttribute("photo");
-        ss.removeAttribute("oldPhoto");
+        ss.removeAttribute(CANDIDATE);
+        ss.removeAttribute(PHOTO);
+        ss.removeAttribute(OLD_PHOTO);
         try {
             resp.sendRedirect(req.getContextPath() + "/candidate.do");
         } catch (IOException e) {

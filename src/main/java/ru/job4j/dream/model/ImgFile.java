@@ -1,6 +1,9 @@
 package ru.job4j.dream.model;
 
-public class ImgFile {
+import java.io.Serializable;
+
+public class ImgFile implements Serializable {
+    private static final long serialVersionUID = 1;
     private int id;
     private String name;
 

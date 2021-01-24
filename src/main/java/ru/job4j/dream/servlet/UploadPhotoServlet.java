@@ -21,13 +21,13 @@ import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("DuplicatedCode")
 public class UploadPhotoServlet extends HttpServlet {
     public static final Logger LOGGER = LoggerFactory.getLogger(UploadPhotoServlet.class);
-    private final SimpleDateFormat time = new SimpleDateFormat("yyyy_M_dd_HH_mm_ss_SSS");
+    private static final String LIST_IMG = "listImg";
 
     /**
      * doGet.
@@ -51,6 +51,7 @@ public class UploadPhotoServlet extends HttpServlet {
      * @param req  req
      * @param resp resp
      */
+    @SuppressWarnings("all")
     @Override
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) {
         try {
@@ -88,23 +89,25 @@ public class UploadPhotoServlet extends HttpServlet {
                 if (!folder.exists()) {
                     folder.mkdir();
                 }
-                for (FileItem item : items) {
-                    if (!item.isFormField()) {
-                        if (!validate(item.getName())) {
-                            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
-                            throw new IllegalArgumentException("Wrong file name !");
-                        }
-                        File file = new File(folder + File.separator
-                                + rename(item.getName(), id, images));
-                        newPhoto.setName(file.getName());
-                        try (FileOutputStream out = new FileOutputStream(file)) {
-                            out.write(item.getInputStream().readAllBytes());
-                        } catch (IOException e) {
-                            LOGGER.error(e.getMessage(), e);
-                        }
-                        if (file != null) {
-                            List<String> lisImg = getlistImg(req);
-                            lisImg.add(file.getName());
+                if (items != null) {
+                    for (FileItem item : items) {
+                        if (!item.isFormField()) {
+                            if (!validate(item.getName())) {
+                                resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+                                throw new IllegalArgumentException("Wrong file name !");
+                            }
+                            File file = new File(folder + File.separator
+                                    + rename(item.getName(), id, images));
+                            newPhoto.setName(file.getName());
+                            try (FileOutputStream out = new FileOutputStream(file)) {
+                                out.write(item.getInputStream().readAllBytes());
+                            } catch (IOException e) {
+                                LOGGER.error(e.getMessage(), e);
+                            }
+                            if (file != null) {
+                                List<String> lisImg = getlistImg(req);
+                                lisImg.add(file.getName());
+                            }
                         }
                     }
                 }
@@ -122,10 +125,10 @@ public class UploadPhotoServlet extends HttpServlet {
     @SuppressWarnings("unchecked")
     private List<String> getlistImg(final HttpServletRequest req) {
         HttpSession ss = req.getSession();
-        ArrayList<String> list = (ArrayList<String>) ss.getAttribute("listImg");
+        ArrayList<String> list = (ArrayList<String>) ss.getAttribute(LIST_IMG);
         if (list == null) {
-            ss.setAttribute("listImg", new ArrayList<>());
-            return (ArrayList<String>) ss.getAttribute("listImg");
+            ss.setAttribute(LIST_IMG, new ArrayList<>());
+            return (ArrayList<String>) ss.getAttribute(LIST_IMG);
         } else {
             return list;
         }
@@ -139,10 +142,6 @@ public class UploadPhotoServlet extends HttpServlet {
      */
     boolean validate(final String name) {
         return name.matches("([^\\s]+(\\.(?i)(jpe?g|png|gif|bmp))$)");
-    }
-
-    private String rename(final String img, final int id) {
-        return String.valueOf(id).concat("-").concat(img);
     }
 
     private String rename(final String img, final int id, final String folder) {

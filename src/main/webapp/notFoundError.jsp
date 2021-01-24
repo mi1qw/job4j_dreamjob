@@ -9,7 +9,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@page isErrorPage="true" %>
 <%@page isELIgnored="false" %>
-<html>
+<html lang="en">
 <head>
     <title>Title</title>
     <link rel="shortcut icon" href="${pageContext.request.contextPath}/favicon.ico"/>

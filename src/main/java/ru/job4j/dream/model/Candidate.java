@@ -1,12 +1,13 @@
 package ru.job4j.dream.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
 /**
  * The type Candidate.
  */
-public class Candidate {
+public class Candidate implements Serializable {
     private int id;
     private String name;
     private String description;

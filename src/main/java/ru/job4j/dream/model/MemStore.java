@@ -1,5 +1,8 @@
 package ru.job4j.dream.model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,6 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public final class MemStore {
+    public static final Logger LOGGER = LoggerFactory.getLogger(MemStore.class);
     private static final MemStore INST = new MemStore();
     private Map<Integer, Post> posts = new ConcurrentHashMap<>();
     private Map<Integer, Candidate> candidates = new ConcurrentHashMap<>();
@@ -35,7 +39,7 @@ public final class MemStore {
             candidates.put(3, new Candidate(3, "Senior Java",
                     "One Senior required", sdf.parse("12.11.2020")));
         } catch (ParseException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         }
     }
 

@@ -60,6 +60,7 @@ public class UploadServlet extends HttpServlet {
      * @param req  req
      * @param resp resp
      */
+    @SuppressWarnings("squid:S2083")
     @Override
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) {
         DiskFileItemFactory factory = new DiskFileItemFactory();

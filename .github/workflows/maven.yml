@@ -1,0 +1,91 @@
+name: git
+on: [ push, pull_request ]
+jobs:
+  specs:
+    name: specs
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:10.8
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_PASSWORD: ""
+    steps:
+      - name: Install libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client libpq-dev
+      - name: Configure databases
+        run: |
+          echo "Postgres"
+          psql -h localhost -c 'create database "dreamjob";' -U postgres
+      #      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: actions/checkout@v2
+      - name: Set up JDK 13
+        uses: actions/setup-java@v1
+        with:
+          java-version: 13
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Cache Maven packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: Build and analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+          -Dsonar.projectKey=mi1qw_job4j_dreamjob
+          -Dsonar.organization=mi1qw
+          -Dsonar.host.url=https://sonarcloud.io
+          -Dsonar.login=$SONAR_TOKEN
+...
+
+
+#      - name: Build with Maven
+#        run: mvn -B package --file pom.xml
+
+
+
+#      - name: SonarCloud Scan
+#        uses: sonarsource/sonarcloud-github-action@master
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#          run: mvn -B verify sonar:sonar
+#            -Dsonar.projectKey=mi1qw_job4j_dreamjob
+#            -Dsonar.organization=mi1qw
+#            -Dsonar.host.url=https://sonarcloud.io
+#            -Dsonar.login=$SONAR_TOKEN
+#            -Dsonar.coverage.jacoco.xmlReportPaths=./target/site/jacoco/jacoco.xml
+
+
+#      - name: Set up Ruby
+#        uses: actions/setup-ruby@v1
+#        with:
+#          ruby-version: 2.6.5
+#
+#      - name: Install bundler and gems
+#        run: |
+#          gem install bundler --no-document
+#          bundle config GITHUB__COM $GITHUB_ACCESS_TOKEN
+#          bundle install --jobs 4 --retry 3
+#        env:
+#          GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_ACCESS_TOKEN }}
+#
+#      - name: Run tests
+#        run: |
+#          pg_config --version
+#          bin/rails db:schema:load RAILS_ENV=test
+#          bin/rspec

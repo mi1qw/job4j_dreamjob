@@ -31,7 +31,7 @@
                 <td><a href="<c:url value='/download?name=${image}'/>">Download</a></td>
                 <td>
                     <img src="<c:url value='/download?name=${image}'/>" width="100px"
-                         height="100px"/>
+                         height="100px" alt="img"/>
                 </td>
             </tr>
         </c:forEach>

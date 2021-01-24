@@ -19,6 +19,9 @@ import java.util.Date;
 public class PostEditServlet extends HttpServlet {
     public static final Logger LOGGER = LoggerFactory.getLogger(PostEditServlet.class);
     public static final String IMAGES = PsqlStore.IMAGESPOST;
+    private static final String POST = "post";
+    private static final String PHOTO = "photo";
+    private static final String OLD_PHOTO = "oldPhoto";
 
     /**
      * doGet.
@@ -32,8 +35,8 @@ public class PostEditServlet extends HttpServlet {
         Post post = null;
         try {
             String id = req.getParameter("id");
-            Post sesn = (Post) ss.getAttribute("post");
-            ImgFile photo = (ImgFile) ss.getAttribute("photo");
+            Post sesn = (Post) ss.getAttribute(POST);
+            ImgFile photo = (ImgFile) ss.getAttribute(PHOTO);
 
             if (id == null) {
                 post = new Post(0, "", "", new Date(), 1, 0);
@@ -53,11 +56,11 @@ public class PostEditServlet extends HttpServlet {
     }
 
     private void setSession(final HttpSession ss, final Post post) {
-        ss.setAttribute("post", post);
+        ss.setAttribute(POST, post);
         ImgFile imgFile = PsqlStore.instOf().findImgPost(post.getPhotoId());
-        ss.setAttribute("photo", PsqlStore.instOf().
+        ss.setAttribute(PHOTO, PsqlStore.instOf().
                 findImgPost(post.getPhotoId()));
-        ss.setAttribute("oldPhoto", imgFile);
+        ss.setAttribute(OLD_PHOTO, imgFile);
     }
 
     /**
@@ -69,15 +72,15 @@ public class PostEditServlet extends HttpServlet {
     @Override
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) {
         HttpSession ss = req.getSession();
-        ImgFile photo = (ImgFile) ss.getAttribute("photo");
-        ImgFile oldPhoto = (ImgFile) ss.getAttribute("oldPhoto");
+        ImgFile photo = (ImgFile) ss.getAttribute(PHOTO);
+        ImgFile oldPhoto = (ImgFile) ss.getAttribute(OLD_PHOTO);
         PsqlStore.instOf().clearListImg(ss, photo, Type.POST);
         if (!photo.getName().equals(oldPhoto.getName())) {
             PsqlStore.instOf().cleanUp(Path.of(IMAGES, photo.getName()));
         }
-        ss.removeAttribute("post");
-        ss.removeAttribute("photo");
-        ss.removeAttribute("oldPhoto");
+        ss.removeAttribute(POST);
+        ss.removeAttribute(PHOTO);
+        ss.removeAttribute(OLD_PHOTO);
         try {
             resp.sendRedirect(req.getContextPath() + "/post.do");
         } catch (IOException e) {
